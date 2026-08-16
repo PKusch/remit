@@ -39,6 +39,93 @@ survive an audit.
 
 ---
 
+## The governance grid
+
+Autonomy on one axis, blast radius on the other. Where a system lands determines what
+oversight it obliges — and the grid is deliberately blunt so disagreement surfaces in the
+design review rather than in the incident.
+
+|  | **B0** read-only | **B1** internal, reversible | **B2** hard to reverse | **B3** irreversible / external |
+|---|---|---|---|---|
+| **A0** advisory | ⬜ Minimal | ⬜ Minimal | 🟨 Standard | 🟨 Standard |
+| **A1** assisted | ⬜ Minimal | 🟨 Standard | 🟨 Standard | 🟧 Enhanced |
+| **A2** supervised | ⬜ Minimal | 🟨 Standard | 🟧 Enhanced | 🟧 Enhanced |
+| **A3** delegated | 🟨 Standard | 🟧 Enhanced | 🟧 Enhanced | 🟥 Constrained |
+| **A4** autonomous | 🟨 Standard | 🟧 Enhanced | 🟥 Constrained | ⛔ Prohibited by default |
+
+⬜ inventory and log it · 🟨 documented purpose, tool justification, named owner
+🟧 tested halt, limits enforced outside the model, injection red-teaming
+🟥 hard technical bounds the agent cannot widen · ⛔ cut the blast radius instead
+
+Note the slope: **A4/B0 is lighter than A2/B3.** Full autonomy over things that cannot
+break anything is cheap to govern; careful supervision of things that can end someone's
+mortgage application is not. Governance effort should track expected harm, not
+architectural impressiveness.
+
+---
+
+## How the pieces fit
+
+```mermaid
+flowchart TD
+    START([You describe an AI system]) --> INTAKE[ai-system-intake]
+    INTAKE --> REC[(system record)]
+
+    REC --> Q{Does it take<br/>actions?}
+    Q -->|yes| AUTO[agent-autonomy-review]
+    Q -->|no| LAW
+    AUTO --> LAW[eu-ai-act-triage]
+    LAW --> FW[nist-ai-rmf-assessment<br/>or iso-42001-soa]
+    FW --> PACK[evidence-pack]
+
+    BAD([Something went wrong]) --> INC[ai-incident-triage]
+    INC --> DIAG[agent-failure-diagnosis]
+
+    AUTO -.-> REC
+    LAW -.-> REC
+    FW -.-> REC
+    DIAG -.-> REC
+    REC -.-> PACK
+
+    classDef rec fill:#2d3748,stroke:#4a5568,color:#fff
+    classDef entry fill:#1a365d,stroke:#2c5282,color:#fff
+    class REC rec
+    class START,BAD entry
+```
+
+Every skill reads from and writes to one shared record. That is the whole architectural
+idea: when each assessment keeps its own private notion of what the system is, they
+drift, contradict each other, and an auditor finds the contradiction before you do.
+
+---
+
+## The failure taxonomy at a glance
+
+Eighteen modes across six classes, each with lettered diagnostic criteria so two
+reviewers reach the same classification from the same evidence.
+
+```mermaid
+flowchart LR
+    F([An agent<br/>fails]) --> G & P & A & M & S & R
+
+    G["<b>G · Goal</b><br/>what it's pursuing<br/>─────────<br/>G1 specification gaming<br/>G2 goal drift<br/>G3 subgoal fixation"]
+    P["<b>P · Perception</b><br/>what it believes<br/>─────────<br/>P1 confabulation<br/>P2 injected belief<br/>P3 stale-state action<br/>P4 sycophantic revision"]
+    A["<b>A · Action</b><br/>what it does<br/>─────────<br/>A1 scope creep<br/>A2 retry storm<br/>A3 irreversibility blindness"]
+    M["<b>M · Memory</b><br/>what it carries<br/>─────────<br/>M1 memory poisoning<br/>M2 context amnesia<br/>M3 confabulated continuity"]
+    S["<b>S · Social</b><br/>agent to agent<br/>─────────<br/>S1 deference cascade<br/>S2 responsibility diffusion"]
+    R["<b>R · Self-report</b><br/>what it claims<br/>─────────<br/>R1 post-hoc rationalisation<br/>R2 overclaiming completion<br/>R3 failure concealment"]
+
+    classDef cls fill:#1a202c,stroke:#4a5568,color:#e2e8f0
+    class G,P,A,M,S,R cls
+```
+
+Cascades are the normal case, not the exception — content is injected (`P2`), the agent
+expands scope on the strength of it (`A1`), and the summary omits the episode (`R3`).
+Record all that apply and mark which is **primary**: the one whose absence would have
+prevented the harm.
+
+---
+
 ## What's in it
 
 ### Framework
@@ -89,23 +176,35 @@ intact — clone it somewhere permanent and symlink, or copy `framework/` alongs
 
 The skills are designed to be invoked by describing your situation, not by naming them.
 "We're putting a model into the loan decisioning flow" should reach intake and EU AI Act
-triage on its own.
+triage on its own. The flow above is the order they chain in; the reasoning behind that
+order is in [`crosswalk.md`](framework/crosswalk.md).
 
-A typical sequence:
+Two sequencing rules worth knowing. **Legal duties first** — EU AI Act triage before the
+voluntary frameworks, because a prohibited or high-risk finding constrains everything
+downstream and carries statutory deadlines. And on the incident path, **the reporting
+clock before the analysis** — Art. 73 and DORA deadlines run from awareness, not from
+the point your investigation concludes.
 
-```
-1. Intake            → system record
-2. Autonomy review   → tier, blast radius, oversight level      (if it takes actions)
-3. EU AI Act triage  → classification and statutory obligations (legal duties first)
-4. NIST or ISO       → framework assessment                     (whichever you need)
-5. Evidence pack     → before the audit, not during
-```
-
-And when something goes wrong:
+### Repository map
 
 ```
-Incident triage → reporting clock first, then classification
-       └── agent-failure-diagnosis → primary failure, severity, controls
+remit/
+├── framework/
+│   ├── autonomy-tiers.md          A0–A4 × B0–B3, the grid, oversight obligations
+│   ├── diagnostic-manual.md       18 failure modes, diagnostic criteria, controls
+│   ├── system-record.schema.json  the shared artefact
+│   └── crosswalk.md               EU AI Act ↔ NIST ↔ ISO 42001 ↔ DORA
+├── skills/
+│   ├── ai-system-intake/          ← start here
+│   ├── agent-autonomy-review/
+│   ├── agent-failure-diagnosis/
+│   ├── eu-ai-act-triage/          + Annex III, prohibitions, obligations
+│   ├── nist-ai-rmf-assessment/    + functions and categories
+│   ├── iso-42001-soa/             + Annex A control objectives
+│   ├── ai-incident-triage/
+│   └── evidence-pack/
+└── examples/
+    └── loan-triage-agent.record.yaml   a worked, deliberately uncomfortable example
 ```
 
 ---
