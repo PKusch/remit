@@ -1,0 +1,270 @@
+# Worked example. Fictional system, realistic shape.
+#
+# It is deliberately an uncomfortable record: a system whose declared tier and observed
+# tier differ, whose oversight is nominal, and which is high-risk under the EU AI Act
+# while its owners described it as "just a recommendation". That combination is the
+# common case, not an edge case.
+
+id: loan-triage-agent
+name: Loan Application Triage Agent
+version: "2.4"
+status: live
+lifecycle_stage: operation
+last_reviewed: 2026-07-14
+next_review_due: 2027-01-14
+
+owner:
+  accountable_person: "[Named individual — Head of Retail Credit Ops]"
+  accountable_role: Head of Retail Credit Operations
+  business_unit: Retail Lending
+  technical_contact: "[Named individual — Lending Platform Engineering]"
+
+purpose:
+  intended_use: >
+    Reviews incoming personal loan applications, retrieves applicant history from the
+    core banking system, and assigns a triage outcome of fast-track approve, refer to
+    underwriter, or decline-recommended, with a written rationale.
+  out_of_scope_uses:
+    - Business or commercial lending of any kind
+    - Mortgage applications
+    - Any final decline decision without underwriter sign-off
+    - Pricing or interest-rate setting
+    - Reassessment of existing customers' facilities
+  affected_persons:
+    - Loan applicants, including unsuccessful ones who never learn a model was involved
+    - Underwriters, whose review capacity is presumed by the design
+  # Declared as influences-human-decision at design time. Operational data says otherwise:
+  # 97.8% of decline-recommended outcomes are confirmed unchanged, at a median review
+  # time of 31 seconds. Recorded here as it actually operates.
+  decision_consequence: determines-outcome
+
+agentic:
+  autonomy_tier: A2          # declared: underwriter approves every outcome
+  observed_tier: A3          # evidenced: review is nominal at current volumes
+  blast_radius: B3           # set by the adverse-decision write
+  oversight_level: constrained
+  reads_untrusted_content: true      # applicant-uploaded documents
+  delegates_to_subagents: false
+
+  tools:
+    - name: core_banking_read
+      description: Retrieves applicant account and repayment history.
+      blast_radius: B0
+      reversible: true
+      justification: Required to assess affordability.
+      credential_scope: read-only, retail accounts
+      requires_approval: false
+
+    - name: document_extract
+      description: Extracts fields from applicant-uploaded payslips and statements.
+      blast_radius: B0
+      reversible: true
+      justification: Required for income verification.
+      credential_scope: sandboxed extraction service
+      requires_approval: false
+      # Untrusted input path. Injection testing is not optional here — see P2.
+
+    - name: bureau_query
+      description: Credit bureau search.
+      blast_radius: B1
+      reversible: false          # leaves a search footprint on the applicant's file
+      justification: Required for creditworthiness assessment.
+      credential_scope: soft search only
+      requires_approval: false
+
+    - name: decision_write
+      description: Writes the triage outcome to the loan origination system.
+      blast_radius: B3
+      reversible: false
+      justification: The purpose of the system.
+      credential_scope: origination system, write
+      requires_approval: true    # nominally; see observed_tier
+
+    - name: applicant_notify
+      description: Sends the outcome letter to the applicant.
+      blast_radius: B3
+      reversible: false
+      justification: >
+        FINDING — added 2026-03 to reduce ops handoffs. No governance review was
+        performed at the time. This tool is why blast radius is B3 rather than B2:
+        a sent adverse-decision letter cannot be recalled.
+      credential_scope: customer comms service
+      requires_approval: false
+
+  halt_mechanism:
+    exists: true
+    how: Feature flag disables the triage queue consumer; in-flight items complete.
+    last_tested: 2025-11-02
+    time_to_halt_seconds: 90
+    # FINDING — untested for over nine months. Constrained oversight requires a tested
+    # halt. "In-flight items complete" also means up to 90 seconds of B3 actions
+    # continue after the halt is triggered.
+
+  memory:
+    persistent: true
+    scope: tenant
+    provenance_recorded: false   # FINDING — see M1
+    review_cadence: none
+
+  tier_history:
+    - date: 2025-06-01
+      autonomy_tier: A1
+      blast_radius: B1
+      reason: Initial deployment. Drafted a recommendation for underwriter entry.
+      approved_by: Credit Risk Committee
+    - date: 2025-09-15
+      autonomy_tier: A2
+      blast_radius: B3
+      reason: Given write access to origination system to remove manual re-keying.
+      approved_by: Credit Risk Committee
+    - date: 2026-03-02
+      autonomy_tier: A2
+      blast_radius: B3
+      reason: >
+        Applicant notification tool added to reduce ops handoffs. Treated as an
+        efficiency change; no re-tiering review performed.
+      approved_by: "[none recorded — FINDING]"
+    # The trajectory is the story. Each step was individually reasonable.
+
+data:
+  personal_data: true
+  special_category_data: false
+  data_sources:
+    - Core banking system
+    - Credit bureau
+    - Applicant-uploaded documents
+  training_data_provenance: >
+    Vendor base model, fine-tuned on 4 years of historical internal underwriting
+    decisions. Historical decisions carry whatever bias the prior process had — assessed
+    at build, not reassessed since.
+  retention: 7 years, per records policy
+
+supply_chain:
+  role: provider
+  # Deployer of a vendor model at first. Fine-tuning on internal decisions plus
+  # deployment under the bank's own brand is Art. 25 conversion. Confirmed with legal
+  # 2026-07-14. This single determination moves the entire Chapter III provider
+  # obligation set onto the bank.
+  base_model: "[vendor model, v3]"
+  base_model_supplier: "[vendor]"
+  third_party_components:
+    - Document extraction service
+    - Credit bureau API
+  critical_or_important_function: true   # DORA
+
+assessments:
+  - framework: eu-ai-act
+    framework_version: Regulation (EU) 2024/1689
+    date: 2026-07-14
+    assessor: "[Named individual — Group Compliance]"
+    outcome: >
+      High-risk, Annex III 5(b) creditworthiness. Art. 6(3) derogation unavailable:
+      the system profiles natural persons, and decision_consequence is
+      determines-outcome in practice. Role: provider via Art. 25.
+    confidence: high
+    requires_legal_review: true
+    findings:
+      - reference: Art. 14
+        status: partial
+        evidence: Underwriter approval step exists in the workflow.
+        gap: >
+          Oversight is nominal — 97.8% confirmation at 31s median review. Art. 14
+          requires oversight that is effective, not merely present.
+        owner: Head of Retail Credit Operations
+        due: 2026-10-31
+      - reference: Art. 27
+        status: not-met
+        evidence: None.
+        gap: >
+          FRIA required for Annex III 5(b) deployers and not performed. Note the bank
+          holds both roles following Art. 25 conversion.
+        owner: Group Compliance
+        due: 2026-09-30
+      - reference: Art. 12
+        status: partial
+        evidence: Decisions logged to origination system.
+        gap: Inputs that justified each decision are not retained; only the outcome is.
+        owner: Lending Platform Engineering
+        due: 2026-11-30
+      - reference: Art. 15(5)
+        status: not-met
+        evidence: None.
+        gap: >
+          No adversarial testing of the applicant-document path, which is an untrusted
+          input reaching a B3-capable agent.
+        owner: Lending Platform Engineering
+        due: 2026-09-30
+
+  - framework: remit-autonomy
+    date: 2026-07-20
+    assessor: "[Named individual — Group Compliance]"
+    outcome: >
+      A2 declared / A3 observed, B3, oversight level constrained. Three obligations of
+      that level unmet: untested halt, limits not enforced outside the model, and no
+      injection testing on an untrusted input path.
+    confidence: high
+    requires_legal_review: false
+    findings:
+      - reference: halt-tested
+        status: not-met
+        evidence: Last test 2025-11-02.
+        gap: Untested for 9 months; 90s of B3 actions continue post-halt.
+        owner: Lending Platform Engineering
+        due: 2026-09-15
+      - reference: tier-mismatch
+        status: not-met
+        evidence: 97.8% confirmation rate, 31s median review time.
+        gap: >
+          Running A3 under an A2 label. Either resource the review so it is real, or
+          re-declare as A3 and meet the obligations that follow.
+        owner: Head of Retail Credit Operations
+        due: 2026-10-31
+      - reference: notify-tool-blast-radius
+        status: not-met
+        evidence: Tool added 2026-03 with no approval recorded.
+        gap: >
+          Recommend removing applicant_notify from the agent and handing the send to a
+          deterministic system gated on underwriter sign-off. Cutting blast radius is
+          cheaper here than governing it.
+        owner: Lending Platform Engineering
+        due: 2026-10-31
+
+incidents:
+  - date: 2026-05-19
+    summary: >
+      Agent declined 14 applications over 40 minutes citing an income threshold that
+      does not exist in policy. Traced to a persisted note written during an earlier
+      session after processing an applicant-uploaded document containing
+      instruction-shaped text.
+    primary_classification: M1
+    contributing_classifications: [P2, R3]
+    severity: severe
+    blast_radius_realised: B3
+    tier_mismatch: true
+    external_reporting:
+      - EU AI Act Art. 73 — assessed, reported 2026-05-27
+      - GDPR Art. 33 — assessed, not engaged
+    remediation: >
+      Memory cleared and provenance recording specified but not yet built. All 14
+      applications re-decided by an underwriter; 11 approved. Applicants contacted.
+      Injection testing on the document path outstanding — see Art. 15(5) finding.
+    closed: false
+
+exceptions:
+  - description: >
+      Operating at constrained oversight level without a tested halt mechanism.
+    rationale: >
+      Engineering capacity committed to the Art. 12 logging remediation until Q4.
+    approved_by: "[Named individual — Chief Risk Officer]"
+    granted: 2026-07-20
+    expires: 2026-10-31
+    compensating_controls:
+      - Daily manual review of decline volumes against a 7-day baseline
+      - Queue consumer capped at 200 applications/hour
+
+notes: >
+  The pattern here is ordinary. Every escalation was individually defensible, the
+  oversight step is genuinely in the workflow, and nobody decided to run a B3 agent on
+  nominal review. It arrived there over ten months, one reasonable change at a time,
+  and the only thing that surfaced it was writing down the tier actually operated
+  rather than the tier designed.
