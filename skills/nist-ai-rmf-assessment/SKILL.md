@@ -85,23 +85,38 @@ Four states, and resist inventing a fifth:
 Avoid maturity scores unless the organisation already uses one. Numbers get quoted
 without their caveats, and a 2.7 travels further than the finding underneath it.
 
+## Granularity — read this before writing the output
+
+The bundled [`references/functions.md`](references/functions.md) is **category-level**:
+19 categories across the four functions, with the probing questions that surface real
+gaps. It does **not** enumerate the 72 subcategory identifiers.
+
+So assess at category level unless you have the NIST AI RMF Playbook or the framework
+document open, and say which level you worked at. **Do not invent subcategory
+identifiers.** A fabricated `MEASURE 2.11` in a governance assessment is precisely the
+`P1` confabulation the diagnostic manual describes, and it is worse here than elsewhere
+because a reader will assume a cited identifier was checked. Cite the ones you know —
+`GOVERN 1.3`, `MANAGE 2.3`, `MANAGE 2.4`, `MEASURE 2.7` recur and are given in the
+reference — and otherwise stay at category level.
+
 ## Output
 
 ```markdown
 # NIST AI RMF assessment — [scope], [date]
 
 ## Summary
-Assessed: [system / organisation] · Subcategories: [n assessed]
-Met [n] · Partial [n] · Not met [n] · N/A [n]
+Assessed: [system / organisation] · Level: [category / subcategory]
+Categories assessed: [n] · Met [n] · Partial [n] · Not met [n] · N/A [n]
 
 ## Headline findings
 [Three to five. Ordered by risk reduction, not by ease of fixing.]
 
 ## By function
 ### GOVERN
-| Subcategory | Status | Evidence | Gap |
+| Category | Status | Evidence | Gap |
 |---|---|---|---|
-[MAP, MEASURE, MANAGE the same]
+[MAP, MEASURE, MANAGE the same. Drop to named subcategories only where you have the
+Playbook to hand and can cite the identifier accurately.]
 
 ## Trustworthiness coverage
 [Per characteristic: how addressed, where thin, and whether it matters here.]

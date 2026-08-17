@@ -9,6 +9,29 @@ control, but the controls themselves are applied according to the organisation's
 impact assessments. Guidance on implementation is in ISO/IEC 42005 (impact assessment)
 and ISO/IEC 23894 (AI risk management).
 
+## Shape of the annex
+
+| Objective | Title | Controls |
+|---|---|---|
+| A.2 | Policies related to AI | 3 |
+| A.3 | Internal organisation | 2 |
+| A.4 | Resources for AI systems | 5 |
+| A.5 | Assessing impacts of AI systems | 4 |
+| A.6 | AI system life cycle | 8 |
+| A.7 | Data for AI systems | 5 |
+| A.8 | Information for interested parties | 4 |
+| A.9 | Use of AI systems | 3 |
+| A.10 | Third-party and customer relationships | 3 |
+
+The annex is usually described as carrying **38 controls across 9 objectives**, but
+secondary sources enumerate the sub-controls slightly differently and the table above
+sums to 37. Count from the standard itself before quoting a number in an SoA — an
+auditor will notice a control set that does not reconcile, and the discrepancy is in the
+counting convention, not in the substance.
+
+*Objective titles verified 17 August 2026 against public sources. Control text is
+copyrighted and must be read in the standard.*
+
 ---
 
 ## A.2 — Policies related to AI

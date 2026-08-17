@@ -73,17 +73,28 @@ specifically — other lines are not listed here.
 
 ## 6. Law enforcement
 
-Where permitted under applicable law: victim risk assessment, polygraphs, evidence
-reliability evaluation, offending or re-offending risk assessment (other than the
-Art. 5-prohibited predictive policing based solely on profiling), and profiling in the
-course of detection, investigation, or prosecution.
+Where permitted under applicable law:
+
+- **(a)** Assessing the risk of a natural person becoming a victim of criminal offences.
+- **(b)** Polygraphs and similar tools.
+- **(c)** Evaluating the reliability of evidence in the course of investigation or
+  prosecution.
+- **(d)** Assessing the risk of offending or re-offending, other than on the basis of
+  profiling alone — profiling-only predictive policing is *prohibited* under Art. 5(1)(d),
+  not high-risk.
+- **(e)** Profiling in the course of detection, investigation, or prosecution.
 
 ## 7. Migration, asylum, and border control management
 
-Polygraphs; risk assessment of persons entering or intending to enter; examination of
-applications for asylum, visa, or residence permits and associated complaints; and
-detection, recognition, or identification of persons, other than verification of travel
-documents.
+Where permitted under applicable law:
+
+- **(a)** Polygraphs and similar tools.
+- **(b)** Assessing risks — including security, irregular migration, and health risks —
+  posed by a person intending to enter or entering a Member State.
+- **(c)** Assisting the examination of applications for asylum, visa, or residence permits
+  and associated complaints regarding eligibility.
+- **(d)** Detecting, recognising, or identifying natural persons, **excluding** the
+  verification of travel documents.
 
 ## 8. Administration of justice and democratic processes
 

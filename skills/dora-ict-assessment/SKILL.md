@@ -67,8 +67,8 @@ is the system in the ICT asset inventory at all; are its dependencies mapped; an
 the detection capability actually cover *model* failure, or only infrastructure failure?
 Most monitoring will tell you the agent is up, not that it is wrong.
 
-**ICT incident management and reporting (Arts. 17–23).** Classification against criteria
-in the RTS, then reporting on the clocks in section 4 below.
+**ICT incident management and reporting (Arts. 17–23).** Classification against the RTS
+criteria in section 4 below, then reporting on the clocks.
 
 **Digital operational resilience testing (Arts. 24–27).** A testing programme
 proportionate to risk, with threat-led penetration testing (TLPT) for entities so
@@ -84,10 +84,37 @@ booked them as software licences rather than ICT services supporting a function.
 
 **Information sharing (Arts. 45+).** Voluntary. Note it, do not labour it.
 
-## 4. Incident reporting clocks
+## 4. Incident classification and reporting clocks
 
-Ask this question early in any incident, because the clocks are short and start from
-events that precede your investigation.
+### Is it major?
+
+Classification is what starts the clock, so it is the time-critical decision — not a
+tidy-up after the investigation.
+
+Under the RTS on classification of major incidents, an incident is **major** where
+critical services are affected **and** either there was any malicious unauthorised access
+to network and information systems, **or** the materiality thresholds of at least **two**
+of the remaining criteria are met.
+
+The criteria: clients, financial counterparts and transactions affected · reputational
+impact · duration and service downtime · geographical spread across Member States · data
+losses (availability, authenticity, integrity, confidentiality) · criticality of services
+affected · economic impact.
+
+Indicative thresholds — **check the current RTS, these are the figures most often
+misquoted**: more than 10% of clients using the affected service (credit institutions);
+downtime exceeding 2 consecutive hours during business hours; gross direct and indirect
+costs and losses exceeding EUR 100,000.
+
+For an AI agent the classification question that gets missed is **data losses through
+integrity rather than availability**. An agent that stays up while producing or acting on
+wrong information has not caused an outage, but it may well have caused an integrity
+loss — and integrity is explicitly one of the data-loss limbs.
+
+### The clocks
+
+Ask this early in any incident, because they are short and start from events that precede
+your investigation.
 
 | Report | Deadline |
 |---|---|

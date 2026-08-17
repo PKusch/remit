@@ -58,6 +58,19 @@ review.
 The central artefact. For every Annex A control: **applicable or not**, **justification**,
 **implementation status**, and **evidence**.
 
+**Granularity, and a warning.** The bundled
+[`references/annex-a.md`](references/annex-a.md) is **objective-level** — the nine
+objectives A.2 to A.10, their scope, and the gaps that typically appear under each. It
+does not reproduce the individual control text, which is copyrighted and must be read in
+the standard.
+
+A real SoA is control-level, so work from the standard itself. **Do not invent control
+identifiers to fill the table.** A fabricated `A.6.2.7` in a document a certification
+body will read is the `P1` confabulation the diagnostic manual describes, and it fails
+the audit more comprehensively than an honest gap would. Where you only have the
+objective-level reference, produce an objective-level draft, label it as such, and list
+what must be completed from the standard.
+
 Two rules that determine whether the SoA survives audit:
 
 **Justify exclusions substantively.** "Not applicable" with no reason is the single most

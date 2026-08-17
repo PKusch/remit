@@ -39,7 +39,19 @@ conformity; a regulator wants statutory obligations; a customer wants risk answe
 their data. Ask what standard or question set applies, and scope to it. A pack that
 answers everything answers nothing well.
 
-### 2. Pull from the system record
+### 2. Validate the record before you build anything on it
+
+```bash
+python scripts/validate_record.py records/the-system.record.yaml
+```
+
+Do this first. An evidence pack assembled from a record that does not conform is a pack
+built on sand, and the validator also reports governance warnings you will otherwise
+have to find by hand — observed tier exceeding declared, blast radius below the tools
+held, untested halts, memory without provenance, **expired exceptions**. That last one
+belongs in the pack whether you like it or not, and an auditor will find it if you don't.
+
+### 3. Pull from the system record
 
 Read the record (see
 [`framework/system-record.schema.json`](../../framework/system-record.schema.json)) and
@@ -47,7 +59,7 @@ assemble: identification and ownership, purpose and out-of-scope uses, agentic
 configuration and tier history, supply-chain role, assessments with findings, incidents
 with remediation status, and open exceptions with expiry dates.
 
-### 3. Substantiate each claim
+### 4. Substantiate each claim
 
 For every control claimed as met, locate the artefact. This is the work, and it is where
 the value is. Three specific things to check hard, because they are asserted far more
@@ -60,7 +72,7 @@ often than they are true:
 - **Human oversight.** Ask for approval records, override rates, and rejection counts.
   A gate with no recorded rejections invites the question of whether it is a gate.
 
-### 4. Report what is missing
+### 5. Report what is missing
 
 The gap register is the most valuable page in the pack. For each: what is claimed, what
 evidence is absent, what would satisfy it, who owns it, and how long it takes to produce.
@@ -69,7 +81,7 @@ Some gaps can be closed before the audit. Some cannot, and for those the right m
 stated, owned remediation plan — auditors respond far better to a known gap with a plan
 than to a claim that collapses under a follow-up question.
 
-### 5. Check the exceptions
+### 6. Check the exceptions
 
 Every exception should have an approver and an expiry. Expired exceptions are findings.
 An exception with no expiry is a policy change nobody wrote down, and it should be

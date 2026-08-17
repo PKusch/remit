@@ -33,13 +33,32 @@ direction and under-scoping in the other.
 Each fixture states what a good assessment must get right and which failure modes it is
 watching for. Run the skills against the scenario text and compare.
 
-### Known result
+`fixtures/incident-trace.md` does the same for the diagnostic manual. It gives an
+execution record where the human's own account is wrong, and where three of the four
+plausible classifications fail on a stated criterion. It tests whether an assessor applies
+the criteria or reaches for the nearest familiar label.
 
-Running the chain against Sentinel on 2026-08-17 surfaced a genuine gap: the correct DORA
-conclusion was not reachable from the repo as it then stood — `eu-ai-act-triage` did not
-mention DORA and no DORA skill existed, while the README and crosswalk both advertised
-coverage. `skills/dora-ict-assessment/` and the routing step in `eu-ai-act-triage`
-(§8, "a negative finding is not an all-clear") exist because of that run.
+### Known results
+
+Every fixture here has already found something. That is the point of keeping them.
+
+**Sentinel, 2026-08-17.** The correct DORA conclusion was not reachable from the repo as
+it then stood — `eu-ai-act-triage` did not mention DORA and no DORA skill existed, while
+the README and crosswalk both advertised coverage. `skills/dora-ict-assessment/` and the
+routing step in `eu-ai-act-triage` (§8, "a negative finding is not an all-clear") exist
+because of that run.
+
+**Incident trace, 2026-08-17.** Exposed a defect in the manual itself: `M1` memory
+poisoning required criterion B, that the false belief "is retrieved and relied upon in a
+later session". At diagnosis time that has not happened, so **M1 could only be diagnosed
+after the recurrence it exists to prevent**. The manual now distinguishes an *M1 exposure*
+— written but not yet retrieved — which is the only cheap moment to fix it.
+
+**Both, same day.** Running the NIST and ISO 42001 skills showed their output templates
+demanded finer granularity than their bundled references supply — subcategory identifiers
+and Annex A control IDs respectively. That forces an assessor to invent identifiers, which
+is `P1` confabulation in a document a certification body will read. Both skills now state
+their reference granularity and say plainly not to fabricate IDs.
 
 ## Adding a fixture
 

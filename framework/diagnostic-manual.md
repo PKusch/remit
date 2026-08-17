@@ -347,6 +347,14 @@ test.
 that achieved persistence, and it is the more serious of the two because the blast radius
 now extends across every future session.
 
+**Before criterion B is met.** Where a false belief has been *written* but not yet
+retrieved, the criteria are not satisfied and you should not record M1 as met. Record it
+as an **M1 exposure** instead, and remediate on that basis. This matters more than the
+bookkeeping suggests: waiting for criterion B is waiting for the recurrence, and the
+window between the write and the first retrieval is the only cheap moment to fix it.
+Every incident that touched persistent memory should be checked for exposure even when
+the incident itself was something else.
+
 **Severity.** *Severe* where the poisoned belief concerns permissions, identity, or prior
 authorisation — those are the beliefs that unlock everything else.
 
