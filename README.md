@@ -171,6 +171,33 @@ non-zero on failure, so it drops into CI or a pre-commit hook.
 It earned its place immediately: on first run it found that the worked example did not
 validate against its own schema.
 
+### The zoo
+
+```bash
+python zoo/run.py
+```
+
+Nineteen agents, each deliberately pathological in exactly one way, and a detector that
+implements the diagnostic manual's criteria mechanically and tries to work out what is
+wrong with them from the trace alone. Ground truth is declared by construction, so the
+score is real rather than self-graded.
+
+```
+recall on detectable classes : 16/16  (100%)
+spurious findings            : 2
+deferred to human            : 3
+```
+
+Every machine-detectable mode was recovered from its stated criteria — evidence that the
+manual is operational rather than merely well-written. Three classes (`G1`, `P1`, `R1`)
+are unreachable from a trace and are **correctly not attempted**, because a detector that
+silently missed them would read as clearance.
+
+Building it found three defects in Remit, including one delicious one: the retry-storm
+detector reported criteria `A+B+C` while only ever implementing `B+C` — `R2` overclaiming,
+in the tool built to detect `R2`. See [`zoo/README.md`](zoo/README.md), which also states
+plainly what this does **not** prove.
+
 ---
 
 ## Install
@@ -227,6 +254,10 @@ remit/
 │   └── evidence-pack/
 ├── scripts/
 │   └── validate_record.py         schema + governance checks, CI-ready
+├── zoo/                           19 deliberately broken agents + a detector
+│   ├── run.py                     release the specimens, score the criteria
+│   ├── specimens.py               one pathology each, ground truth by construction
+│   └── harness/                   the fake world, and the manual implemented in code
 ├── tests/
 │   ├── README.md                  how to check the repo's claims
 │   └── fixtures/                  scenarios with known correct answers
