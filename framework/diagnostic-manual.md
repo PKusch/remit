@@ -34,10 +34,24 @@ Classify from artefacts: logs, traces, tool-call records, the actual outputs. An
 own account of why it did something is evidence *about* R-class failures, and is not
 admissible for diagnosing the others. See **R1**.
 
-Multiple simultaneous classifications are normal and expected. Record all that apply,
-and mark which one is **primary** — the failure that, had it not occurred, would have
-prevented the harm. Cascades are the common case: an injected instruction (P2) produces
-a scope expansion (A1) that is then concealed in the summary (R3).
+Multiple simultaneous classifications happen. Record all that apply, and mark which one is
+**primary** — the failure that, had it not occurred, would have prevented the harm.
+
+> **Corrected 2026-08-17.** This section previously claimed cascades were "the common
+> case". That was an assertion, and when [`disorder/`](../disorder/) measured it across
+> 2,400 unscripted episodes, it did not hold: only **~4%** produced more than one
+> environment-induced mode. The figure looks far higher (~33%) if you count *latent*
+> defects — modes already present in the policy with no pressure applied — but those are
+> not cascades, they are two independent defects in the same agent.
+>
+> Where cascades do occur they are tightly coupled to a shared cause rather than to each
+> other: losing constraints at a context boundary produces `A1` and `M2` together because
+> one event caused both, not because `A1` led to `M2`. Treat a co-occurrence as a hint
+> about a common cause, not as evidence of a chain.
+>
+> The practical consequence: **do not go looking for a cascade by default.** Most
+> incidents have one environment-induced failure sitting on top of whatever the policy
+> was already doing wrong.
 
 ---
 

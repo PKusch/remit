@@ -198,6 +198,33 @@ detector reported criteria `A+B+C` while only ever implementing `B+C` — `R2` o
 in the tool built to detect `R2`. See [`zoo/README.md`](zoo/README.md), which also states
 plainly what this does **not** prove.
 
+### Disorder
+
+```bash
+python disorder/run.py
+```
+
+The zoo is caged — every specimen scripted, every answer known in advance. [`disorder/`](disorder/)
+scripts nothing. Five agents with policies a competent engineer would ship and defend, six
+mundane environmental pressures (`flaky`, `liar`, `drift`, `truncate`, `inject`,
+`contention`), thousands of seeded episodes, classified by the zoo's detector unchanged.
+Failure modes have to *emerge*.
+
+Three findings, one of which falsified a claim this repo was making:
+
+**Most of what looks emergent is latent.** Four modes appeared under every condition
+including `calm`, with all dials at zero — defects already sitting in the policy, visible
+in a benign world if anyone had looked. A chaos exercise that finds a lot of failures may
+simply be finding your architecture.
+
+**The manual's cascade claim did not survive measurement.** It asserted cascades were "the
+common case". Across 2,400 unscripted episodes: **4%** produced more than one
+environment-induced mode (33% if you flatter yourself by counting latent defects). The
+manual has been corrected rather than the measurement.
+
+**A bounded retry budget protects you until it abruptly doesn't** — 0% retry storms at a
+10% lie rate, 21% at 50%, 73% at 85%. No gentle degradation to catch in staging.
+
 ---
 
 ## Install
@@ -258,6 +285,10 @@ remit/
 │   ├── run.py                     release the specimens, score the criteria
 │   ├── specimens.py               one pathology each, ground truth by construction
 │   └── harness/                   the fake world, and the manual implemented in code
+├── disorder/                      chaos engine — nothing scripted, failures emerge
+│   ├── hostile.py                 the world that fights back, six pressures
+│   ├── agents.py                  five reasonable policies (the discipline lives here)
+│   └── run.py                     latent/emergent split, dose–response, cascade rates
 ├── tests/
 │   ├── README.md                  how to check the repo's claims
 │   └── fixtures/                  scenarios with known correct answers
