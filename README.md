@@ -75,8 +75,12 @@ flowchart TD
     Q -->|yes| AUTO[agent-autonomy-review]
     Q -->|no| LAW
     AUTO --> LAW[eu-ai-act-triage]
-    LAW --> FW[nist-ai-rmf-assessment<br/>or iso-42001-soa]
+    LAW --> FIN{EU financial<br/>entity?}
+    FIN -->|yes| DORA[dora-ict-assessment]
+    FIN -->|no| FW
+    DORA --> FW[nist-ai-rmf-assessment<br/>or iso-42001-soa]
     FW --> PACK[evidence-pack]
+    DORA -.-> REC
 
     BAD([Something went wrong]) --> INC[ai-incident-triage]
     INC --> DIAG[agent-failure-diagnosis]
@@ -145,10 +149,27 @@ prevented the harm.
 | [`agent-autonomy-review`](skills/agent-autonomy-review/) | Tiers autonomy and blast radius, derives the oversight obligation, finds autonomy creep |
 | [`agent-failure-diagnosis`](skills/agent-failure-diagnosis/) | Classifies why an agent misbehaved, from artefacts rather than narrative |
 | [`eu-ai-act-triage`](skills/eu-ai-act-triage/) | Prohibited / high-risk / transparency / minimal, provider vs deployer, obligations with dates |
+| [`dora-ict-assessment`](skills/dora-ict-assessment/) | Critical-or-important-function call, the five pillars, incident clocks, ICT third-party risk |
 | [`nist-ai-rmf-assessment`](skills/nist-ai-rmf-assessment/) | GOVERN / MAP / MEASURE / MANAGE gap assessment with evidence |
 | [`iso-42001-soa`](skills/iso-42001-soa/) | Clause conformity and the Statement of Applicability |
 | [`ai-incident-triage`](skills/ai-incident-triage/) | Incident classification, harm assessment, and the reporting-clock call |
 | [`evidence-pack`](skills/evidence-pack/) | Assembles audit-ready evidence and finds the claims that aren't evidenced |
+
+### Tooling
+
+```bash
+pip install pyyaml jsonschema
+python scripts/validate_record.py examples/ tests/fixtures/
+```
+
+`scripts/validate_record.py` validates records against the schema *and* reports
+governance warnings the schema cannot express — an observed tier exceeding the declared
+one, a blast radius lower than the tools actually held, an untested halt at an oversight
+level that requires one, persistent memory without provenance, expired exceptions. Exits
+non-zero on failure, so it drops into CI or a pre-commit hook.
+
+It earned its place immediately: on first run it found that the worked example did not
+validate against its own schema.
 
 ---
 
@@ -199,10 +220,16 @@ remit/
 │   ├── agent-autonomy-review/
 │   ├── agent-failure-diagnosis/
 │   ├── eu-ai-act-triage/          + Annex III, prohibitions, obligations
+│   ├── dora-ict-assessment/       the regime that usually binds in financial services
 │   ├── nist-ai-rmf-assessment/    + functions and categories
 │   ├── iso-42001-soa/             + Annex A control objectives
 │   ├── ai-incident-triage/
 │   └── evidence-pack/
+├── scripts/
+│   └── validate_record.py         schema + governance checks, CI-ready
+├── tests/
+│   ├── README.md                  how to check the repo's claims
+│   └── fixtures/                  scenarios with known correct answers
 └── examples/
     └── loan-triage-agent.record.yaml   a worked, deliberately uncomfortable example
 ```
@@ -224,12 +251,21 @@ everything else. Where self-report and trace conflict, the trace wins.
 
 ## Limits, stated plainly
 
-**This is not legal advice.** The EU AI Act, ISO 42001, and DORA material here is a
+**Legal content last verified: 17 August 2026.**
+
+That date matters more than usual. The **Digital Omnibus on AI** entered into force on
+27 July 2026 and deferred the EU AI Act's high-risk deadlines — Annex III from 2 August
+2026 to **2 December 2027**, Annex I to **2 August 2028** — while explicitly leaving
+Art. 50 transparency at 2 August 2026. This repo carried the pre-Omnibus dates for its
+first two days. Most guidance you will find online still does. **Check the vintage of
+anything you read on this, including this.**
+
+**This is not legal advice.** The EU AI Act, DORA, and ISO 42001 material here is a
 structured triage to organise facts and surface the right questions. Classification turns
 on specifics that reasonable people contest, and much of the detail sits in delegated
-acts, harmonised standards, and guidance that continue to develop. Verify article
-numbers, dates, and control text against current sources before relying on any of it, and
-route real decisions to qualified counsel.
+acts, regulatory technical standards, harmonised standards, and guidance that continue to
+develop. Verify article numbers, dates, and control text against current sources before
+relying on any of it, and route real decisions to qualified counsel.
 
 **The diagnostic manual is a working taxonomy, not a validated instrument.** Its
 categories are not exhaustive, not mutually exclusive, and carry no field trial. They

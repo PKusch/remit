@@ -84,6 +84,24 @@ usually the one that predicts every other gap.
 Record `unknown` rather than guessing. A record with honest gaps is auditable; a record
 with confident fiction is worse than nothing because it stops anyone looking.
 
+The schema accepts the literal string `unknown` in place of a date or boolean wherever
+intake realistically cannot establish the answer — review dates, whether a halt mechanism
+exists and when it was last tested, memory persistence and provenance, whether personal
+data is involved, tool reversibility and approval, and the DORA critical-function
+determination. For `halt_mechanism.last_tested` it also accepts `never`, and the
+distinction is worth preserving: **`never` is a finding, `unknown` is a question.**
+
+Validate before you hand the record over:
+
+```bash
+python scripts/validate_record.py records/your-system.record.yaml
+```
+
+That checks conformance and also reports governance warnings the schema cannot express —
+an observed tier exceeding the declared one, a blast radius lower than the tools held,
+an untested halt at an oversight level that requires one, persistent memory without
+provenance, and expired exceptions.
+
 Where an answer materially changes downstream classification and is unavailable, note it
 in `notes` and flag it in your summary as a blocking question. Do not stall the whole
 intake on one open point — complete everything else and surface what is missing.

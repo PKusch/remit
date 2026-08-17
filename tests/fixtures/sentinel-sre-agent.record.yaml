@@ -1,0 +1,138 @@
+# OUTPUT of ai-system-intake run against scenario.md
+# Testing: does the skill produce a usable record from a stakeholder description?
+
+id: sentinel-sre-agent
+name: Sentinel SRE Remediation Agent
+version: "unknown"          # SKILL GAP: skill never asks for version
+status: live
+lifecycle_stage: operation
+last_reviewed: "unknown"     # SCHEMA BUG: enum/format won't accept "unknown"
+next_review_due: "unknown"   # SCHEMA BUG: same
+
+owner:
+  accountable_person: "UNKNOWN — nobody named. First finding."
+  accountable_role: "Head of Engineering asserts a position but has not accepted accountability"
+  business_unit: Platform Engineering
+  technical_contact: "unknown"
+
+purpose:
+  intended_use: >
+    Consumes PagerDuty alerts for the payments platform, retrieves the relevant runbook
+    and telemetry, and attempts automated remediation — service restart, replica scaling,
+    deploy rollback, feature-flag changes, and execution of queries from an approved
+    library. Escalates to a human on-call engineer if unresolved within 10 minutes.
+  out_of_scope_uses:
+    - Schema changes or migrations
+    - Any action on customer records
+    - Changes to payment routing or settlement logic
+    - Ad-hoc SQL outside the approved library
+    # NOTE: these were inferred by me, not stated by the stakeholder. A real intake
+    # must ask. The skill does prompt for this, correctly.
+  affected_persons:
+    - Payments platform end users, indirectly, via availability and transaction integrity
+    - On-call engineers, whose escalation load the design presumes
+  decision_consequence: none
+  # Correct: no decision is made ABOUT a natural person. This is the field that keeps
+  # the EU AI Act triage honest downstream.
+
+agentic:
+  autonomy_tier: A2        # as the org would describe it ("an SRE watches")
+  observed_tier: A3        # unattended overnight/weekends; no per-step approval by day
+  blast_radius: B3         # rollback + flag flips + SQL on a live payments platform
+  oversight_level: constrained
+  reads_untrusted_content: true    # Confluence runbooks, alert payloads, log content
+  delegates_to_subagents: false
+
+  tools:
+    - name: datadog_query
+      blast_radius: B0
+      reversible: true
+      justification: Diagnosis.
+      requires_approval: false
+    - name: log_search
+      blast_radius: B0
+      reversible: true
+      justification: Diagnosis.
+      requires_approval: false
+    - name: confluence_runbook_read
+      blast_radius: B0
+      reversible: true
+      justification: Retrieves remediation procedure.
+      requires_approval: false
+      # UNTRUSTED PATH: any Confluence editor can write instruction-shaped text into a
+      # runbook that this agent will read and act on. P2 exposure. Nobody has considered
+      # Confluence an attack surface.
+    - name: service_restart
+      blast_radius: B1
+      reversible: true
+      justification: Core remediation.
+      requires_approval: false
+    - name: replica_scale
+      blast_radius: B1
+      reversible: true
+      justification: Core remediation.
+      requires_approval: false
+    - name: feature_flag_toggle
+      blast_radius: B2
+      reversible: true
+      justification: Core remediation.
+      requires_approval: false
+      # Reversible technically, but a flag flip on a payments platform can produce
+      # irreversible downstream effects (failed/duplicated transactions).
+    - name: deploy_rollback
+      blast_radius: B3
+      reversible: false
+      justification: >
+        FINDING — added June 2026 after an incident. No governance review, no recorded
+        approval. This tool is what makes the system B3.
+      requires_approval: false
+    - name: approved_sql_library
+      blast_radius: B3
+      reversible: false
+      justification: >
+        FINDING — "approved library" is a control asserted, not evidenced. Nobody could
+        say who approves additions or when it was last reviewed.
+      requires_approval: false
+
+  halt_mechanism:
+    exists: "unknown"       # SCHEMA BUG: declared boolean, cannot express "unknown"
+    how: "Not established during intake. Nobody could describe one."
+    last_tested: "never"    # SCHEMA BUG: format date
+
+  memory:
+    persistent: true
+    scope: tenant
+    provenance_recorded: false
+    review_cadence: none
+    # Vector store of past incidents, no provenance. M1 exposure: a poisoned "lesson"
+    # persists across every future incident.
+
+  tier_history:
+    - date: "2026-03-01"
+      autonomy_tier: A2
+      blast_radius: B1
+      reason: Initial deployment. Restart and scaling only.
+      approved_by: "unknown"
+    - date: "2026-06-01"
+      autonomy_tier: A2
+      blast_radius: B3
+      reason: Rollback capability added after a bad night.
+      approved_by: "NONE RECORDED — unreviewed re-tiering event"
+
+data:
+  personal_data: false
+  special_category_data: false
+  data_sources: [PagerDuty alerts, Datadog, application logs, Confluence runbooks]
+  retention: unknown
+
+supply_chain:
+  role: deployer
+  base_model: "unknown"
+  base_model_supplier: "unknown"
+  critical_or_important_function: true
+  # DORA. Incident response for a payments platform. This is the binding regime.
+
+notes: >
+  TEST NOTE: The skill produced a usable record and correctly drove the two questions
+  that matter (decision_consequence, tool inventory). But it has no vocabulary for
+  "unknown" in typed fields, and it never surfaced DORA — see findings.

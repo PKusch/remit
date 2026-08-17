@@ -4,6 +4,12 @@ Applicable since **2 February 2025**. Penalties reach **€35,000,000 or 7% of t
 worldwide annual turnover**, whichever is higher (Art. 99) — the heaviest tier in the
 Regulation.
 
+> **Two further prohibitions apply from 2 December 2026**, added by the Digital Omnibus
+> on AI (in force 27 July 2026): AI systems that generate or manipulate realistic
+> material depicting an identifiable person's intimate parts without their explicit
+> consent, and systems generating child sexual abuse material. These are listed as
+> (i) and (j) below and are commonly absent from guidance written before August 2026.
+
 Check these before any other classification step. A prohibited practice is not a severe
 form of high-risk; it is a system that may not be placed on the market, put into
 service, or used at all.
@@ -49,6 +55,13 @@ prevention of specific and imminent threat to life or a terrorist attack, and lo
 or identifying suspects of listed serious offences) — and those exceptions require prior
 judicial or independent administrative authorisation, a fundamental rights impact
 assessment, and registration.
+
+**(i) Non-consensual intimate imagery** — generating or manipulating realistic images,
+video, audio, or similar material depicting an identifiable person's intimate parts,
+without that person's explicit consent. *Applies from 2 December 2026.*
+
+**(j) Child sexual abuse material** — systems generating CSAM. *Applies from
+2 December 2026.*
 
 ---
 

@@ -3,6 +3,17 @@
 Hand people the obligations that attach to *their* role for *their* classification, with
 the article and the date. A generic list of articles is not an output anyone can act on.
 
+> **When the high-risk obligations below actually bite.** The Digital Omnibus on AI
+> (in force 27 July 2026) deferred **Annex III high-risk to 2 December 2027** and
+> **Annex I high-risk to 2 August 2028**; systems already in use by public authorities
+> have until 2 August 2030. So a high-risk classification made today is a real
+> classification with a real deadline — just not an immediate one.
+>
+> Say this explicitly when presenting the obligations. Two opposite errors are common
+> right now: treating high-risk duties as live today, and concluding that "nothing
+> applies until 2027". The prohibitions, AI literacy, GPAI duties, and **Art. 50
+> transparency (2 August 2026)** are all live and were not deferred.
+
 ---
 
 ## High-risk — provider obligations
@@ -63,7 +74,10 @@ modifies the intended purpose such that it becomes high-risk.
 
 ## Transparency obligations (Art. 50)
 
-Independent of risk tier. Applicable **2 August 2026**.
+Independent of risk tier. Applicable **2 August 2026 — explicitly not deferred by the
+Digital Omnibus**, which makes this the nearest live AI Act deadline for most
+organisations. Generative systems already on the market before 2 August 2026 have until
+**2 December 2026** for the Art. 50(2) machine-readable marking requirement.
 
 | Who | Obligation |
 |---|---|

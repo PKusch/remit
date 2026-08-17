@@ -74,17 +74,22 @@ For an organisation facing several frameworks at once, this order minimises rewo
 4. **NIST AI RMF or ISO 42001** — whichever the organisation needs. If certification is
    the goal, ISO; if the need is a structured internal posture or a US-facing
    demonstration, NIST. Doing one makes the other substantially cheaper.
-5. **DORA** — where the organisation is an EU financial entity and the system touches a
-   critical or important function.
+5. **DORA** — where the organisation is an EU financial entity, run
+   [`dora-ict-assessment`](../skills/dora-ict-assessment/SKILL.md) regardless of what the
+   AI Act triage concluded. DORA has applied since January 2025 with no transition left,
+   and for many financial-sector AI systems it is the only regime that actually binds. A
+   negative AI Act finding is not an all-clear.
 6. **Evidence pack** — assemble, and find the unevidenced claims before someone else does.
 
 ---
 
 ## Sources
 
-Verify against current texts; all of these are moving.
+Verify against current texts; all of these are moving. **Last verified 17 August 2026.**
 
-- Regulation (EU) 2024/1689 (AI Act) — consolidated text and Commission guidance
+- Regulation (EU) 2024/1689 (AI Act), **as amended by the Digital Omnibus on AI**
+  (in force 27 July 2026, which deferred Annex III high-risk to 2 December 2027 and
+  Annex I to 2 August 2028) — consolidated text and Commission guidance
 - NIST AI RMF 1.0 (Jan 2023) and the Generative AI Profile, NIST AI 600-1 (Jul 2024)
 - ISO/IEC 42001:2023; see also ISO/IEC 23894 (risk management) and ISO/IEC 42005
   (impact assessment)

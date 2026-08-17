@@ -102,7 +102,14 @@ otherwise minimal-risk:
 - Text published to inform the public on matters of public interest must be disclosed as
   AI-generated where not subject to human editorial review.
 
-Applicable from **2 August 2026**.
+Applicable from **2 August 2026 — these were deliberately excluded from the Omnibus
+deferral.** Generative systems already on the market before that date have until
+**2 December 2026** for the Art. 50(2) machine-readable marking requirement.
+
+This is now the nearest live AI Act deadline for most organisations, and it applies
+regardless of risk tier. A system that is otherwise minimal-risk can still owe
+transparency duties, which is why this step runs independently of the high-risk analysis
+rather than after it.
 
 ### 7. GPAI (Chapter V)
 
@@ -114,7 +121,30 @@ cybersecurity. Applicable since **2 August 2025**.
 
 Deployers of somebody else's GPAI do not inherit these. Providers building on one may.
 
+### 8. A negative finding is not an all-clear
+
+If the organisation is an **EU financial entity** — bank, payment or e-money institution,
+investment firm, insurer, pension provider, crypto-asset service provider, trading venue —
+run [`dora-ict-assessment`](../dora-ict-assessment/SKILL.md) before concluding. DORA has
+applied since January 2025 with no transition remaining, and it reaches operational
+resilience, four-hour incident reporting, and third-party concentration risk that the AI
+Act does not touch at all.
+
+This is the most expensive miss available in financial services: the AI Act analysis
+comes back negative, everyone relaxes, and the regime that actually binds was never
+assessed. Where the system takes actions, also run
+[`agent-autonomy-review`](../agent-autonomy-review/SKILL.md) — a system outside Annex III
+can still be an A3/B3 agent needing constrained oversight.
+
+Say plainly in the output which regimes you assessed and which you did not. A triage that
+is silent about DORA reads as a clearance it never gave.
+
 ## Dates
+
+> **The Digital Omnibus on AI entered into force on 27 July 2026 and deferred the
+> high-risk deadlines.** Much published guidance — and many internal compliance
+> calendars — still carries the original 2 August 2026 date for Annex III. Check which
+> vintage you are reading before relying on it.
 
 Cite these when stating obligations, since half of the practical question is *by when*:
 
@@ -123,11 +153,25 @@ Cite these when stating obligations, since half of the practical question is *by
 | 1 Aug 2024 | Entry into force |
 | 2 Feb 2025 | Prohibitions (Art. 5) and AI literacy (Art. 4) |
 | 2 Aug 2025 | GPAI obligations, governance bodies, penalties |
-| 2 Aug 2026 | General application, including Annex III high-risk and Art. 50 transparency |
-| 2 Aug 2027 | Annex I high-risk (products under harmonisation legislation) |
+| 2 Aug 2026 | General application · **Art. 50 transparency — NOT deferred** · AI Office enforcement powers · governance bodies operational |
+| 2 Dec 2026 | New prohibitions: non-consensual intimate imagery and CSAM generation · Art. 50(2) machine-readable marking for generative systems already on the market before 2 Aug 2026 |
+| 2 Aug 2027 | Member State AI regulatory sandboxes (deferred from 2 Aug 2026) |
+| **2 Dec 2027** | **Annex III high-risk — deferred from 2 Aug 2026** |
+| **2 Aug 2028** | **Annex I high-risk — deferred from 2 Aug 2027** |
+| 2 Aug 2030 | High-risk systems already in use by public authorities |
 
-Check current status before relying on these — implementation timelines have been subject
-to active political debate, and any of them may have moved since this was written.
+**What the Omnibus did *not* touch**, and where most of the live risk therefore sits:
+the Art. 5 prohibitions and Art. 4 AI literacy (in force since Feb 2025), the GPAI
+obligations (since Aug 2025), and Art. 50 transparency (2 Aug 2026). A common error
+right now is to tell a client "nothing applies until December 2027" — the transparency
+duties are live and the prohibitions have been for over a year.
+
+The Omnibus also refined the "safety component" definition to prevent overclassification,
+moved machinery products to a lower-risk classification, and reinstated a strict-necessity
+threshold for processing special-category data in bias detection under Art. 10(5).
+
+*Verified 17 August 2026 against post-Omnibus sources. Re-check before relying on it —
+this area has moved twice in a year.*
 
 ## Obligations
 
