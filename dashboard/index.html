@@ -1,0 +1,291 @@
+<meta charset="utf-8">
+<title>Remit Control Room</title>
+<style>
+:root{
+  --bg:#eaeef2; --panel:#f7f9fb; --sunk:#e2e7ec; --line:#ccd5dd; --hair:#dae1e7;
+  --ink:#141d26; --ink2:#4a5866; --ink3:#75838f;
+  --accent:#35566f; --accent-soft:#dde5ec;
+  --s0:#8a949d; --s1:#5f7f6e; --s2:#a87c33; --s3:#a2504a; --s4:#6e2b32;
+  --ok:#456f5c; --warn:#a2504a;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --serif:ui-serif,"Iowan Old Style",Charter,Georgia,serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f151b; --panel:#161e26; --sunk:#121a21; --line:#2b3742; --hair:#212c35;
+  --ink:#e7edf2; --ink2:#a4b1bd; --ink3:#77848f;
+  --accent:#8fb4d0; --accent-soft:#1d2b37;
+  --s0:#6d7883; --s1:#7fa892; --s2:#cfa155; --s3:#d4776f; --s4:#b0525c;
+  --ok:#7fa892; --warn:#d4776f;
+}}
+:root[data-theme="dark"]{
+  --bg:#0f151b; --panel:#161e26; --sunk:#121a21; --line:#2b3742; --hair:#212c35;
+  --ink:#e7edf2; --ink2:#a4b1bd; --ink3:#77848f;
+  --accent:#8fb4d0; --accent-soft:#1d2b37;
+  --s0:#6d7883; --s1:#7fa892; --s2:#cfa155; --s3:#d4776f; --s4:#b0525c;
+  --ok:#7fa892; --warn:#d4776f;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);
+  -webkit-font-smoothing:antialiased}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 22px 72px}
+
+.head{display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;
+  padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:22px}
+.head h1{margin:0;font-size:20px;font-weight:650;letter-spacing:-.02em}
+.head .sub{color:var(--ink3);font-size:13px}
+.head .spacer{flex:1}
+.pill{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink3);border:1px solid var(--line);border-radius:2px;padding:3px 8px}
+
+/* summary */
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));
+  gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:26px}
+.stat{background:var(--panel);padding:14px 16px}
+.stat b{display:block;font-family:var(--mono);font-size:26px;font-weight:600;
+  letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--ink3);margin-top:5px}
+.stat.alert b{color:var(--warn)}
+
+h2{font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink3);margin:0 0 4px}
+.hint{margin:0 0 14px;color:var(--ink2);font-size:13.5px;max-width:66ch}
+
+/* grid */
+.gridwrap{overflow-x:auto;margin-bottom:34px}
+table.grid{border-collapse:separate;border-spacing:2px;min-width:660px;width:100%}
+table.grid th{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink3);font-weight:500;padding:6px 8px;text-align:left}
+table.grid th.rh{text-align:right;white-space:nowrap;width:1%}
+td.cell{background:var(--panel);border:1px solid var(--hair);padding:8px;height:64px;
+  vertical-align:top;cursor:pointer;transition:border-color .12s,background .12s;position:relative}
+td.cell:hover{border-color:var(--accent)}
+td.cell:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+td.cell.sel{border-color:var(--accent);background:var(--accent-soft)}
+td.cell .lvl{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink3)}
+td.cell .bar{position:absolute;left:0;top:0;bottom:0;width:3px}
+.chip{display:inline-block;font-family:var(--mono);font-size:10.5px;
+  background:var(--accent);color:var(--panel);border-radius:2px;padding:2px 6px;margin-top:6px}
+.chip.ghost{background:none;color:var(--accent);border:1px dashed var(--accent)}
+
+/* obligation panel */
+.oblig{background:var(--panel);border:1px solid var(--line);padding:16px 18px;margin-bottom:34px}
+.oblig h3{margin:0 0 6px;font-size:15px;font-weight:650}
+.oblig p{margin:0;color:var(--ink2);font-size:13.5px;max-width:74ch}
+.oblig ul{margin:10px 0 0;padding-left:18px;color:var(--ink2);font-size:13.5px}
+.oblig li{margin-bottom:3px}
+
+/* systems */
+.sys{background:var(--panel);border:1px solid var(--line);margin-bottom:8px}
+.sys.hide{display:none}
+.srow{display:grid;grid-template-columns:3px 1fr auto auto auto;gap:14px;align-items:center;
+  padding:0;cursor:pointer;width:100%;background:none;border:0;text-align:left;color:inherit;
+  font:inherit}
+.srow:hover{background:var(--sunk)}
+.srow:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.sev{align-self:stretch}
+.sname{padding:13px 0}
+.sname b{display:block;font-size:14.5px;font-weight:600}
+.sname span{display:block;color:var(--ink3);font-size:12.5px;margin-top:2px}
+.tier{font-family:var(--mono);font-size:12.5px;color:var(--ink2);white-space:nowrap}
+.tier .bad{color:var(--warn);font-weight:600}
+.count{font-family:var(--mono);font-size:12px;color:var(--ink3);white-space:nowrap;
+  padding-right:16px}
+.count i{font-style:normal;color:var(--warn)}
+.detail{display:none;border-top:1px solid var(--hair);padding:16px 18px;background:var(--sunk)}
+.detail.open{display:block}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.dgrid h4{margin:0 0 7px;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink3);font-weight:600}
+.f{font-family:var(--serif);font-size:14px;color:var(--ink2);margin:0 0 9px;padding-left:11px;
+  border-left:2px solid var(--warn)}
+.f b{font-family:var(--mono);font-size:11.5px;color:var(--ink);display:block;
+  font-weight:600;margin-bottom:1px}
+.f.ok{border-left-color:var(--ok)}
+.w{font-size:13px;color:var(--ink2);margin:0 0 6px;display:flex;gap:8px}
+.w::before{content:"!";font-family:var(--mono);color:var(--warn);font-weight:700}
+.tl{font-family:var(--mono);font-size:12px;color:var(--ink2);display:flex;
+  justify-content:space-between;gap:10px;padding:3px 0;border-bottom:1px dotted var(--hair)}
+.tl b{color:var(--ink);font-weight:600}
+.foot{margin-top:30px;padding-top:16px;border-top:1px solid var(--line);
+  color:var(--ink3);font-size:12.5px;max-width:74ch}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<div class="wrap">
+  <div class="head">
+    <h1>Remit</h1>
+    <span class="sub">AI estate — autonomy, reach, and what each position obliges</span>
+    <span class="spacer"></span>
+    <span class="pill">3 systems · live from records</span>
+  </div>
+
+  <div class="strip" id="strip"></div>
+
+  <h2>The grid</h2>
+  <p class="hint">Autonomy across, reach down. A system's square decides its oversight —
+    and the slope is deliberate: full autonomy over things that cannot break anything is
+    cheap to govern, careful supervision of things that can end someone's mortgage
+    application is not. Click any square.</p>
+  <div class="gridwrap"><div id="grid"></div></div>
+  <div class="oblig" id="oblig"></div>
+
+  <h2>Systems</h2>
+  <p class="hint">Gaps are computed in the page by the same checks
+    <span class="mono">scripts/validate_record.py</span> runs, so what you see here is what
+    CI would tell you. Open a row for the detail.</p>
+  <div id="list"></div>
+
+  <p class="foot">Records come from <span class="mono">examples/</span> and
+    <span class="mono">tests/fixtures/</span> in the repository. Two of these are worked
+    examples; <span class="mono">opspilot</span> is a real system, assessed by reading its
+    source. Nothing here is legal advice.</p>
+</div>
+<script>
+const R = [{"id":"loan-triage-agent","name":"Loan Application Triage Agent","version":"2.4","status":"live","lifecycle_stage":"operation","last_reviewed":"2026-07-14","next_review_due":"2027-01-14","owner":{"accountable_person":"[Named individual \u2014 Head of Retail Credit Ops]","accountable_role":"Head of Retail Credit Operations","business_unit":"Retail Lending","technical_contact":"[Named individual \u2014 Lending Platform Engineering]"},"purpose":{"intended_use":"Reviews incoming personal loan applications, retrieves applicant history from the core banking system, and assigns a triage outcome of fast-track approve, refer to underwriter, or decline-recommended, with a written rationale.\n","out_of_scope_uses":["Business or commercial lending of any kind","Mortgage applications","Any final decline decision without underwriter sign-off","Pricing or interest-rate setting","Reassessment of existing customers' facilities"],"affected_persons":["Loan applicants, including unsuccessful ones who never learn a model was involved","Underwriters, whose review capacity is presumed by the design"],"decision_consequence":"determines-outcome"},"agentic":{"autonomy_tier":"A2","observed_tier":"A3","blast_radius":"B3","oversight_level":"constrained","reads_untrusted_content":true,"delegates_to_subagents":false,"tools":[{"name":"core_banking_read","description":"Retrieves applicant account and repayment history.","blast_radius":"B0","reversible":true,"justification":"Required to assess affordability.","credential_scope":"read-only, retail accounts","requires_approval":false},{"name":"document_extract","description":"Extracts fields from applicant-uploaded payslips and statements.","blast_radius":"B0","reversible":true,"justification":"Required for income verification.","credential_scope":"sandboxed extraction service","requires_approval":false},{"name":"bureau_query","description":"Credit bureau search.","blast_radius":"B1","reversible":false,"justification":"Required for creditworthiness assessment.","credential_scope":"soft search only","requires_approval":false},{"name":"decision_write","description":"Writes the triage outcome to the loan origination system.","blast_radius":"B3","reversible":false,"justification":"The purpose of the system.","credential_scope":"origination system, write","requires_approval":true},{"name":"applicant_notify","description":"Sends the outcome letter to the applicant.","blast_radius":"B3","reversible":false,"justification":"FINDING \u2014 added 2026-03 to reduce ops handoffs. No governance review was performed at the time. This tool is why blast radius is B3 rather than B2: a sent adverse-decision letter cannot be recalled.\n","credential_scope":"customer comms service","requires_approval":false}],"halt_mechanism":{"exists":true,"how":"Feature flag disables the triage queue consumer; in-flight items complete.","last_tested":"2025-11-02","time_to_halt_seconds":90},"memory":{"persistent":true,"scope":"tenant","provenance_recorded":false,"review_cadence":"none"},"tier_history":[{"date":"2025-06-01","autonomy_tier":"A1","blast_radius":"B1","reason":"Initial deployment. Drafted a recommendation for underwriter entry.","approved_by":"Credit Risk Committee"},{"date":"2025-09-15","autonomy_tier":"A2","blast_radius":"B3","reason":"Given write access to origination system to remove manual re-keying.","approved_by":"Credit Risk Committee"},{"date":"2026-03-02","autonomy_tier":"A2","blast_radius":"B3","reason":"Applicant notification tool added to reduce ops handoffs. Treated as an efficiency change; no re-tiering review performed.\n","approved_by":"[none recorded \u2014 FINDING]"}]},"data":{"personal_data":true,"special_category_data":false,"data_sources":["Core banking system","Credit bureau","Applicant-uploaded documents"],"training_data_provenance":"Vendor base model, fine-tuned on 4 years of historical internal underwriting decisions. Historical decisions carry whatever bias the prior process had \u2014 assessed at build, not reassessed since.\n","retention":"7 years, per records policy"},"supply_chain":{"role":"provider","base_model":"[vendor model, v3]","base_model_supplier":"[vendor]","third_party_components":["Document extraction service","Credit bureau API"],"critical_or_important_function":true},"assessments":[{"framework":"eu-ai-act","framework_version":"Regulation (EU) 2024/1689","date":"2026-07-14","assessor":"[Named individual \u2014 Group Compliance]","outcome":"High-risk, Annex III 5(b) creditworthiness. Art. 6(3) derogation unavailable: the system profiles natural persons, and decision_consequence is determines-outcome in practice. Role: provider via Art. 25. Chapter III obligations apply from 2 Dec 2027 following the Digital Omnibus deferral \u2014 the classification is live now, the duties bite then. Art. 50 transparency is not deferred but is not engaged here (no direct interaction, no synthetic content).\n","confidence":"high","requires_legal_review":true,"findings":[{"reference":"Art. 14","status":"partial","evidence":"Underwriter approval step exists in the workflow.","gap":"Oversight is nominal \u2014 97.8% confirmation at 31s median review. Art. 14 requires oversight that is effective, not merely present.\n","owner":"Head of Retail Credit Operations","due":"2026-10-31"},{"reference":"Art. 27","status":"not-met","evidence":"None.","gap":"FRIA required for Annex III 5(b) deployers and not performed. Note the bank holds both roles following Art. 25 conversion.\n","owner":"Group Compliance","due":"2026-09-30"},{"reference":"Art. 12","status":"partial","evidence":"Decisions logged to origination system.","gap":"Inputs that justified each decision are not retained; only the outcome is.","owner":"Lending Platform Engineering","due":"2026-11-30"},{"reference":"Art. 15(5)","status":"not-met","evidence":"None.","gap":"No adversarial testing of the applicant-document path, which is an untrusted input reaching a B3-capable agent.\n","owner":"Lending Platform Engineering","due":"2026-09-30"}]},{"framework":"remit-autonomy","date":"2026-07-20","assessor":"[Named individual \u2014 Group Compliance]","outcome":"A2 declared / A3 observed, B3, oversight level constrained. Three obligations of that level unmet: untested halt, limits not enforced outside the model, and no injection testing on an untrusted input path.\n","confidence":"high","requires_legal_review":false,"findings":[{"reference":"halt-tested","status":"not-met","evidence":"Last test 2025-11-02.","gap":"Untested for 9 months; 90s of B3 actions continue post-halt.","owner":"Lending Platform Engineering","due":"2026-09-15"},{"reference":"tier-mismatch","status":"not-met","evidence":"97.8% confirmation rate, 31s median review time.","gap":"Running A3 under an A2 label. Either resource the review so it is real, or re-declare as A3 and meet the obligations that follow.\n","owner":"Head of Retail Credit Operations","due":"2026-10-31"},{"reference":"notify-tool-blast-radius","status":"not-met","evidence":"Tool added 2026-03 with no approval recorded.","gap":"Recommend removing applicant_notify from the agent and handing the send to a deterministic system gated on underwriter sign-off. Cutting blast radius is cheaper here than governing it.\n","owner":"Lending Platform Engineering","due":"2026-10-31"}]}],"incidents":[{"date":"2026-05-19","summary":"Agent declined 14 applications over 40 minutes citing an income threshold that does not exist in policy. Traced to a persisted note written during an earlier session after processing an applicant-uploaded document containing instruction-shaped text.\n","primary_classification":"M1","contributing_classifications":["P2","R3"],"severity":"severe","blast_radius_realised":"B3","tier_mismatch":true,"external_reporting":["EU AI Act Art. 73 \u2014 assessed, reported 2026-05-27","GDPR Art. 33 \u2014 assessed, not engaged"],"remediation":"Memory cleared and provenance recording specified but not yet built. All 14 applications re-decided by an underwriter; 11 approved. Applicants contacted. Injection testing on the document path outstanding \u2014 see Art. 15(5) finding.\n","closed":false}],"exceptions":[{"description":"Operating at constrained oversight level without a tested halt mechanism.\n","rationale":"Engineering capacity committed to the Art. 12 logging remediation until Q4.\n","approved_by":"[Named individual \u2014 Chief Risk Officer]","granted":"2026-07-20","expires":"2026-10-31","compensating_controls":["Daily manual review of decline volumes against a 7-day baseline","Queue consumer capped at 200 applications/hour"]}],"notes":"The pattern here is ordinary. Every escalation was individually defensible, the oversight step is genuinely in the workflow, and nobody decided to run a B3 agent on nominal review. It arrived there over ten months, one reasonable change at a time, and the only thing that surfaced it was writing down the tier actually operated rather than the tier designed.\n"},{"id":"opspilot","name":"OpsPilot \u2014 agentic reconciliation copilot","version":"0.1.0","status":"in-development","lifecycle_stage":"build","last_reviewed":"2026-08-18","next_review_due":"unknown","owner":{"accountable_person":"patkusch (author)","accountable_role":"Author / maintainer","business_unit":"n/a \u2014 personal project","technical_contact":"patkusch"},"purpose":{"intended_use":"Takes a plain-English intent from an operator, inspects a queue of reconciliation breaks (mismatches between ledgers and counterparties), plans a disposition per item \u2014 auto-match, write-off, or escalate \u2014 executes the eligible ones, and verifies the outcome arithmetically against the ledger.\n","out_of_scope_uses":["Any item at or above the \u00a310,000 dual-control limit (hard-blocked in code)","Write-offs above \u00a3250 per item or \u00a35,000 per batch (hard-blocked)","Items under 30 days old (hard-blocked from write-off)","Deciding without a named human operator (rejected in Store.run)"],"affected_persons":["Counterparties whose breaks are written off or matched","Reconciliation analysts, whose escalation queue the design presumes"],"decision_consequence":"determines-outcome"},"agentic":{"autonomy_tier":"A2","observed_tier":"A3","blast_radius":"B3","oversight_level":"constrained","reads_untrusted_content":false,"delegates_to_subagents":false,"tools":[{"name":"build_plan","description":"Parses intent, computes a disposition per break.","blast_radius":"B0","reversible":true,"justification":"The planning step. Read-only.","requires_approval":false},{"name":"execute_and_verify","description":"Mutates break.status to cleared/escalated, then checks arithmetic.","blast_radius":"B3","reversible":false,"justification":"The purpose of the system. NOTE: the same function performs the mutations and computes the proof that the mutations were correct.\n","credential_scope":"none \u2014 no authentication on any endpoint","requires_approval":false},{"name":"POST /api/run","description":"Public HTTP endpoint that triggers execute_and_verify.","blast_radius":"B3","reversible":false,"justification":"FINDING \u2014 unauthenticated. `operator` is a free-text string in the request body.\n","credential_scope":"none","requires_approval":false}],"halt_mechanism":{"exists":false,"how":"No kill switch, rate limit, or circuit breaker in the codebase.","last_tested":"never"},"memory":{"persistent":false,"scope":"session","provenance_recorded":false,"review_cadence":"none"},"tier_history":[{"date":"2026-07-25","autonomy_tier":"A2","blast_radius":"B3","reason":"Initial build. Guardrails present from the start.","approved_by":"n/a \u2014 personal project"}]},"data":{"personal_data":false,"special_category_data":false,"data_sources":["seeded in-memory break queue (app/seed.py)"],"retention":"none \u2014 resets on restart"},"supply_chain":{"role":"provider","base_model":"none \u2014 the decision path contains no model at all","third_party_components":["FastAPI","Pydantic"],"critical_or_important_function":false},"assessments":[{"framework":"remit-autonomy","date":"2026-08-18","assessor":"Remit agent-autonomy-review","outcome":"A2 declared / A3 evidenced, B3, oversight level constrained. Guardrail design is unusually strong \u2014 limits are enforced in code, not prompts, and the decision path contains no model at all, so the classic agentic failure modes are largely designed out. Three findings concern the boundary between the agent and the humans around it, not the agent's own logic.\n","confidence":"high","requires_legal_review":false,"findings":[{"reference":"self-asserted-identity","status":"not-met","evidence":"app/main.py RunReq.operator is a free-text string; no auth on any route.","gap":"The dual-control control is defeated by typing a different name. Store.run rejects empty and rejects \"agent\", which shows the intent \u2014 but a control the caller satisfies by describing itself is not a control. This is precisely the finding adversary/ established.\n","owner":"patkusch"},{"reference":"self-verification","status":"partial","evidence":"engine.execute_and_verify mutates b.status, then computes VerificationCheck objects from the same in-memory objects it just mutated.\n","gap":"The proof is produced by the actor from its own writes. \"Cleared breaks actually gone\" checks that the code did what the code just did. Conservation of value is a genuine arithmetic identity and does hold \u2014 but an independent reader of the ledger would make all four checks evidence rather than assertion.\n","owner":"patkusch"},{"reference":"approval-not-enforced","status":"not-met","evidence":"POST /api/run builds a fresh plan and executes it in the same call.","gap":"/api/plan and /api/run are separate endpoints, but nothing server-side requires that a plan was seen, let alone approved, before execution. The approval step exists in the UI only. That is the A2/A3 gap.\n","owner":"patkusch"},{"reference":"no-halt","status":"not-met","evidence":"No kill switch, rate limit, or circuit breaker anywhere in 494 lines.","gap":"Constrained oversight requires a tested halt. Low real-world severity while the store is in-memory and seeded; blocking if ever pointed at a real ledger.\n","owner":"patkusch"}]},{"framework":"eu-ai-act","framework_version":"Regulation (EU) 2024/1689 as amended by the Digital Omnibus","date":"2026-08-18","assessor":"Remit eu-ai-act-triage","outcome":"Almost certainly NOT an AI system under Art. 3(1) as built \u2014 the decision path is regex intent-parsing plus deterministic threshold rules, with no inference and no model. Deterministic rules-based software sits outside the definition. If a model were introduced into parse_intent or _decide, re-triage immediately: the function (creditworthiness-adjacent financial decisioning about counterparty balances) sits near Annex III 5(b), and decision_consequence is already determines-outcome. Art. 50 transparency not engaged: no interaction with natural persons as such, no synthetic content.\n","confidence":"medium","requires_legal_review":false},{"framework":"dora","date":"2026-08-18","assessor":"Remit dora-ict-assessment","outcome":"Out of scope as built \u2014 a personal project, not an EU financial entity. Recorded because the finding is conditional and would flip: deployed inside a bank against a live reconciliation ledger, this is ICT supporting a critical or important function, and the no-halt and no-auth findings above would move from housekeeping to Art. 9 ICT risk management gaps with resilience-testing obligations attached.\n","confidence":"high","requires_legal_review":false}],"notes":"Assessment produced by reading source, not from a description. What the exercise was really testing: whether Remit's skills produce findings specific to a system, or generic checklist noise. On this evidence, specific \u2014 the three substantive findings (self-asserted operator identity, self-produced verification, unenforced approval gate) are all things the code does, none are things the skills could have guessed, and two of them come directly from a finding adversary/ established two hours earlier.\nWorth saying plainly: the guardrail design here is better than most production agents. Limits live in code, the decision path is model-free, and the system refuses to run without a named human. The findings are about the seam between the agent and its operators, which is exactly where the framework claims the gap usually is.\n"},{"id":"sentinel-sre-agent","name":"Sentinel SRE Remediation Agent","version":"unknown","status":"live","lifecycle_stage":"operation","last_reviewed":"unknown","next_review_due":"unknown","owner":{"accountable_person":"UNKNOWN \u2014 nobody named. First finding.","accountable_role":"Head of Engineering asserts a position but has not accepted accountability","business_unit":"Platform Engineering","technical_contact":"unknown"},"purpose":{"intended_use":"Consumes PagerDuty alerts for the payments platform, retrieves the relevant runbook and telemetry, and attempts automated remediation \u2014 service restart, replica scaling, deploy rollback, feature-flag changes, and execution of queries from an approved library. Escalates to a human on-call engineer if unresolved within 10 minutes.\n","out_of_scope_uses":["Schema changes or migrations","Any action on customer records","Changes to payment routing or settlement logic","Ad-hoc SQL outside the approved library"],"affected_persons":["Payments platform end users, indirectly, via availability and transaction integrity","On-call engineers, whose escalation load the design presumes"],"decision_consequence":"none"},"agentic":{"autonomy_tier":"A2","observed_tier":"A3","blast_radius":"B3","oversight_level":"constrained","reads_untrusted_content":true,"delegates_to_subagents":false,"tools":[{"name":"datadog_query","blast_radius":"B0","reversible":true,"justification":"Diagnosis.","requires_approval":false},{"name":"log_search","blast_radius":"B0","reversible":true,"justification":"Diagnosis.","requires_approval":false},{"name":"confluence_runbook_read","blast_radius":"B0","reversible":true,"justification":"Retrieves remediation procedure.","requires_approval":false},{"name":"service_restart","blast_radius":"B1","reversible":true,"justification":"Core remediation.","requires_approval":false},{"name":"replica_scale","blast_radius":"B1","reversible":true,"justification":"Core remediation.","requires_approval":false},{"name":"feature_flag_toggle","blast_radius":"B2","reversible":true,"justification":"Core remediation.","requires_approval":false},{"name":"deploy_rollback","blast_radius":"B3","reversible":false,"justification":"FINDING \u2014 added June 2026 after an incident. No governance review, no recorded approval. This tool is what makes the system B3.\n","requires_approval":false},{"name":"approved_sql_library","blast_radius":"B3","reversible":false,"justification":"FINDING \u2014 \"approved library\" is a control asserted, not evidenced. Nobody could say who approves additions or when it was last reviewed.\n","requires_approval":false}],"halt_mechanism":{"exists":"unknown","how":"Not established during intake. Nobody could describe one.","last_tested":"never"},"memory":{"persistent":true,"scope":"tenant","provenance_recorded":false,"review_cadence":"none"},"tier_history":[{"date":"2026-03-01","autonomy_tier":"A2","blast_radius":"B1","reason":"Initial deployment. Restart and scaling only.","approved_by":"unknown"},{"date":"2026-06-01","autonomy_tier":"A2","blast_radius":"B3","reason":"Rollback capability added after a bad night.","approved_by":"NONE RECORDED \u2014 unreviewed re-tiering event"}]},"data":{"personal_data":false,"special_category_data":false,"data_sources":["PagerDuty alerts","Datadog","application logs","Confluence runbooks"],"retention":"unknown"},"supply_chain":{"role":"deployer","base_model":"unknown","base_model_supplier":"unknown","critical_or_important_function":true},"notes":"TEST NOTE: The skill produced a usable record and correctly drove the two questions that matter (decision_consequence, tool inventory). But it has no vocabulary for \"unknown\" in typed fields, and it never surfaced DORA \u2014 see findings.\n"}];
+const A = ["A0","A1","A2","A3","A4"], B = ["B0","B1","B2","B3"];
+const ANAME = {A0:"advisory",A1:"assisted",A2:"supervised",A3:"delegated",A4:"autonomous"};
+const BNAME = {B0:"read-only",B1:"internal, reversible",B2:"hard to reverse",B3:"irreversible / external"};
+const GRID = {
+ A0:{B0:0,B1:0,B2:1,B3:1}, A1:{B0:0,B1:1,B2:1,B3:2}, A2:{B0:0,B1:1,B2:2,B3:2},
+ A3:{B0:1,B1:2,B2:2,B3:3}, A4:{B0:1,B1:2,B2:3,B3:4}};
+const LVL = ["minimal","standard","enhanced","constrained","prohibited"];
+const SVAR = ["var(--s0)","var(--s1)","var(--s2)","var(--s3)","var(--s4)"];
+const OBLIG = {
+ minimal:["Inventory it, name an owner, log invocations.","That is genuinely all. Governance capacity is finite, and spending it here is why nobody trusts the governance function."],
+ standard:["Documented purpose and limits.","A tool inventory with a justification per tool.","Action-level logging sufficient to reconstruct what happened.","A named human accountable for outcomes, and periodic review."],
+ enhanced:["Everything at standard, plus:","Pre-deployment evaluation against declared failure modes.","A halt mechanism, tested at least as often as your DR plan.","Rate and scope limits enforced outside the model — a prompt is not a control.","Red-teaming for injection wherever the agent reads untrusted content."],
+ constrained:["Everything at enhanced, plus:","Hard technical bounds the agent cannot widen by any sequence of its own actions.","Independent review before deployment.","Continuous monitoring with automated halt on anomaly.","A rollback procedure that has actually been executed in a test."],
+ prohibited:["Do not deploy.","The fix is almost always to cut blast radius rather than pile oversight onto it — split the irreversible step out and give it to a human or a deterministic system.","If you deploy anyway, that is a time-limited exception with executive sign-off and a defined path back below the line."]};
+
+// The same checks scripts/validate_record.py runs, so what you see here is what CI says.
+function warnings(r){
+  const g=r.agentic; if(!g) return [];
+  const out=[], dec=(g.observed_tier||g.autonomy_tier), rad=g.blast_radius;
+  if(g.observed_tier && g.autonomy_tier && g.observed_tier>g.autonomy_tier)
+    out.push(`running at ${g.observed_tier} but governed as ${g.autonomy_tier}`);
+  const tools=g.tools||[];
+  if(tools.length && rad){
+    const worst=tools.reduce((m,t)=>B.indexOf(t.blast_radius)>B.indexOf(m)?t.blast_radius:m,"B0");
+    if(B.indexOf(worst)>B.indexOf(rad)) out.push(`blast radius ${rad} but a tool reaches ${worst}`);
+  }
+  if(dec&&rad){
+    const need=LVL[GRID[dec][rad]];
+    if(g.oversight_level&&g.oversight_level!==need) out.push(`oversight recorded as ${g.oversight_level}; the grid gives ${need}`);
+    if(need==="enhanced"||need==="constrained"){
+      const h=g.halt_mechanism||{};
+      if(h.exists===true&&(!h.last_tested||h.last_tested==="never"||h.last_tested==="unknown"))
+        out.push("halt mechanism not evidenced as tested");
+      else if(h.exists!==true) out.push("no halt mechanism recorded, and this level requires one");
+    }
+    if(g.reads_untrusted_content===true&&(rad==="B2"||rad==="B3"))
+      out.push(`reads untrusted content at ${rad} — injection testing is load-bearing`);
+  }
+  const m=g.memory||{};
+  if(m.persistent===true&&!m.provenance_recorded) out.push("persistent memory without provenance");
+  tools.filter(t=>!t.justification).forEach(t=>out.push(`tool "${t.name}" has no justification`));
+  (r.exceptions||[]).filter(e=>e.expires&&e.expires<"2026-08-18")
+    .forEach(e=>out.push(`exception expired ${e.expires}`));
+  return out;
+}
+const meta = R.map(r=>{
+  const g=r.agentic||{}, dec=g.observed_tier||g.autonomy_tier, rad=g.blast_radius;
+  const lvlIdx = (dec&&rad)?GRID[dec][rad]:0;
+  const findings=(r.assessments||[]).flatMap(a=>(a.findings||[]).map(f=>({...f,fw:a.framework})));
+  return {r,g,dec,rad,lvlIdx,lvl:LVL[lvlIdx],warn:warnings(r),findings,
+          open:findings.filter(f=>f.status==="not-met"||f.status==="partial").length};
+});
+let sel=null;
+
+const esc=s=>String(s??"").replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+
+function drawStrip(){
+  const mism=meta.filter(m=>m.g.observed_tier&&m.g.autonomy_tier&&m.g.observed_tier>m.g.autonomy_tier).length;
+  const hi=meta.filter(m=>m.lvlIdx>=3).length;
+  const warns=meta.reduce((n,m)=>n+m.warn.length,0);
+  document.getElementById("strip").innerHTML=[
+    [meta.length,"systems governed",0],
+    [hi,"at constrained or above",hi>0],
+    [mism,"running above their tier",mism>0],
+    [warns,"open control gaps",warns>0],
+  ].map(([n,l,a])=>`<div class="stat${a?" alert":""}"><b>${n}</b><span>${l}</span></div>`).join("");
+}
+
+function drawGrid(){
+  let h='<table class="grid"><thead><tr><th></th>'+
+    B.map(b=>`<th>${b}<br><span style="text-transform:none;letter-spacing:0">${BNAME[b]}</span></th>`).join("")+'</tr></thead><tbody>';
+  A.forEach(a=>{
+    h+=`<tr><th class="rh">${a}<br><span style="text-transform:none;letter-spacing:0">${ANAME[a]}</span></th>`;
+    B.forEach(b=>{
+      const i=GRID[a][b], here=meta.filter(m=>m.dec===a&&m.rad===b);
+      const on=sel&&sel.a===a&&sel.b===b;
+      h+=`<td class="cell${on?" sel":""}" tabindex="0" role="button" data-a="${a}" data-b="${b}"
+           aria-label="${a} ${b}, ${LVL[i]} oversight, ${here.length} system(s)">
+           <span class="bar" style="background:${SVAR[i]}"></span>
+           <span class="lvl">${LVL[i]}</span>`;
+      here.forEach(m=>{h+=`<br><span class="chip">${esc(m.r.id)}</span>`});
+      h+=`</td>`;
+    });
+    h+="</tr>";
+  });
+  document.getElementById("grid").innerHTML=h+"</tbody></table>";
+}
+
+function drawOblig(){
+  const el=document.getElementById("oblig");
+  if(!sel){el.innerHTML=`<h3>Pick a cell</h3><p>Every square is a real position a system can occupy. Choosing one shows what that combination of autonomy and reach actually obliges you to do — and filters the list below to the systems sitting there.</p>`;return}
+  const i=GRID[sel.a][sel.b], n=meta.filter(m=>m.dec===sel.a&&m.rad===sel.b).length;
+  el.innerHTML=`<h3><span class="mono">${sel.a} · ${sel.b}</span> → ${LVL[i]}</h3>
+    <p>${esc(ANAME[sel.a])} autonomy over something ${esc(BNAME[sel.b])}. ${n} system${n===1?"":"s"} here.</p>
+    <ul>${OBLIG[LVL[i]].map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
+}
+
+function drawList(){
+  document.getElementById("list").innerHTML=meta.map((m,i)=>{
+    const p=m.r.purpose||{}, o=m.r.owner||{};
+    const hidden=sel&&!(m.dec===sel.a&&m.rad===sel.b);
+    const mism=m.g.observed_tier&&m.g.autonomy_tier&&m.g.observed_tier>m.g.autonomy_tier;
+    return `<div class="sys${hidden?" hide":""}">
+      <button class="srow" aria-expanded="false" data-i="${i}">
+        <span class="sev" style="background:${SVAR[m.lvlIdx]}"></span>
+        <span class="sname"><b>${esc(m.r.name||m.r.id)}</b><span>${esc((p.intended_use||"").slice(0,96))}…</span></span>
+        <span class="tier">${esc(m.g.autonomy_tier||"—")}${mism?`<span class="bad"> → ${esc(m.g.observed_tier)}</span>`:""} · ${esc(m.rad||"—")}</span>
+        <span class="tier">${esc(m.lvl)}</span>
+        <span class="count">${m.warn.length?`<i>${m.warn.length} gap${m.warn.length===1?"":"s"}</i>`:"clear"} · ${m.open} open</span>
+      </button>
+      <div class="detail" id="d${i}">
+        <div class="dgrid">
+          <div><h4>Control gaps — computed now</h4>
+            ${m.warn.length?m.warn.map(w=>`<p class="w">${esc(w)}</p>`).join(""):'<p class="w" style="color:var(--ok)">none</p>'}
+          </div>
+          <div><h4>Findings</h4>
+            ${m.findings.length?m.findings.map(f=>`<p class="f${f.status==="met"?" ok":""}"><b>${esc(f.reference)} · ${esc(f.status)}</b>${esc(f.gap||f.evidence||"")}</p>`).join(""):'<p class="f ok">No assessment findings recorded.</p>'}
+          </div>
+          <div><h4>Tools held</h4>
+            ${(m.g.tools||[]).map(t=>`<div class="tl"><span>${esc(t.name)}</span><b>${esc(t.blast_radius)}</b></div>`).join("")||'<div class="tl">none recorded</div>'}
+            <h4 style="margin-top:14px">Accountable</h4>
+            <div class="tl"><span>${esc(o.accountable_person||"unknown")}</span></div>
+          </div>
+        </div>
+      </div></div>`}).join("");
+}
+
+function render(){drawStrip();drawGrid();drawOblig();drawList();}
+render();
+
+document.addEventListener("click",e=>{
+  const c=e.target.closest(".cell");
+  if(c){const a=c.dataset.a,b=c.dataset.b;
+    sel=(sel&&sel.a===a&&sel.b===b)?null:{a,b};render();return}
+  const r=e.target.closest(".srow");
+  if(r){const d=document.getElementById("d"+r.dataset.i);
+    const open=d.classList.toggle("open");r.setAttribute("aria-expanded",open)}
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Enter"||e.key===" "){const c=e.target.closest?.(".cell");
+    if(c){e.preventDefault();c.click()}}
+  if(e.key==="Escape"&&sel){sel=null;render()}
+});
+</script>

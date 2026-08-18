@@ -63,6 +63,17 @@ Validates against the schema **and** flags things the schema can't express — a
 autonomy tier higher than the declared one, a blast radius lower than the tools held, an
 untested halt, memory without provenance, expired exceptions.
 
+## See the whole estate at once
+
+```bash
+python dashboard/build.py && open dashboard/index.html
+```
+
+One self-contained HTML file. Every system plotted on the autonomy × blast-radius grid;
+click a square to see what that position obliges. Control gaps are computed **in the page**
+by the same checks `validate_record.py` runs, so it shows you what CI would say rather than
+a summary someone wrote. Point it at your own records with `--records`.
+
 ## What you actually get
 
 Look at [`examples/opspilot/`](examples/opspilot/) — the framework run against a real

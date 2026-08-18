@@ -52,6 +52,13 @@ jobs:
       - name: Disorder — false-negative sweep
         run: python disorder/falsenegatives.py -n 40
 
+      # Does the dashboard still build from the records? A stale template silently
+      # produces a page that renders nothing.
+      - name: Dashboard builds
+        run: |
+          python dashboard/build.py --out /tmp/dash.html
+          grep -q "const R = \[{" /tmp/dash.html || { echo "no records embedded"; exit 1; }
+
       # Has any change reopened a hole that adversary/ previously closed? This is the
       # only robustness claim CI can honestly police.
       - name: Adversary — no closed hole reopened

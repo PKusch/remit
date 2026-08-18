@@ -1,0 +1,291 @@
+<meta charset="utf-8">
+<title>Remit Control Room</title>
+<style>
+:root{
+  --bg:#eaeef2; --panel:#f7f9fb; --sunk:#e2e7ec; --line:#ccd5dd; --hair:#dae1e7;
+  --ink:#141d26; --ink2:#4a5866; --ink3:#75838f;
+  --accent:#35566f; --accent-soft:#dde5ec;
+  --s0:#8a949d; --s1:#5f7f6e; --s2:#a87c33; --s3:#a2504a; --s4:#6e2b32;
+  --ok:#456f5c; --warn:#a2504a;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --serif:ui-serif,"Iowan Old Style",Charter,Georgia,serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f151b; --panel:#161e26; --sunk:#121a21; --line:#2b3742; --hair:#212c35;
+  --ink:#e7edf2; --ink2:#a4b1bd; --ink3:#77848f;
+  --accent:#8fb4d0; --accent-soft:#1d2b37;
+  --s0:#6d7883; --s1:#7fa892; --s2:#cfa155; --s3:#d4776f; --s4:#b0525c;
+  --ok:#7fa892; --warn:#d4776f;
+}}
+:root[data-theme="dark"]{
+  --bg:#0f151b; --panel:#161e26; --sunk:#121a21; --line:#2b3742; --hair:#212c35;
+  --ink:#e7edf2; --ink2:#a4b1bd; --ink3:#77848f;
+  --accent:#8fb4d0; --accent-soft:#1d2b37;
+  --s0:#6d7883; --s1:#7fa892; --s2:#cfa155; --s3:#d4776f; --s4:#b0525c;
+  --ok:#7fa892; --warn:#d4776f;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);
+  -webkit-font-smoothing:antialiased}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 22px 72px}
+
+.head{display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;
+  padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:22px}
+.head h1{margin:0;font-size:20px;font-weight:650;letter-spacing:-.02em}
+.head .sub{color:var(--ink3);font-size:13px}
+.head .spacer{flex:1}
+.pill{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink3);border:1px solid var(--line);border-radius:2px;padding:3px 8px}
+
+/* summary */
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));
+  gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:26px}
+.stat{background:var(--panel);padding:14px 16px}
+.stat b{display:block;font-family:var(--mono);font-size:26px;font-weight:600;
+  letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--ink3);margin-top:5px}
+.stat.alert b{color:var(--warn)}
+
+h2{font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink3);margin:0 0 4px}
+.hint{margin:0 0 14px;color:var(--ink2);font-size:13.5px;max-width:66ch}
+
+/* grid */
+.gridwrap{overflow-x:auto;margin-bottom:34px}
+table.grid{border-collapse:separate;border-spacing:2px;min-width:660px;width:100%}
+table.grid th{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink3);font-weight:500;padding:6px 8px;text-align:left}
+table.grid th.rh{text-align:right;white-space:nowrap;width:1%}
+td.cell{background:var(--panel);border:1px solid var(--hair);padding:8px;height:64px;
+  vertical-align:top;cursor:pointer;transition:border-color .12s,background .12s;position:relative}
+td.cell:hover{border-color:var(--accent)}
+td.cell:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+td.cell.sel{border-color:var(--accent);background:var(--accent-soft)}
+td.cell .lvl{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink3)}
+td.cell .bar{position:absolute;left:0;top:0;bottom:0;width:3px}
+.chip{display:inline-block;font-family:var(--mono);font-size:10.5px;
+  background:var(--accent);color:var(--panel);border-radius:2px;padding:2px 6px;margin-top:6px}
+.chip.ghost{background:none;color:var(--accent);border:1px dashed var(--accent)}
+
+/* obligation panel */
+.oblig{background:var(--panel);border:1px solid var(--line);padding:16px 18px;margin-bottom:34px}
+.oblig h3{margin:0 0 6px;font-size:15px;font-weight:650}
+.oblig p{margin:0;color:var(--ink2);font-size:13.5px;max-width:74ch}
+.oblig ul{margin:10px 0 0;padding-left:18px;color:var(--ink2);font-size:13.5px}
+.oblig li{margin-bottom:3px}
+
+/* systems */
+.sys{background:var(--panel);border:1px solid var(--line);margin-bottom:8px}
+.sys.hide{display:none}
+.srow{display:grid;grid-template-columns:3px 1fr auto auto auto;gap:14px;align-items:center;
+  padding:0;cursor:pointer;width:100%;background:none;border:0;text-align:left;color:inherit;
+  font:inherit}
+.srow:hover{background:var(--sunk)}
+.srow:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.sev{align-self:stretch}
+.sname{padding:13px 0}
+.sname b{display:block;font-size:14.5px;font-weight:600}
+.sname span{display:block;color:var(--ink3);font-size:12.5px;margin-top:2px}
+.tier{font-family:var(--mono);font-size:12.5px;color:var(--ink2);white-space:nowrap}
+.tier .bad{color:var(--warn);font-weight:600}
+.count{font-family:var(--mono);font-size:12px;color:var(--ink3);white-space:nowrap;
+  padding-right:16px}
+.count i{font-style:normal;color:var(--warn)}
+.detail{display:none;border-top:1px solid var(--hair);padding:16px 18px;background:var(--sunk)}
+.detail.open{display:block}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.dgrid h4{margin:0 0 7px;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink3);font-weight:600}
+.f{font-family:var(--serif);font-size:14px;color:var(--ink2);margin:0 0 9px;padding-left:11px;
+  border-left:2px solid var(--warn)}
+.f b{font-family:var(--mono);font-size:11.5px;color:var(--ink);display:block;
+  font-weight:600;margin-bottom:1px}
+.f.ok{border-left-color:var(--ok)}
+.w{font-size:13px;color:var(--ink2);margin:0 0 6px;display:flex;gap:8px}
+.w::before{content:"!";font-family:var(--mono);color:var(--warn);font-weight:700}
+.tl{font-family:var(--mono);font-size:12px;color:var(--ink2);display:flex;
+  justify-content:space-between;gap:10px;padding:3px 0;border-bottom:1px dotted var(--hair)}
+.tl b{color:var(--ink);font-weight:600}
+.foot{margin-top:30px;padding-top:16px;border-top:1px solid var(--line);
+  color:var(--ink3);font-size:12.5px;max-width:74ch}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<div class="wrap">
+  <div class="head">
+    <h1>Remit</h1>
+    <span class="sub">AI estate — autonomy, reach, and what each position obliges</span>
+    <span class="spacer"></span>
+    <span class="pill">3 systems · live from records</span>
+  </div>
+
+  <div class="strip" id="strip"></div>
+
+  <h2>The grid</h2>
+  <p class="hint">Autonomy across, reach down. A system's square decides its oversight —
+    and the slope is deliberate: full autonomy over things that cannot break anything is
+    cheap to govern, careful supervision of things that can end someone's mortgage
+    application is not. Click any square.</p>
+  <div class="gridwrap"><div id="grid"></div></div>
+  <div class="oblig" id="oblig"></div>
+
+  <h2>Systems</h2>
+  <p class="hint">Gaps are computed in the page by the same checks
+    <span class="mono">scripts/validate_record.py</span> runs, so what you see here is what
+    CI would tell you. Open a row for the detail.</p>
+  <div id="list"></div>
+
+  <p class="foot">Records come from <span class="mono">examples/</span> and
+    <span class="mono">tests/fixtures/</span> in the repository. Two of these are worked
+    examples; <span class="mono">opspilot</span> is a real system, assessed by reading its
+    source. Nothing here is legal advice.</p>
+</div>
+<script>
+const R = __RECORDS__;
+const A = ["A0","A1","A2","A3","A4"], B = ["B0","B1","B2","B3"];
+const ANAME = {A0:"advisory",A1:"assisted",A2:"supervised",A3:"delegated",A4:"autonomous"};
+const BNAME = {B0:"read-only",B1:"internal, reversible",B2:"hard to reverse",B3:"irreversible / external"};
+const GRID = {
+ A0:{B0:0,B1:0,B2:1,B3:1}, A1:{B0:0,B1:1,B2:1,B3:2}, A2:{B0:0,B1:1,B2:2,B3:2},
+ A3:{B0:1,B1:2,B2:2,B3:3}, A4:{B0:1,B1:2,B2:3,B3:4}};
+const LVL = ["minimal","standard","enhanced","constrained","prohibited"];
+const SVAR = ["var(--s0)","var(--s1)","var(--s2)","var(--s3)","var(--s4)"];
+const OBLIG = {
+ minimal:["Inventory it, name an owner, log invocations.","That is genuinely all. Governance capacity is finite, and spending it here is why nobody trusts the governance function."],
+ standard:["Documented purpose and limits.","A tool inventory with a justification per tool.","Action-level logging sufficient to reconstruct what happened.","A named human accountable for outcomes, and periodic review."],
+ enhanced:["Everything at standard, plus:","Pre-deployment evaluation against declared failure modes.","A halt mechanism, tested at least as often as your DR plan.","Rate and scope limits enforced outside the model — a prompt is not a control.","Red-teaming for injection wherever the agent reads untrusted content."],
+ constrained:["Everything at enhanced, plus:","Hard technical bounds the agent cannot widen by any sequence of its own actions.","Independent review before deployment.","Continuous monitoring with automated halt on anomaly.","A rollback procedure that has actually been executed in a test."],
+ prohibited:["Do not deploy.","The fix is almost always to cut blast radius rather than pile oversight onto it — split the irreversible step out and give it to a human or a deterministic system.","If you deploy anyway, that is a time-limited exception with executive sign-off and a defined path back below the line."]};
+
+// The same checks scripts/validate_record.py runs, so what you see here is what CI says.
+function warnings(r){
+  const g=r.agentic; if(!g) return [];
+  const out=[], dec=(g.observed_tier||g.autonomy_tier), rad=g.blast_radius;
+  if(g.observed_tier && g.autonomy_tier && g.observed_tier>g.autonomy_tier)
+    out.push(`running at ${g.observed_tier} but governed as ${g.autonomy_tier}`);
+  const tools=g.tools||[];
+  if(tools.length && rad){
+    const worst=tools.reduce((m,t)=>B.indexOf(t.blast_radius)>B.indexOf(m)?t.blast_radius:m,"B0");
+    if(B.indexOf(worst)>B.indexOf(rad)) out.push(`blast radius ${rad} but a tool reaches ${worst}`);
+  }
+  if(dec&&rad){
+    const need=LVL[GRID[dec][rad]];
+    if(g.oversight_level&&g.oversight_level!==need) out.push(`oversight recorded as ${g.oversight_level}; the grid gives ${need}`);
+    if(need==="enhanced"||need==="constrained"){
+      const h=g.halt_mechanism||{};
+      if(h.exists===true&&(!h.last_tested||h.last_tested==="never"||h.last_tested==="unknown"))
+        out.push("halt mechanism not evidenced as tested");
+      else if(h.exists!==true) out.push("no halt mechanism recorded, and this level requires one");
+    }
+    if(g.reads_untrusted_content===true&&(rad==="B2"||rad==="B3"))
+      out.push(`reads untrusted content at ${rad} — injection testing is load-bearing`);
+  }
+  const m=g.memory||{};
+  if(m.persistent===true&&!m.provenance_recorded) out.push("persistent memory without provenance");
+  tools.filter(t=>!t.justification).forEach(t=>out.push(`tool "${t.name}" has no justification`));
+  (r.exceptions||[]).filter(e=>e.expires&&e.expires<"2026-08-18")
+    .forEach(e=>out.push(`exception expired ${e.expires}`));
+  return out;
+}
+const meta = R.map(r=>{
+  const g=r.agentic||{}, dec=g.observed_tier||g.autonomy_tier, rad=g.blast_radius;
+  const lvlIdx = (dec&&rad)?GRID[dec][rad]:0;
+  const findings=(r.assessments||[]).flatMap(a=>(a.findings||[]).map(f=>({...f,fw:a.framework})));
+  return {r,g,dec,rad,lvlIdx,lvl:LVL[lvlIdx],warn:warnings(r),findings,
+          open:findings.filter(f=>f.status==="not-met"||f.status==="partial").length};
+});
+let sel=null;
+
+const esc=s=>String(s??"").replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+
+function drawStrip(){
+  const mism=meta.filter(m=>m.g.observed_tier&&m.g.autonomy_tier&&m.g.observed_tier>m.g.autonomy_tier).length;
+  const hi=meta.filter(m=>m.lvlIdx>=3).length;
+  const warns=meta.reduce((n,m)=>n+m.warn.length,0);
+  document.getElementById("strip").innerHTML=[
+    [meta.length,"systems governed",0],
+    [hi,"at constrained or above",hi>0],
+    [mism,"running above their tier",mism>0],
+    [warns,"open control gaps",warns>0],
+  ].map(([n,l,a])=>`<div class="stat${a?" alert":""}"><b>${n}</b><span>${l}</span></div>`).join("");
+}
+
+function drawGrid(){
+  let h='<table class="grid"><thead><tr><th></th>'+
+    B.map(b=>`<th>${b}<br><span style="text-transform:none;letter-spacing:0">${BNAME[b]}</span></th>`).join("")+'</tr></thead><tbody>';
+  A.forEach(a=>{
+    h+=`<tr><th class="rh">${a}<br><span style="text-transform:none;letter-spacing:0">${ANAME[a]}</span></th>`;
+    B.forEach(b=>{
+      const i=GRID[a][b], here=meta.filter(m=>m.dec===a&&m.rad===b);
+      const on=sel&&sel.a===a&&sel.b===b;
+      h+=`<td class="cell${on?" sel":""}" tabindex="0" role="button" data-a="${a}" data-b="${b}"
+           aria-label="${a} ${b}, ${LVL[i]} oversight, ${here.length} system(s)">
+           <span class="bar" style="background:${SVAR[i]}"></span>
+           <span class="lvl">${LVL[i]}</span>`;
+      here.forEach(m=>{h+=`<br><span class="chip">${esc(m.r.id)}</span>`});
+      h+=`</td>`;
+    });
+    h+="</tr>";
+  });
+  document.getElementById("grid").innerHTML=h+"</tbody></table>";
+}
+
+function drawOblig(){
+  const el=document.getElementById("oblig");
+  if(!sel){el.innerHTML=`<h3>Pick a cell</h3><p>Every square is a real position a system can occupy. Choosing one shows what that combination of autonomy and reach actually obliges you to do — and filters the list below to the systems sitting there.</p>`;return}
+  const i=GRID[sel.a][sel.b], n=meta.filter(m=>m.dec===sel.a&&m.rad===sel.b).length;
+  el.innerHTML=`<h3><span class="mono">${sel.a} · ${sel.b}</span> → ${LVL[i]}</h3>
+    <p>${esc(ANAME[sel.a])} autonomy over something ${esc(BNAME[sel.b])}. ${n} system${n===1?"":"s"} here.</p>
+    <ul>${OBLIG[LVL[i]].map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
+}
+
+function drawList(){
+  document.getElementById("list").innerHTML=meta.map((m,i)=>{
+    const p=m.r.purpose||{}, o=m.r.owner||{};
+    const hidden=sel&&!(m.dec===sel.a&&m.rad===sel.b);
+    const mism=m.g.observed_tier&&m.g.autonomy_tier&&m.g.observed_tier>m.g.autonomy_tier;
+    return `<div class="sys${hidden?" hide":""}">
+      <button class="srow" aria-expanded="false" data-i="${i}">
+        <span class="sev" style="background:${SVAR[m.lvlIdx]}"></span>
+        <span class="sname"><b>${esc(m.r.name||m.r.id)}</b><span>${esc((p.intended_use||"").slice(0,96))}…</span></span>
+        <span class="tier">${esc(m.g.autonomy_tier||"—")}${mism?`<span class="bad"> → ${esc(m.g.observed_tier)}</span>`:""} · ${esc(m.rad||"—")}</span>
+        <span class="tier">${esc(m.lvl)}</span>
+        <span class="count">${m.warn.length?`<i>${m.warn.length} gap${m.warn.length===1?"":"s"}</i>`:"clear"} · ${m.open} open</span>
+      </button>
+      <div class="detail" id="d${i}">
+        <div class="dgrid">
+          <div><h4>Control gaps — computed now</h4>
+            ${m.warn.length?m.warn.map(w=>`<p class="w">${esc(w)}</p>`).join(""):'<p class="w" style="color:var(--ok)">none</p>'}
+          </div>
+          <div><h4>Findings</h4>
+            ${m.findings.length?m.findings.map(f=>`<p class="f${f.status==="met"?" ok":""}"><b>${esc(f.reference)} · ${esc(f.status)}</b>${esc(f.gap||f.evidence||"")}</p>`).join(""):'<p class="f ok">No assessment findings recorded.</p>'}
+          </div>
+          <div><h4>Tools held</h4>
+            ${(m.g.tools||[]).map(t=>`<div class="tl"><span>${esc(t.name)}</span><b>${esc(t.blast_radius)}</b></div>`).join("")||'<div class="tl">none recorded</div>'}
+            <h4 style="margin-top:14px">Accountable</h4>
+            <div class="tl"><span>${esc(o.accountable_person||"unknown")}</span></div>
+          </div>
+        </div>
+      </div></div>`}).join("");
+}
+
+function render(){drawStrip();drawGrid();drawOblig();drawList();}
+render();
+
+document.addEventListener("click",e=>{
+  const c=e.target.closest(".cell");
+  if(c){const a=c.dataset.a,b=c.dataset.b;
+    sel=(sel&&sel.a===a&&sel.b===b)?null:{a,b};render();return}
+  const r=e.target.closest(".srow");
+  if(r){const d=document.getElementById("d"+r.dataset.i);
+    const open=d.classList.toggle("open");r.setAttribute("aria-expanded",open)}
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Enter"||e.key===" "){const c=e.target.closest?.(".cell");
+    if(c){e.preventDefault();c.click()}}
+  if(e.key==="Escape"&&sel){sel=null;render()}
+});
+</script>

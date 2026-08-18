@@ -16,6 +16,7 @@ git clone https://github.com/patkusch/remit.git && cd remit && ./install.sh
 ```
 
 **→ [`QUICKSTART.md`](QUICKSTART.md)** — five minutes, and you never type a skill name.
+**→ [`dashboard/`](dashboard/)** — your estate on the grid, control gaps computed live.
 **→ [`examples/opspilot/`](examples/opspilot/)** — what it produces, run against a real
 agentic system that writes off money.
 
