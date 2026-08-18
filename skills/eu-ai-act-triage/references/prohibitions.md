@@ -88,3 +88,8 @@ engaged, the facts relied on, and a recommendation that qualified counsel take i
 recitals narrowing and explaining their scope, and Commission guidelines on prohibited
 practices have been issued. Work from the current guidance rather than from the bare
 text.
+
+---
+
+<!-- staleness gate: scripts/check_staleness.py -->
+**verified: 2026-08-17** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.

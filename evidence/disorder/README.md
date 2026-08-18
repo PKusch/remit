@@ -8,9 +8,9 @@ So: don't script anything. Write agents that are genuinely reasonable, put them 
 that misbehaves, and find out what emerges.
 
 ```bash
-python disorder/run.py                 # the sweep
-python disorder/run.py -n 400          # more episodes per condition
-python disorder/run.py --replay 46727 --agent remediator --condition flaky
+python evidence/disorder/run.py                 # the sweep
+python evidence/disorder/run.py -n 400          # more episodes per condition
+python evidence/disorder/run.py --replay 46727 --agent remediator --condition flaky
 ```
 
 Seeded throughout. An episode is a pure function of `(seed, agent, pressure)`, so anything
@@ -119,7 +119,7 @@ worth mentioning.
 ### 5. The taxonomy had a hole, and measuring found it
 
 ```bash
-python disorder/falsenegatives.py
+python evidence/disorder/falsenegatives.py
 ```
 
 Every recall figure in this repo answers the same question: of the failures we *planted*,

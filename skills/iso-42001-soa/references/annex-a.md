@@ -131,3 +131,8 @@ performed — and that is a thread an auditor will pull.
 
 The SoA is required by clause 6.1.3. It is the document a certification body reads first,
 and the one that reveals fastest whether the management system is real.
+
+---
+
+<!-- staleness gate: scripts/check_staleness.py -->
+**verified: 2026-08-17** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.

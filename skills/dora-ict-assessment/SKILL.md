@@ -186,3 +186,8 @@ critical-or-important-function call and any major-incident classification — to
 who own them.
 
 *Legal content verified 17 August 2026. Re-check before relying on it.*
+
+---
+
+<!-- staleness gate: scripts/check_staleness.py -->
+**verified: 2026-08-17** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.

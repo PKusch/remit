@@ -138,3 +138,8 @@ Whichever is higher, except for SMEs and start-ups where the lower of the two ap
 checked against the current consolidated text of Regulation (EU) 2024/1689 and current
 Commission guidance. Implementation timelines have been under active political
 discussion.
+
+---
+
+<!-- staleness gate: scripts/check_staleness.py -->
+**verified: 2026-08-17** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.

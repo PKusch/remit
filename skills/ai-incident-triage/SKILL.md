@@ -45,7 +45,7 @@ The essentials, if you are doing it inline:
    what happened is evidence about `R1` and nothing else.
 2. **Classify against criteria**, recording every entry whose criteria are met. Do not
    assume a cascade — measured across 2,400 unscripted episodes in
-   [`disorder/`](../../disorder/), only ~4% of incidents involved more than one
+   [`evidence/disorder/`](../../evidence/disorder/), only ~4% of incidents involved more than one
    environment-induced mode. Most are one failure sitting on top of a defect the policy
    already had, which is a different remediation.
 3. **Name the primary** — the failure whose absence would have prevented the harm.

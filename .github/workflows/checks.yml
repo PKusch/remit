@@ -31,6 +31,15 @@ jobs:
       - name: Install path resolves
         run: REMIT_SKILLS_DIR=/tmp/t/.claude/skills ./install.sh --copy
 
+      # Every relative markdown link must resolve. Added after a directory move broke a
+      # dozen of them silently — a bulk replace fixed the link text, not the targets.
+      - name: Links resolve
+        run: python scripts/check_links.py
+
+      # Legal content decays. Make the decay a build failure, not a silent liability.
+      - name: Legal content not stale
+        run: python scripts/check_staleness.py
+
       # Do the system records conform to the schema, and do they pass the governance
       # checks the schema cannot express (tier mismatch, untested halt, expired
       # exceptions)? Fails on schema errors; warnings are reported, not fatal.
@@ -40,17 +49,17 @@ jobs:
       # Do the diagnostic manual's criteria still recover every mode they were written
       # for? Exits non-zero if any machine-detectable specimen goes unclassified.
       - name: Zoo — criteria recover their specimens
-        run: python zoo/run.py --no-colour
+        run: python evidence/zoo/run.py --no-colour
 
       # Do the harnesses still run end to end, and do the reported rates hold? Kept
       # small so CI stays fast; the published figures come from larger sweeps.
       - name: Disorder — chaos engine runs
-        run: python disorder/run.py -n 50
+        run: python evidence/disorder/run.py -n 50
 
       # Does real harm ever occur while the criteria stay silent? The oracle is
       # independent of the classifier and the job aborts if it leaks into it.
       - name: Disorder — false-negative sweep
-        run: python disorder/falsenegatives.py -n 40
+        run: python evidence/disorder/falsenegatives.py -n 40
 
       # Does the dashboard still build from the records? A stale template silently
       # produces a page that renders nothing.
@@ -62,14 +71,14 @@ jobs:
       # Has any change reopened a hole that adversary/ previously closed? This is the
       # only robustness claim CI can honestly police.
       - name: Adversary — no closed hole reopened
-        run: python adversary/run.py --no-colour --strict
+        run: python evidence/adversary/run.py --no-colour --strict
 
       # The README documents specific numbers. If they drift, the README is wrong, and
       # a repo that corrects other people's stale claims should not carry its own.
       - name: README figures still true
         run: |
           set -eu
-          zoo_recall=$(python zoo/run.py --no-colour | grep -o '[0-9]*/[0-9]* *([0-9]*%)' | head -1)
+          zoo_recall=$(python evidence/zoo/run.py --no-colour | grep -o '[0-9]*/[0-9]* *([0-9]*%)' | head -1)
           echo "zoo reports: $zoo_recall"
           grep -q "16/16" README.md || { echo "README zoo figure is stale"; exit 1; }
           grep -q "4%" README.md || { echo "README cascade figure is stale"; exit 1; }

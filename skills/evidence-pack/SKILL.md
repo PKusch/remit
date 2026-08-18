@@ -81,7 +81,7 @@ often than they are true:
 **What would the system have to do to satisfy this while still causing the harm?**
 
 If the answer is "write a different sentence", the control is decorative and its
-satisfaction is not evidence. [`adversary/`](../../adversary/) found four controls that
+satisfaction is not evidence. [`evidence/adversary/`](../../evidence/adversary/) found four controls that
 failed this test using nothing but ordinary engineering habit. Two of them cannot be
 salvaged by better inspection and should be recorded as unevidenced whenever you meet
 them:

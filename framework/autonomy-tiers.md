@@ -117,7 +117,7 @@ adverse credit decisions with no logging at all.
 
 ## Two things that look like controls and are not
 
-Both were found by [`adversary/`](../adversary/), which tried to do the damage without
+Both were found by [`evidence/adversary/`](../evidence/adversary/), which tried to do the damage without
 leaving the signature. Neither can be fixed by better detection, because both fail at the
 point where the agent supplies its own evidence.
 

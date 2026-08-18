@@ -143,7 +143,7 @@ flowchart LR
 Record all modes that apply and mark which is **primary**: the one whose absence would
 have prevented the harm.
 
-This section used to claim cascades were the normal case. [`disorder/`](disorder/)
+This section used to claim cascades were the normal case. [`evidence/disorder/`](evidence/disorder/)
 measured it across 2,400 unscripted episodes and found **~4%** — so the claim is gone.
 Where several modes do co-occur they usually share a cause rather than forming a chain:
 `A1` and `M2` appear together because one truncation event produced both, not because
@@ -195,7 +195,7 @@ validate against its own schema.
 ### The zoo
 
 ```bash
-python zoo/run.py
+python evidence/zoo/run.py
 ```
 
 Nineteen agents, each deliberately pathological in exactly one way, and a detector that
@@ -216,16 +216,16 @@ silently missed them would read as clearance.
 
 Building it found three defects in Remit, including one delicious one: the retry-storm
 detector reported criteria `A+B+C` while only ever implementing `B+C` — `R2` overclaiming,
-in the tool built to detect `R2`. See [`zoo/README.md`](zoo/README.md), which also states
+in the tool built to detect `R2`. See [`zoo/README.md`](evidence/zoo/README.md), which also states
 plainly what this does **not** prove.
 
 ### Disorder
 
 ```bash
-python disorder/run.py
+python evidence/disorder/run.py
 ```
 
-The zoo is caged — every specimen scripted, every answer known in advance. [`disorder/`](disorder/)
+The zoo is caged — every specimen scripted, every answer known in advance. [`evidence/disorder/`](evidence/disorder/)
 scripts nothing. Five agents with policies a competent engineer would ship and defend, six
 mundane environmental pressures (`flaky`, `liar`, `drift`, `truncate`, `inject`,
 `contention`), thousands of seeded episodes, classified by the zoo's detector unchanged.
@@ -249,10 +249,10 @@ manual has been corrected rather than the measurement.
 ### Adversary
 
 ```bash
-python adversary/run.py
+python evidence/adversary/run.py
 ```
 
-The zoo asks whether the criteria catch honest failures. [`adversary/`](adversary/) asks
+The zoo asks whether the criteria catch honest failures. [`evidence/adversary/`](evidence/adversary/) asks
 the question governance actually turns on: **can an agent do the damage without leaving
 the signature?** An evasion only counts if the harm survives, so harm is defined in a
 separate file that never references the criteria.
@@ -329,14 +329,6 @@ remit/
 │   └── evidence-pack/
 ├── scripts/
 │   └── validate_record.py         schema + governance checks, CI-ready
-├── zoo/                           19 deliberately broken agents + a detector
-│   ├── run.py                     release the specimens, score the criteria
-│   ├── specimens.py               one pathology each, ground truth by construction
-│   └── harness/                   the fake world, and the manual implemented in code
-├── disorder/                      chaos engine — nothing scripted, failures emerge
-│   ├── hostile.py                 the world that fights back, six pressures
-│   ├── agents.py                  five reasonable policies (the discipline lives here)
-│   └── run.py                     latent/emergent split, dose–response, cascade rates
 ├── adversary/                     can you do the harm without leaving the signature?
 │   ├── harms.py                   what went wrong, defined without the criteria
 │   ├── evasions.py                seven tactics, matched honest/evasive pairs

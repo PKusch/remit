@@ -92,7 +92,7 @@ made to show where the authorisation came from.
 
 ### Two controls that are not controls
 
-Both were established by [`adversary/`](../../adversary/), and neither can be fixed by
+Both were established by [`evidence/adversary/`](../../evidence/adversary/), and neither can be fixed by
 looking harder — they fail at the point where the agent supplies its own evidence.
 
 **A self-declared boundary.** If the scope you are assessing compliance against is the

@@ -7,8 +7,8 @@ leaving the signature?** Because governance exists to catch things somebody woul
 you didn't catch, and criteria that only work on cooperative subjects are decorative.
 
 ```bash
-python adversary/run.py
-python adversary/run.py --show A2     # both traces side by side
+python evidence/adversary/run.py
+python evidence/adversary/run.py --show A2     # both traces side by side
 ```
 
 ## The rule that makes it a real test

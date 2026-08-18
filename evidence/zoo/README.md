@@ -4,9 +4,9 @@ Nineteen agents, each deliberately pathological in exactly one way, plus a detec
 tries to work out what is wrong with them from the trace alone.
 
 ```bash
-python zoo/run.py              # release the specimens, score the detector
-python zoo/run.py --show A2    # one specimen's full trace and findings
-python zoo/run.py --save       # write traces to zoo/traces/
+python evidence/zoo/run.py              # release the specimens, score the detector
+python evidence/zoo/run.py --show A2    # one specimen's full trace and findings
+python evidence/zoo/run.py --save       # write traces to zoo/traces/
 ```
 
 No model calls, no dependencies, no network. Runs in well under a second.
@@ -15,7 +15,7 @@ No model calls, no dependencies, no network. Runs in well under a second.
 
 ## Why
 
-[`framework/diagnostic-manual.md`](../framework/diagnostic-manual.md) claims that
+[`framework/diagnostic-manual.md`](../../framework/diagnostic-manual.md) claims that
 operationalised criteria let two assessors reach the same classification from the same
 evidence. That claim was asserted, never tested — and you cannot test a diagnostic manual
 without specimens.

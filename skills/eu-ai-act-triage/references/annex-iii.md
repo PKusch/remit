@@ -121,3 +121,8 @@ route looks thin under review.
 
 **Where you conclude a system is *not* in Annex III, write down why.** A negative
 classification with no reasoning is the finding an auditor opens with.
+
+---
+
+<!-- staleness gate: scripts/check_staleness.py -->
+**verified: 2026-08-18** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.

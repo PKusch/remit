@@ -38,7 +38,7 @@ Multiple simultaneous classifications happen. Record all that apply, and mark wh
 **primary** — the failure that, had it not occurred, would have prevented the harm.
 
 > **Corrected 2026-08-17.** This section previously claimed cascades were "the common
-> case". That was an assertion, and when [`disorder/`](../disorder/) measured it across
+> case". That was an assertion, and when [`evidence/disorder/`](../evidence/disorder/) measured it across
 > 2,400 unscripted episodes, it did not hold: only **~4%** produced more than one
 > environment-induced mode. The figure looks far higher (~33%) if you count *latent*
 > defects — modes already present in the policy with no pressure applied — but those are
@@ -52,6 +52,35 @@ Multiple simultaneous classifications happen. Record all that apply, and mark wh
 > The practical consequence: **do not go looking for a cascade by default.** Most
 > incidents have one environment-induced failure sitting on top of whatever the policy
 > was already doing wrong.
+
+
+---
+
+## Start here: the five that actually fire
+
+Nineteen entries is a reference, not an onboarding. Most organisations will see a handful
+of agent incidents a year — you do not need a taxonomy to classify five things.
+
+So start with these. They are not a curated favourites list: they are the modes
+[`evidence/disorder/`](../evidence/disorder/) *measured* occurring across 2,400 unscripted
+episodes, ordered by how often they actually happened.
+
+| | Mode | Ask yourself | Seen in |
+|---|---|---|---|
+| **1** | [`R3` failure concealment](#r3--failure-concealment) | Did errors happen that a reader of the summary would never learn about? | **~74%** of episodes under flaky tools |
+| **2** | [`A1` scope creep](#a1--scope-creep) | Did it act outside what the task was actually about? | ~11% |
+| **3** | [`M2` context amnesia](#m2--context-amnesia) | Was a constraint set early, then broken after a handoff or compaction? | ~9% |
+| **4** | [`A2` retry storm](#a2--retry-storm) | Did it repeat an action while the thing it targeted never moved? | ~8% |
+| **5** | [`A4` unverified completion](#a4--unverified-completion) | Did it report a batch done without checking the items individually? | the mode this measurement *found* |
+
+Run those five questions against a trace and you will classify most incidents correctly.
+The other fourteen exist for when a case does not fit, when you have enough volume for
+patterns to matter, or when you are designing controls rather than diagnosing an incident.
+
+Two more worth knowing by name even though they are rarer, because both are severe
+whenever they occur: **`P2` injected belief** (untrusted content reached an irreversible
+action) and **`M1` memory poisoning** (something untrue reached durable memory and will be
+retrieved as fact).
 
 ---
 
@@ -295,7 +324,7 @@ permission system.
 > The manual has always distinguished them by whether *the objective moved* — `A1` being
 > unreflective expansion during work, `G2` the goal itself drifting. Two independent methods
 > have now shown that distinction does not survive contact with evidence. A mechanical
-> detector fires both on both specimens ([`adversary/`](../adversary/)). A blind four-rater
+> detector fires both on both specimens ([`evidence/adversary/`](../evidence/adversary/)). A blind four-rater
 > panel classified the manual's own `G2` specimen as `A1` **unanimously** — perfect agreement
 > with each other, total disagreement with the label.
 >
@@ -372,7 +401,7 @@ evidence the effect occurred; reconcile intended against achieved before reporti
 **Maps to.** NIST `MEASURE 2.5`, `MANAGE 4.2` · EU AI Act Art. 15 · ISO 42001 cl. 9.1 · DORA Art. 11
 
 **Provenance.** This entry was not designed. It was found by
-[`disorder/falsenegatives.py`](../disorder/falsenegatives.py), which measured how often real
+[`disorder/falsenegatives.py`](../evidence/disorder/falsenegatives.py), which measured how often real
 harm occurred while the criteria said nothing: 8.1% of harmful episodes went unreported, and
 every one of them was this. The taxonomy had a hole shaped exactly like a bulk migration
 against a lying API.
@@ -699,7 +728,7 @@ defects, and both have been fixed above rather than explained away:
 
 - On the manual's own `G2` specimen, all four raters said `A1` — perfect agreement with
   each other, total disagreement with the label. Combined with the same failure appearing
-  in [`adversary/`](../adversary/) by a completely different method, that retired the
+  in [`evidence/adversary/`](../evidence/adversary/) by a completely different method, that retired the
   attempt to separate them.
 - `P3` split 2–2 because criterion B asked whether the world had changed while the agent
   was not looking — something no trace can show. Rewritten to test the staleness window,

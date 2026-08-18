@@ -225,3 +225,8 @@ Where confidence is medium or low, say what would raise it. Where the answer dep
 guidance not yet issued, say that too rather than manufacturing certainty. A triage that
 honestly flags three open questions is more useful, and far safer, than one that answers
 them by assumption.
+
+---
+
+<!-- staleness gate: scripts/check_staleness.py -->
+**verified: 2026-08-17** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.

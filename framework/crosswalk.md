@@ -94,3 +94,8 @@ Verify against current texts; all of these are moving. **Last verified 17 August
 - ISO/IEC 42001:2023; see also ISO/IEC 23894 (risk management) and ISO/IEC 42005
   (impact assessment)
 - Regulation (EU) 2022/2554 (DORA) and its regulatory technical standards
+
+---
+
+<!-- staleness gate: scripts/check_staleness.py -->
+**verified: 2026-08-17** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.

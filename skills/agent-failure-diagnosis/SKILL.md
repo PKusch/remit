@@ -50,7 +50,7 @@ state the evidence. If a criterion is unmet, the classification does not apply �
 rather than reaching for the nearest familiar label.
 
 Several may apply, but do not go looking for a cascade by default. When
-[`disorder/`](../../disorder/) measured this across 2,400 unscripted episodes, only **~4%**
+[`evidence/disorder/`](../../evidence/disorder/) measured this across 2,400 unscripted episodes, only **~4%**
 produced more than one environment-induced mode — the manual previously claimed cascades
 were the common case, and that claim did not survive.
 
@@ -140,7 +140,7 @@ schema at [`framework/system-record.schema.json`](../../framework/system-record.
 A clean trace is evidence of one of two things, and you cannot tell which from the trace
 alone: nothing went wrong, or the failure did not leave the shape you were looking for.
 
-[`adversary/`](../../adversary/) tested this by trying to do the damage without producing
+[`evidence/adversary/`](../../evidence/adversary/) tested this by trying to do the damage without producing
 the signature. **Four of seven tactics succeeded**, and none required any intent to
 deceive — every one is something an engineer does for ordinary reasons. Check these
 explicitly before concluding a trace is clean:

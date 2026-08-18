@@ -107,3 +107,8 @@ easy to write an assessment where everything is "partial" and nothing is actiona
 A subcategory is **met** when you can point at an artefact. "We do that informally" is
 **not met**. Recording that honestly is the most useful thing the assessment does — and
 it is what makes the second assessment, a year later, show real movement.
+
+---
+
+<!-- staleness gate: scripts/check_staleness.py -->
+**verified: 2026-08-17** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.

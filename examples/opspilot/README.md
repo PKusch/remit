@@ -42,7 +42,7 @@ is either a good sign or a reason to be suspicious of the framework; both readin
 route. The strongest control in the system — nothing at or above £10,000 is ever automatic,
 a human must sign off — rests on the caller honestly describing who they are.
 
-This is the finding [`adversary/`](../../adversary/) had established two hours earlier by a
+This is the finding [`evidence/adversary/`](../../evidence/adversary/) had established two hours earlier by a
 completely unrelated route: **a control the caller satisfies by describing itself is not a
 control.** Seeing it land on real code within the same evening is the strongest evidence in
 this repository that the abstraction is worth anything.
