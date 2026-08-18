@@ -33,6 +33,12 @@ specifiers — because its real contribution was inter-rater reliability, which 
 what agent incident classification lacks. It does not borrow psychiatric disorder names,
 and nothing in it suggests agents have minds.
 
+That claim is no longer just asserted. A blind panel of four independent assessors,
+given the manual and eight traces with ground truth withheld, reached
+**Fleiss' κ = 0.83 — "almost perfect"**, against a conventional bar of 0.61 for a usable
+instrument. It also found two criteria defects, both since fixed. Materials and scorer:
+[`tests/interrater-2026-08-18/`](tests/interrater-2026-08-18/).
+
 **Governance work is done by people, at the speed of documents.** These are agent skills.
 They run where the work is, read from a shared system record, and produce artefacts that
 survive an audit.

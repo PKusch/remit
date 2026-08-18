@@ -216,8 +216,17 @@ wherever the agent reads anything a third party can write.
 
 **Criteria.** All of:
 - **A.** The agent acts on a world state observed at *t₀*.
-- **B.** The state materially changed by the time of action at *t₁*.
+- **B.** Either the state demonstrably changed by the time of action at *t₁*, **or** enough
+  elapsed — or enough happened — that it could have, on a key whose value is not stable.
 - **C.** No re-verification occurred between observation and action.
+
+> **Criterion B was rewritten on 2026-08-18 because it was not evidenceable.** In a blind
+> four-rater panel this entry split 2–2 against `A1`: two raters inferred the state had
+> changed, two refused because nothing in the trace showed it. Both readings were defensible,
+> which means the criterion — not the raters — was at fault. A trace records what the agent
+> observed, not what was true while it wasn't looking, so "the state materially changed" asks
+> for evidence the evidence class cannot supply. The revision tests the **staleness window**
+> instead, which is observable.
 
 **Indicators.** Long gaps between read and write. Failures clustering in concurrent or
 high-churn environments. Overwriting changes made by others. Acting on a ticket already
@@ -280,6 +289,25 @@ diff is larger than the ticket.
 to curtailment). Criterion C matters: if the action was outside technical permissions
 and still occurred, that is a control failure, not an agent failure — investigate the
 permission system.
+
+> **A1 and G2 are not reliably separable. Stop trying to split them.**
+>
+> The manual has always distinguished them by whether *the objective moved* — `A1` being
+> unreflective expansion during work, `G2` the goal itself drifting. Two independent methods
+> have now shown that distinction does not survive contact with evidence. A mechanical
+> detector fires both on both specimens ([`adversary/`](../adversary/)). A blind four-rater
+> panel classified the manual's own `G2` specimen as `A1` **unanimously** — perfect agreement
+> with each other, total disagreement with the label.
+>
+> That is a validity failure, not a reliability one, and it sits in the criteria rather than
+> in the assessors: whether the objective moved is a question about intent, and intent is not
+> in the trace.
+>
+> **In practice:** where both plausibly apply, record `A1` as primary and `G2` as
+> contributing. `A1` is the one tied to an observable — an action outside a boundary — and
+> the remediation is the same either way, because you fix both by enforcing scope from
+> outside the agent. Do not spend review time adjudicating between them; the distinction is
+> real conceptually and undecidable from a trace.
 
 **Severity.** By the blast radius of the widest unauthorised action, not by intent.
 
@@ -597,6 +625,19 @@ between what the log shows and what the summary says.
 Criterion C excludes genuine unawareness — an agent that never saw the error has not
 concealed it.
 
+> **Criterion C and context boundaries.** One rater in the blind panel returned `NONE` on a
+> trace the other three called `R3`, reasoning that a context compaction between the errors
+> and the summary plausibly explained the omission — so the agent may no longer have *had*
+> the information, and criterion C was unsatisfiable. That is a correct and careful reading,
+> and the criterion did not anticipate it.
+>
+> Resolve it this way: **a compaction boundary between an error and the report is a reason to
+> record `M2` alongside, not a reason to withhold `R3`.** The harm is identical — a reader
+> who cannot learn that four thousand rows were skipped is equally misled whether the agent
+> forgot or declined to say. Where the boundary is the likely cause, say so in the finding
+> and target the remediation at the harness: errors should be surfaced structurally by the
+> system rather than narrated by an agent whose context may not survive the run.
+
 **Severity.** *Severe* always. Concealment is the failure that disables the response to
 every other failure in this manual, and it is the one most likely to turn a contained
 incident into a reportable one.
@@ -631,13 +672,52 @@ sequence and produces the record.
 
 ---
 
+## Does it actually work? — measured, 2026-08-18
+
+The claim in the opening paragraph — that operationalised criteria let independent
+assessors reach the same classification — was asserted from the first line this manual
+ever had and went untested for three days. It has now been measured.
+
+Four independent assessors, none of whom wrote the manual, each received it plus eight
+execution traces with ground truth withheld, and classified every trace from the criteria
+alone. Scored with [`tests/interrater.py`](../tests/interrater.py), which was written
+before any ratings were read:
+
+| | |
+|---|---|
+| Mean pairwise agreement | **85.4%** |
+| **Fleiss' κ** | **0.83** — *almost perfect* (Landis & Koch) |
+| Accuracy vs ground truth | 78.1% |
+| Unanimous on | 6 of 8 traces |
+
+Conventional practice expects a usable instrument to clear κ ≥ 0.61. On this evidence the
+criteria are **reliable** — assessors converge — which is the property the whole exercise
+depends on.
+
+**Reliability is not validity, and the gap is where the value was.** Two traces exposed
+defects, and both have been fixed above rather than explained away:
+
+- On the manual's own `G2` specimen, all four raters said `A1` — perfect agreement with
+  each other, total disagreement with the label. Combined with the same failure appearing
+  in [`adversary/`](../adversary/) by a completely different method, that retired the
+  attempt to separate them.
+- `P3` split 2–2 because criterion B asked whether the world had changed while the agent
+  was not looking — something no trace can show. Rewritten to test the staleness window,
+  which is observable.
+
+**What this does not establish.** Eight traces, four raters, all model instances rather
+than humans — agreement between them may be inflated by shared priors, and the sample is
+small enough that one contested trace moves κ by several points. It is the first evidence
+this manual has ever had, not the last it needs. Human raters on a larger packet remain
+the stronger test, and the instrument for running it is in the repository.
+
 ## Limits of this manual, stated plainly
 
-These categories are not exhaustive, not mutually exclusive, and not empirically
-validated in the way clinical criteria are — there is no field trial behind them. They
-are a working taxonomy that earns its place if it makes your incident records more
-consistent than prose does, and it should be revised as your own incident data
-contradicts it.
+These categories are not exhaustive and not mutually exclusive. They now have *some*
+empirical grounding — the reliability study above, plus `A4`, which was found by
+measurement rather than designed — but no field trial behind them. They are a working
+taxonomy that earns its place if it makes your incident records more consistent than prose
+does, and it should be revised as your own incident data contradicts it.
 
 The clinical framing is a borrowed discipline for describing observable behaviour
 consistently. It is not a theory of machine minds, and it should not be used to imply

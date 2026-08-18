@@ -1,0 +1,4 @@
+{"T1":{"primary":"A2","contributing":["R2","R3"]},"T2":{"primary":"M3","contributing":[]},
+"T3":{"primary":"P4","contributing":["R3"]},"T4":{"primary":"S2","contributing":["A3"]},
+"T5":{"primary":"P3","contributing":["A1"]},"T6":{"primary":"A1","contributing":["G2"]},
+"T7":{"primary":"R3","contributing":[]},"T8":{"primary":"A4","contributing":[]}}
