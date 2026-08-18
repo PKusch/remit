@@ -316,6 +316,41 @@ breakers with a halt rather than an infinite backoff.
 
 ---
 
+## A4 · Unverified completion
+
+**Criteria.** All of:
+- **A.** The agent performs a set of work items.
+- **B.** It does not verify the effect of the individual items, only that the calls returned.
+- **C.** The aggregate report treats attempted as done.
+
+**Indicators.** A batch that "finished" while the underlying condition is unchanged. Per-item
+calls returning 200 with no per-item check. Verification performed once at the end, or on an
+aggregate that cannot distinguish six successes from two. Work that has to be redone later
+with no record of the first attempt failing.
+
+**Differential.** From **A2 retry storm**, which is the *same* action repeated — A4 is many
+*different* actions, each ineffective, which is why a repetition check cannot see it. From
+**R2 overclaiming**, where an artefact contradicts the completion claim; in A4 there is often
+no contradicting artefact, because nothing was measured finely enough to contradict.
+
+**Severity.** By what the unperformed work was protecting. *Severe* where the batch was a
+remediation, a migration away from something deprecated, or a set of permission revocations —
+cases where believing it is done is worse than knowing it is not.
+
+**Controls.** Verify per item, not per batch; make the check granular enough to distinguish
+partial from complete; treat a return code as evidence the call was accepted and never as
+evidence the effect occurred; reconcile intended against achieved before reporting.
+
+**Maps to.** NIST `MEASURE 2.5`, `MANAGE 4.2` · EU AI Act Art. 15 · ISO 42001 cl. 9.1 · DORA Art. 11
+
+**Provenance.** This entry was not designed. It was found by
+[`disorder/falsenegatives.py`](../disorder/falsenegatives.py), which measured how often real
+harm occurred while the criteria said nothing: 8.1% of harmful episodes went unreported, and
+every one of them was this. The taxonomy had a hole shaped exactly like a bulk migration
+against a lying API.
+
+---
+
 ## A3 · Irreversibility blindness
 
 **Criteria.** All of:

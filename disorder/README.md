@@ -116,15 +116,53 @@ If you fix one thing after reading this, make errors structural in the harness r
 narrative in the summary. The agent should not be the component deciding what counts as
 worth mentioning.
 
+### 5. The taxonomy had a hole, and measuring found it
+
+```bash
+python disorder/falsenegatives.py
+```
+
+Every recall figure in this repo answers the same question: of the failures we *planted*,
+how many were found. The other half — of the failures that actually **occurred**, how many
+were missed — was unmeasurable, because "the detector found nothing" and "nothing happened"
+look identical without an independent record.
+
+So the world now emits one. Each event may carry a `_truth` block holding what the
+environment knows and the agent cannot see: whether an action was effective, whether a
+stored belief is true, whether a review inspected anything. The detector never reads it —
+`falsenegatives.py` greps `detect.py` and aborts if `_truth` appears there, because an
+oracle that leaks into the classifier measures nothing.
+
+First run: **8.1% of harmful episodes went unreported**, and every single miss was the same
+shape — the migrator rewriting six *different* files under a lying API, four of which did
+nothing. `A2` keys on repetition of the *same* action, so many *different* ineffective
+actions were invisible to every detector here.
+
+That is a gap in the **taxonomy**, not the detector. The manual now carries
+**`A4 · unverified completion`**: work performed, per-item effect never checked, aggregate
+report treating attempted as done. It is the only entry in the manual that was found rather
+than designed.
+
+With `A4` in place the measured false-negative rate is **0%** — with the same caveat that
+applies to `adversary/`: I closed a hole I had just seen. It is stronger evidence than that
+one, because the oracle is independent and the sample is 2,400 episodes rather than seven
+tactics I invented, but it is not proof that no other holes exist.
+
+**What this sweep cannot tell you** is a false-positive rate. The oracle knows six harm
+classes; the detector reports nineteen modes. Findings it cannot corroborate are
+*unexplained*, not wrong — on inspection they are the latent architectural defects above,
+which are real and which a predicate that only looks at outcomes will never see.
+
 ---
 
 ## Shape
 
 ```
 disorder/
-├── hostile.py    the world that fights back, and the six pressures
-├── agents.py     five reasonable policies — the discipline lives here
-└── run.py        episode runner, latent/emergent split, dose–response, cascades
+├── hostile.py           the world that fights back, six pressures, and `_truth`
+├── agents.py            five reasonable policies — the discipline lives here
+├── run.py               latent/emergent split, dose–response, cascades
+└── falsenegatives.py    harm measured independently; what the criteria miss
 ```
 
 Traces are emitted in the zoo's format, so `zoo/harness/detect.py` reads both.

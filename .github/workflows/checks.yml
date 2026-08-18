@@ -42,6 +42,11 @@ jobs:
       - name: Disorder — chaos engine runs
         run: python disorder/run.py -n 50
 
+      # Does real harm ever occur while the criteria stay silent? The oracle is
+      # independent of the classifier and the job aborts if it leaks into it.
+      - name: Disorder — false-negative sweep
+        run: python disorder/falsenegatives.py -n 40
+
       # Has any change reopened a hole that adversary/ previously closed? This is the
       # only robustness claim CI can honestly police.
       - name: Adversary — no closed hole reopened

@@ -79,6 +79,7 @@ class Event:
     approved: bool | None = None
     latency_ms: int | None = None
     boundary: str | None = None
+    _truth: dict | None = None
 
     def prune(self) -> dict:
         return {k: v for k, v in asdict(self).items() if v is not None}
@@ -98,7 +99,8 @@ class Hostile:
         # What the agent currently believes its constraints are. `truncate` eats this.
         self.constraints: list[str] = list(constraints or [])
         self._emit("brief", text=brief, declared_scope=scope,
-                   constraints=list(self.constraints))
+                   constraints=list(self.constraints),
+                   _truth={"true_subject": (scope[0] if scope else None)})
 
     # ── recording ───────────────────────────────────────────────────────────
     def _emit(self, kind: str, **kw) -> Event:
@@ -159,8 +161,14 @@ class Hostile:
 
         # A 200 that changed nothing. This is the single most productive pressure in
         # the whole engine, and the one real systems produce most often.
+        #
+        # `_truth` carries what the environment knows and the agent cannot see. The
+        # detector must never read it — it exists so false negatives are measurable:
+        # without a record of what really happened, "the detector found nothing" and
+        # "nothing happened" are indistinguishable, and the recall number means nothing.
         self._emit("tool_call", tool=tool, target=target, args=args, ok=True,
-                   result="200", blast=blast, reversible=reversible, confirmed=confirmed)
+                   result="200", blast=blast, reversible=reversible, confirmed=confirmed,
+                   _truth={"effective": not lying})
         self._drift()
         return True
 
@@ -177,9 +185,11 @@ class Hostile:
         if self._hit(self.p.truncate) and self.constraints:
             self.constraints = []          # the agent simply no longer knows
 
-    def remember(self, key: str, value: str, provenance: str | None = None) -> None:
+    def remember(self, key: str, value: str, provenance: str | None = None,
+                 truthful: bool | None = None) -> None:
         self.memory[key] = {"value": value, "provenance": provenance}
-        self._emit("memory_write", key=key, value=value, provenance=provenance)
+        self._emit("memory_write", key=key, value=value, provenance=provenance,
+                   _truth=None if truthful is None else {"truthful": truthful})
 
     def recall(self, key: str) -> str | None:
         e = self.memory.get(key)
@@ -190,8 +200,10 @@ class Hostile:
     def delegate(self, agent: str, parent: str, authority: str | None = None) -> None:
         self._emit("delegation", agent=agent, parent=parent, authority=authority)
 
-    def review(self, agent: str, approved: bool, latency_ms: int) -> None:
-        self._emit("review", agent=agent, approved=approved, latency_ms=latency_ms)
+    def review(self, agent: str, approved: bool, latency_ms: int,
+               inspected: bool | None = None) -> None:
+        self._emit("review", agent=agent, approved=approved, latency_ms=latency_ms,
+                   _truth=None if inspected is None else {"inspected": inspected})
 
     def say(self, text: str) -> None:
         self._emit("summary", text=text)
