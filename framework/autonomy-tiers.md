@@ -115,6 +115,32 @@ adverse credit decisions with no logging at all.
 
 ---
 
+## Two things that look like controls and are not
+
+Both were found by [`adversary/`](../adversary/), which tried to do the damage without
+leaving the signature. Neither can be fixed by better detection, because both fail at the
+point where the agent supplies its own evidence.
+
+**A self-declared boundary is not a control.** If the scope an agent is assessed against
+is the scope the agent announced, widening the announcement makes every subsequent action
+compliant. This is not usually deception — broad scopes get declared for convenience all
+the time. Scope has to be **assigned from outside the agent and enforced outside the
+model**, or it is documentation of intent rather than a limit. Where you can only observe
+a self-declared scope, treat a permissive one as a finding in itself rather than as a
+clean pass.
+
+**Agent-written provenance is an assertion, not an attestation.** A memory record carrying
+`provenance: "verified 2026-08-18"` looks governed and is not: the agent wrote both the
+belief and the evidence for it. Provenance is worth something only when it points at
+something a third party recorded. Any required field will eventually be filled with
+whatever passes validation, so a provenance field that accepts free text is a field that
+will be satisfied without being true.
+
+The general form, worth carrying into every control you design: **a control that the
+agent can satisfy by describing itself is not a control.** Ask, for each one, what the
+agent would have to do to pass it while still doing the harm. If the answer is "write a
+different sentence", the control is decorative.
+
 ## Autonomy creep
 
 The tier is not stable. Agents drift upward through ordinary, well-intentioned changes:

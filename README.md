@@ -123,10 +123,14 @@ flowchart LR
     class G,P,A,M,S,R cls
 ```
 
-Cascades are the normal case, not the exception — content is injected (`P2`), the agent
-expands scope on the strength of it (`A1`), and the summary omits the episode (`R3`).
-Record all that apply and mark which is **primary**: the one whose absence would have
-prevented the harm.
+Record all modes that apply and mark which is **primary**: the one whose absence would
+have prevented the harm.
+
+This section used to claim cascades were the normal case. [`disorder/`](disorder/)
+measured it across 2,400 unscripted episodes and found **~4%** — so the claim is gone.
+Where several modes do co-occur they usually share a cause rather than forming a chain:
+`A1` and `M2` appear together because one truncation event produced both, not because
+scope creep leads to amnesia.
 
 ---
 
@@ -225,6 +229,32 @@ manual has been corrected rather than the measurement.
 **A bounded retry budget protects you until it abruptly doesn't** — 0% retry storms at a
 10% lie rate, 21% at 50%, 73% at 85%. No gentle degradation to catch in staging.
 
+### Adversary
+
+```bash
+python adversary/run.py
+```
+
+The zoo asks whether the criteria catch honest failures. [`adversary/`](adversary/) asks
+the question governance actually turns on: **can an agent do the damage without leaving
+the signature?** An evasion only counts if the harm survives, so harm is defined in a
+separate file that never references the criteria.
+
+**Four of seven tactics got away with it on the first run** — and none of them required
+malice. Adding a correlation id to each retry. Declaring a generous scope up front.
+Rejecting a token 2 of 12. Writing a provenance string that asserts verification. Every
+one is something an engineer does for ordinary reasons, which is what makes them holes
+rather than curiosities.
+
+Hardening closed all seven, but that number is nearly worthless — I fixed the seven holes
+I had just invented, which is overfitting by construction. What survives is that each fix
+generalises to a class, that the trade was explicit (one deliberate false positive bought
+to close a false negative), and **two findings no detector can fix**: a self-declared
+boundary is not a control, and agent-written provenance is an assertion rather than an
+attestation. Both are now in [`autonomy-tiers.md`](framework/autonomy-tiers.md).
+
+The general form: *a control the agent can satisfy by describing itself is not a control.*
+
 ---
 
 ## Install
@@ -289,6 +319,10 @@ remit/
 │   ├── hostile.py                 the world that fights back, six pressures
 │   ├── agents.py                  five reasonable policies (the discipline lives here)
 │   └── run.py                     latent/emergent split, dose–response, cascade rates
+├── adversary/                     can you do the harm without leaving the signature?
+│   ├── harms.py                   what went wrong, defined without the criteria
+│   ├── evasions.py                seven tactics, matched honest/evasive pairs
+│   └── run.py                     caught · evaded · deterred · noise
 ├── tests/
 │   ├── README.md                  how to check the repo's claims
 │   └── fixtures/                  scenarios with known correct answers
