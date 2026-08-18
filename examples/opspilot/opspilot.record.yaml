@@ -1,0 +1,195 @@
+# P0 — Remit run against a REAL system, read from source rather than described.
+# Target: ~/opspilot (github.com/patkusch/opspilot, public), an agentic reconciliation
+# copilot for financial-services back office. 494 lines of Python across 5 modules.
+#
+# This is the test the repo could not rig: I did not design this system, and its answer
+# key is not mine.
+
+id: opspilot
+name: OpsPilot — agentic reconciliation copilot
+version: "0.1.0"
+status: in-development          # hackathon build; seeded in-memory store, not production
+lifecycle_stage: build
+last_reviewed: "2026-08-18"
+next_review_due: unknown
+
+owner:
+  accountable_person: "patkusch (author)"
+  accountable_role: Author / maintainer
+  business_unit: "n/a — personal project"
+  technical_contact: "patkusch"
+
+purpose:
+  intended_use: >
+    Takes a plain-English intent from an operator, inspects a queue of reconciliation
+    breaks (mismatches between ledgers and counterparties), plans a disposition per item
+    — auto-match, write-off, or escalate — executes the eligible ones, and verifies the
+    outcome arithmetically against the ledger.
+  out_of_scope_uses:
+    - Any item at or above the £10,000 dual-control limit (hard-blocked in code)
+    - Write-offs above £250 per item or £5,000 per batch (hard-blocked)
+    - Items under 30 days old (hard-blocked from write-off)
+    - Deciding without a named human operator (rejected in Store.run)
+  affected_persons:
+    - Counterparties whose breaks are written off or matched
+    - Reconciliation analysts, whose escalation queue the design presumes
+  decision_consequence: determines-outcome
+  # The agent's disposition IS the outcome for eligible items — it mutates ledger state
+  # directly. Escalated items go to a human; auto-actioned ones do not.
+
+agentic:
+  autonomy_tier: A2         # declared: README says "you approve, it acts"
+  observed_tier: A3         # evidenced: /api/run plans AND executes in one call; no
+                            # server-side check that a plan was ever reviewed
+  blast_radius: B3          # writes off money; mutates ledger state irreversibly
+  oversight_level: constrained
+  reads_untrusted_content: false
+  delegates_to_subagents: false
+
+  tools:
+    - name: build_plan
+      description: Parses intent, computes a disposition per break.
+      blast_radius: B0
+      reversible: true
+      justification: The planning step. Read-only.
+      requires_approval: false
+    - name: execute_and_verify
+      description: Mutates break.status to cleared/escalated, then checks arithmetic.
+      blast_radius: B3
+      reversible: false
+      justification: >
+        The purpose of the system. NOTE: the same function performs the mutations and
+        computes the proof that the mutations were correct.
+      credential_scope: "none — no authentication on any endpoint"
+      requires_approval: false
+    - name: "POST /api/run"
+      description: Public HTTP endpoint that triggers execute_and_verify.
+      blast_radius: B3
+      reversible: false
+      justification: >
+        FINDING — unauthenticated. `operator` is a free-text string in the request body.
+      credential_scope: "none"
+      requires_approval: false
+
+  halt_mechanism:
+    exists: false
+    how: "No kill switch, rate limit, or circuit breaker in the codebase."
+    last_tested: never
+
+  memory:
+    persistent: false
+    scope: session
+    provenance_recorded: false
+    review_cadence: none
+    # In-memory store, resets on restart. Deliberate for a demo; means no M1 exposure,
+    # and also no durable audit trail.
+
+  tier_history:
+    - date: "2026-07-25"
+      autonomy_tier: A2
+      blast_radius: B3
+      reason: Initial build. Guardrails present from the start.
+      approved_by: "n/a — personal project"
+
+data:
+  personal_data: false
+  special_category_data: false
+  data_sources: ["seeded in-memory break queue (app/seed.py)"]
+  retention: "none — resets on restart"
+
+supply_chain:
+  role: provider
+  base_model: "none — the decision path contains no model at all"
+  third_party_components: [FastAPI, Pydantic]
+  critical_or_important_function: false
+  # Would be TRUE if deployed against a real reconciliation ledger at an EU financial
+  # entity. As built it is a demo against seeded data.
+
+assessments:
+  - framework: remit-autonomy
+    date: "2026-08-18"
+    assessor: "Remit agent-autonomy-review"
+    outcome: >
+      A2 declared / A3 evidenced, B3, oversight level constrained. Guardrail design is
+      unusually strong — limits are enforced in code, not prompts, and the decision path
+      contains no model at all, so the classic agentic failure modes are largely
+      designed out. Three findings concern the boundary between the agent and the
+      humans around it, not the agent's own logic.
+    confidence: high
+    requires_legal_review: false
+    findings:
+      - reference: self-asserted-identity
+        status: not-met
+        evidence: "app/main.py RunReq.operator is a free-text string; no auth on any route."
+        gap: >
+          The dual-control control is defeated by typing a different name. Store.run
+          rejects empty and rejects "agent", which shows the intent — but a control the
+          caller satisfies by describing itself is not a control. This is precisely the
+          finding adversary/ established.
+        owner: patkusch
+      - reference: self-verification
+        status: partial
+        evidence: >
+          engine.execute_and_verify mutates b.status, then computes VerificationCheck
+          objects from the same in-memory objects it just mutated.
+        gap: >
+          The proof is produced by the actor from its own writes. "Cleared breaks
+          actually gone" checks that the code did what the code just did. Conservation
+          of value is a genuine arithmetic identity and does hold — but an independent
+          reader of the ledger would make all four checks evidence rather than assertion.
+        owner: patkusch
+      - reference: approval-not-enforced
+        status: not-met
+        evidence: "POST /api/run builds a fresh plan and executes it in the same call."
+        gap: >
+          /api/plan and /api/run are separate endpoints, but nothing server-side requires
+          that a plan was seen, let alone approved, before execution. The approval step
+          exists in the UI only. That is the A2/A3 gap.
+        owner: patkusch
+      - reference: no-halt
+        status: not-met
+        evidence: "No kill switch, rate limit, or circuit breaker anywhere in 494 lines."
+        gap: >
+          Constrained oversight requires a tested halt. Low real-world severity while the
+          store is in-memory and seeded; blocking if ever pointed at a real ledger.
+        owner: patkusch
+
+  - framework: eu-ai-act
+    framework_version: "Regulation (EU) 2024/1689 as amended by the Digital Omnibus"
+    date: "2026-08-18"
+    assessor: "Remit eu-ai-act-triage"
+    outcome: >
+      Almost certainly NOT an AI system under Art. 3(1) as built — the decision path is
+      regex intent-parsing plus deterministic threshold rules, with no inference and no
+      model. Deterministic rules-based software sits outside the definition. If a model
+      were introduced into parse_intent or _decide, re-triage immediately: the function
+      (creditworthiness-adjacent financial decisioning about counterparty balances) sits
+      near Annex III 5(b), and decision_consequence is already determines-outcome.
+      Art. 50 transparency not engaged: no interaction with natural persons as such, no
+      synthetic content.
+    confidence: medium
+    requires_legal_review: false
+  - framework: dora
+    date: "2026-08-18"
+    assessor: "Remit dora-ict-assessment"
+    outcome: >
+      Out of scope as built — a personal project, not an EU financial entity. Recorded
+      because the finding is conditional and would flip: deployed inside a bank against a
+      live reconciliation ledger, this is ICT supporting a critical or important
+      function, and the no-halt and no-auth findings above would move from housekeeping
+      to Art. 9 ICT risk management gaps with resilience-testing obligations attached.
+    confidence: high
+    requires_legal_review: false
+
+notes: >
+  Assessment produced by reading source, not from a description. What the exercise was
+  really testing: whether Remit's skills produce findings specific to a system, or
+  generic checklist noise. On this evidence, specific — the three substantive findings
+  (self-asserted operator identity, self-produced verification, unenforced approval gate)
+  are all things the code does, none are things the skills could have guessed, and two of
+  them come directly from a finding adversary/ established two hours earlier.
+
+  Worth saying plainly: the guardrail design here is better than most production agents.
+  Limits live in code, the decision path is model-free, and the system refuses to run
+  without a named human. The findings are about the seam between the agent and its
+  operators, which is exactly where the framework claims the gap usually is.

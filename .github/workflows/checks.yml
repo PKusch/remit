@@ -26,6 +26,11 @@ jobs:
       - name: Install dependencies
         run: pip install --quiet pyyaml jsonschema
 
+      # Does the documented install actually work? It did not for three days, because
+      # nobody ran it. install.sh verifies its own result, so this is a real gate.
+      - name: Install path resolves
+        run: REMIT_SKILLS_DIR=/tmp/t/.claude/skills ./install.sh --copy
+
       # Do the system records conform to the schema, and do they pass the governance
       # checks the schema cannot express (tier mismatch, untested halt, expired
       # exceptions)? Fails on schema errors; warnings are reported, not fatal.

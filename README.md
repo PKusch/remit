@@ -11,6 +11,16 @@ without asking anyone.**
 The name is the thesis. An agent's remit is the scope of authority it has been granted,
 and governance is the business of defining that scope, evidencing it, and enforcing it.
 
+```bash
+git clone https://github.com/patkusch/remit.git && cd remit && ./install.sh
+```
+
+**→ [`QUICKSTART.md`](QUICKSTART.md)** — five minutes, and you never type a skill name.
+**→ [`examples/opspilot/`](examples/opspilot/)** — what it produces, run against a real
+agentic system that writes off money.
+
+Everything below is why it works and how it was tested. You don't need it to start.
+
 ---
 
 ## Why this exists
@@ -265,21 +275,22 @@ The general form: *a control the agent can satisfy by describing itself is not a
 
 ## Install
 
-Copy the skills you want into your skills directory:
-
 ```bash
 git clone https://github.com/patkusch/remit.git
-cp -r remit/skills/* ~/.claude/skills/
+cd remit && ./install.sh
 ```
 
-Or install one:
+Symlinks the nine skills into `~/.claude/skills/`, puts the framework where they expect to
+find it, and verifies every reference resolves. `--copy` to copy instead, `--uninstall` to
+remove.
 
-```bash
-cp -r remit/skills/agent-autonomy-review ~/.claude/skills/
-```
+**New here? [`QUICKSTART.md`](QUICKSTART.md) gets you to something useful in five minutes.**
 
-The skills reference `framework/` by relative path, so keep the repository structure
-intact — clone it somewhere permanent and symlink, or copy `framework/` alongside.
+> The previous instruction here was `cp -r remit/skills/* ~/.claude/skills/`, and it was
+> broken. The skills reference the framework by relative path in thirteen places; copying
+> them alone leaves every one dangling, and the skills lose the manual and the schema
+> **silently**. It stood for three days because nobody, including the author, ever tried
+> following it. `install.sh` exists so the failure is impossible rather than quiet.
 
 ---
 
@@ -333,6 +344,7 @@ remit/
 │   ├── README.md                  how to check the repo's claims
 │   └── fixtures/                  scenarios with known correct answers
 └── examples/
+    ├── opspilot/                  the framework run against a REAL agentic system
     └── loan-triage-agent.record.yaml   a worked, deliberately uncomfortable example
 ```
 
