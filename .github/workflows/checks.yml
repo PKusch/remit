@@ -1,0 +1,59 @@
+name: checks
+
+# Every claim this repo makes that can be checked mechanically, checked on every push.
+#
+# This exists because the author demonstrated twice, in one week, that he would not run
+# these reliably by hand — the example record sat broken against its own schema for a
+# day, and the EU AI Act dates were wrong in public for two. A gate is worth more than
+# a paragraph in a README about being careful.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install --quiet pyyaml jsonschema
+
+      # Do the system records conform to the schema, and do they pass the governance
+      # checks the schema cannot express (tier mismatch, untested halt, expired
+      # exceptions)? Fails on schema errors; warnings are reported, not fatal.
+      - name: Records validate
+        run: python scripts/validate_record.py examples/ tests/fixtures/
+
+      # Do the diagnostic manual's criteria still recover every mode they were written
+      # for? Exits non-zero if any machine-detectable specimen goes unclassified.
+      - name: Zoo — criteria recover their specimens
+        run: python zoo/run.py --no-colour
+
+      # Do the harnesses still run end to end, and do the reported rates hold? Kept
+      # small so CI stays fast; the published figures come from larger sweeps.
+      - name: Disorder — chaos engine runs
+        run: python disorder/run.py -n 50
+
+      # Has any change reopened a hole that adversary/ previously closed? This is the
+      # only robustness claim CI can honestly police.
+      - name: Adversary — no closed hole reopened
+        run: python adversary/run.py --no-colour --strict
+
+      # The README documents specific numbers. If they drift, the README is wrong, and
+      # a repo that corrects other people's stale claims should not carry its own.
+      - name: README figures still true
+        run: |
+          set -eu
+          zoo_recall=$(python zoo/run.py --no-colour | grep -o '[0-9]*/[0-9]* *([0-9]*%)' | head -1)
+          echo "zoo reports: $zoo_recall"
+          grep -q "16/16" README.md || { echo "README zoo figure is stale"; exit 1; }
+          grep -q "4%" README.md || { echo "README cascade figure is stale"; exit 1; }
+          echo "README figures consistent with current output"
