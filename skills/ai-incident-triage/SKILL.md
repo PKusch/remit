@@ -43,7 +43,11 @@ The essentials, if you are doing it inline:
 1. **Collect artefacts first** — trace, tool logs, inputs including retrieved content,
    outputs, memory state, permissions held. Not narrative. An agent's own account of
    what happened is evidence about `R1` and nothing else.
-2. **Classify against criteria**, recording every entry whose criteria are met.
+2. **Classify against criteria**, recording every entry whose criteria are met. Do not
+   assume a cascade — measured across 2,400 unscripted episodes in
+   [`disorder/`](../../disorder/), only ~4% of incidents involved more than one
+   environment-induced mode. Most are one failure sitting on top of a defect the policy
+   already had, which is a different remediation.
 3. **Name the primary** — the failure whose absence would have prevented the harm.
 4. **Severity** from the manual's specifiers; **blast radius realised** (`B0`–`B3`), and
    separately the radius that was *available*. The gap between them is the near-miss, and

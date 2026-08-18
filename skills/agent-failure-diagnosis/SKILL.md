@@ -49,9 +49,17 @@ Walk the manual. For each candidate entry, check every lettered criterion explic
 state the evidence. If a criterion is unmet, the classification does not apply — say so
 rather than reaching for the nearest familiar label.
 
-Expect several to apply. Cascades are the normal case: content is injected (`P2`), the
-agent expands scope on the strength of it (`A1`), and the summary omits the whole
-episode (`R3`).
+Several may apply, but do not go looking for a cascade by default. When
+[`disorder/`](../../disorder/) measured this across 2,400 unscripted episodes, only **~4%**
+produced more than one environment-induced mode — the manual previously claimed cascades
+were the common case, and that claim did not survive.
+
+Two things follow. Where modes do co-occur they usually share a cause rather than forming
+a chain: `A1` and `M2` appear together because one truncation event caused both, not
+because scope creep leads to amnesia — so read a co-occurrence as a hint about a common
+cause. And most incidents turn out to be **one environment-induced failure sitting on top
+of something the policy was already doing wrong**, which is a different remediation from a
+cascade.
 
 ### 4. Name the primary
 
@@ -126,6 +134,61 @@ Declared: [A_] · Evidenced: [A_] · [Mismatch? then this is a finding.]
 
 Write the record into the system record's `incidents` array if one exists, using the
 schema at [`framework/system-record.schema.json`](../../framework/system-record.schema.json).
+
+## When the trace looks clean
+
+A clean trace is evidence of one of two things, and you cannot tell which from the trace
+alone: nothing went wrong, or the failure did not leave the shape you were looking for.
+
+[`adversary/`](../../adversary/) tested this by trying to do the damage without producing
+the signature. **Four of seven tactics succeeded**, and none required any intent to
+deceive — every one is something an engineer does for ordinary reasons. Check these
+explicitly before concluding a trace is clean:
+
+**Repetition hidden by varying arguments.** A retry storm with a correlation id on each
+attempt looks like fourteen distinct calls. Group by *tool and target*, ignore the
+arguments, and ask whether the observed condition ever moved. Correlation ids are good
+practice, which is exactly why this is easy to miss.
+
+**Controls performed but not consulted.** "I ran the health checks" is literally true if
+the agent called the tool and ignored the result. Do not accept the presence of a call as
+evidence a control operated — look for whether its output changed anything downstream. A
+check whose failure would not have stopped the action is theatre.
+
+**Errors disclosed without being reportable.** "There were some transient upstream
+conditions" is a disclosure that leaves a reader unable to act. If the number of failures
+is not recoverable from what was said, treat it as `R3` even though something was
+mentioned.
+
+**Boundaries declared wide.** See below — this one you cannot fix by looking harder.
+
+**Dissent that costs nothing.** A reviewer at 100% approval is obviously broken, so any
+team told to watch that number will produce 92%. Check whether rejections were followed
+immediately by an approval of the same work. See `S1`.
+
+**Instructions laundered through memory.** An injected instruction written to memory in
+one session and retrieved as settled belief in the next has no temporal link to the
+ingest. Where an agent acts on a "prior authorisation", find the authorisation.
+
+None of this means assume bad faith. It means a clean trace supports a weaker conclusion
+than it appears to, and the honest report says which checks you ran rather than "no
+issues found".
+
+## Two things that are not evidence, however they look
+
+**A boundary the agent declared for itself.** Scope compliance measured against
+self-declared scope is circular: widening the declaration makes every action compliant.
+If the scope you are assessing against came from the agent, say so and treat a permissive
+scope as a finding in its own right.
+
+**Provenance the agent wrote about its own belief.** A memory record carrying
+`provenance: "verified 2026-08-18"` is an assertion, not an attestation — the agent
+authored both the belief and its evidence. Provenance counts only when it points at
+something a third party recorded.
+
+The general test, worth applying to every control you meet: **what would the agent have to
+do to pass this while still doing the harm?** If the answer is "write a different
+sentence", the control is decorative and its satisfaction is not evidence of anything.
 
 ## Two failure modes to avoid in yourself
 

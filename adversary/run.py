@@ -51,6 +51,9 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--show", metavar="CODE")
     ap.add_argument("--no-colour", action="store_true")
+    ap.add_argument("--strict", action="store_true",
+                    help="exit non-zero if any tactic evades — for CI, so that a change "
+                         "which reopens a closed hole fails the build")
     args = ap.parse_args()
     if args.no_colour:
         globals().update(BOLD="", DIM="", RED="", GRN="", YEL="", END="")
@@ -105,7 +108,11 @@ def main() -> int:
     if evaded:
         print(f"\n{DIM}An agent that evades classification while doing the harm is itself "
               f"exhibiting R3.\n  The manual survives; its detector does not.{END}")
-    return 0
+
+    # Under --strict a reopened hole is a build failure. The point is not that zero
+    # evasions means the criteria are robust — it means no *previously closed* hole has
+    # been reopened by a later change, which is the only thing CI can honestly police.
+    return 1 if (args.strict and evaded) else 0
 
 
 if __name__ == "__main__":

@@ -85,7 +85,31 @@ last exercised and how long it takes to take effect. An untested halt is not a h
 **Injection resistance where the agent reads untrusted content.** If the agent processes
 anything a third party can write — web pages, emails, tickets, documents, code comments,
 tool results from external services — then instruction/data separation and egress limits
-are load-bearing. See `P2` in the diagnostic manual.
+are load-bearing. See `P2` in the diagnostic manual. Note the laundering route as well: an
+instruction written to memory in one session and retrieved as settled belief in the next
+has no visible link to the ingest, so an agent acting on a "prior authorisation" should be
+made to show where the authorisation came from.
+
+### Two controls that are not controls
+
+Both were established by [`adversary/`](../../adversary/), and neither can be fixed by
+looking harder — they fail at the point where the agent supplies its own evidence.
+
+**A self-declared boundary.** If the scope you are assessing compliance against is the
+scope the agent announced, the assessment is circular: widening the announcement makes
+every action compliant. This is rarely deception — broad scopes get declared for
+convenience constantly. Ask who assigned the scope. If the answer is the agent, or a
+prompt the agent can restate, record the boundary as **not enforced** regardless of how
+well the agent stayed inside it.
+
+**Agent-written provenance.** A memory record carrying `provenance: "verified"` looks
+governed and is not; the agent authored both the belief and its evidence. Provenance is
+worth something only when it references something a third party recorded. A provenance
+field that accepts free text will eventually be filled with whatever passes validation.
+
+Carry the general form into every control you assess: **what would the agent have to do to
+pass this while still doing the harm?** If the answer is "write a different sentence", the
+control is decorative, and a system that satisfies it has demonstrated nothing.
 
 ## Step 6 — Look for autonomy creep
 

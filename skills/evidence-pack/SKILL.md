@@ -70,7 +70,30 @@ often than they are true:
 - **Halt mechanisms.** Ask for the test record and the date. "It exists" is not evidence
   it works.
 - **Human oversight.** Ask for approval records, override rates, and rejection counts.
-  A gate with no recorded rejections invites the question of whether it is a gate.
+  A gate with no recorded rejections invites the question of whether it is a gate — but
+  note that a gate with a *few* rejections is not automatically better. Check whether the
+  rejected items came straight back and were approved. Dissent that costs nothing is not
+  review, and an approval rate massaged off 100% is a metric being managed rather than a
+  control operating.
+
+### The test to apply to every claimed control
+
+**What would the system have to do to satisfy this while still causing the harm?**
+
+If the answer is "write a different sentence", the control is decorative and its
+satisfaction is not evidence. [`adversary/`](../../adversary/) found four controls that
+failed this test using nothing but ordinary engineering habit. Two of them cannot be
+salvaged by better inspection and should be recorded as unevidenced whenever you meet
+them:
+
+- **Scope the system declared for itself.** Compliance against a self-set boundary is
+  circular. Ask who assigned it; if the agent did, the boundary is documentation of intent.
+- **Provenance the system wrote about its own belief.** The agent authored both the record
+  and its justification. Provenance counts only when it points at something a third party
+  recorded.
+
+Auditors ask this question instinctively. Getting to it first is the entire value of
+assembling the pack early.
 
 ### 5. Report what is missing
 
