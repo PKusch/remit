@@ -1,0 +1,191 @@
+# Remit run against a system neither the framework's author nor its user wrote.
+#
+# Target: github.com/OpenInterpreter/open-interpreter — a coding agent that executes
+# commands on your machine. Rust, ~3,850 source files. Assessed by reading source at
+# depth-1 clone on 2026-08-18.
+#
+# This exists because every other assessment in this repository was of code we wrote.
+# If the skills only produce specific findings on familiar systems, they are worthless.
+
+id: open-interpreter
+name: Open Interpreter — local coding agent
+version: "main @ 2026-08-18"
+status: live
+lifecycle_stage: operation
+last_reviewed: "2026-08-18"
+next_review_due: unknown
+
+owner:
+  accountable_person: "n/a — third-party open source, assessed as a prospective deployer"
+  accountable_role: "Would be the adopting organisation's engineering lead"
+  business_unit: "n/a"
+
+purpose:
+  intended_use: >
+    A terminal coding agent. Takes natural-language intent, plans, and executes shell
+    commands and file edits on the local machine to accomplish it, under a configurable
+    sandbox and approval policy.
+  out_of_scope_uses:
+    - Anything the active SandboxPolicy forbids — enforced at the OS layer, not by prompt
+    - Network egress unless NetworkAccess is explicitly set to Enabled
+  affected_persons:
+    - The operator, whose machine and repositories it acts on
+    - Anyone downstream of code it writes or commands it runs
+  decision_consequence: determines-outcome
+  # Its actions ARE the outcome — files written, commands run — not advice about them.
+
+agentic:
+  autonomy_tier: A2          # as documented, and how the `untrusted` policy behaves
+  observed_tier: A3          # the DEFAULT policy is model-decided approval = delegated
+  blast_radius: B3           # arbitrary shell execution is available
+  oversight_level: constrained
+  # A4/B3 is reachable in one config change (Never + DangerFullAccess) and the grid calls
+  # that prohibited-by-default — but recording A4 as observed would overstate: it is not
+  # what the tool does out of the box. The span is a finding, not the tier.
+  reads_untrusted_content: true    # file contents, command output, web content, MCP
+  delegates_to_subagents: true
+
+  tools:
+    - name: shell execution
+      description: Runs arbitrary shell commands under the active sandbox policy.
+      blast_radius: B3
+      reversible: false
+      justification: The purpose of the system.
+      credential_scope: "the operator's own user account"
+      requires_approval: unknown        # depends entirely on AskForApproval; see findings
+    - name: file write
+      description: Creates and edits files within writable roots.
+      blast_radius: B2
+      reversible: true
+      justification: Core function. Bounded by SandboxPolicy::WorkspaceWrite.
+      requires_approval: unknown
+    - name: network egress
+      description: Outbound network, gated by NetworkAccess.
+      blast_radius: B3
+      reversible: false
+      justification: Needed for package installs and API calls.
+      credential_scope: "NetworkAccess::Restricted by default"
+      requires_approval: unknown
+    - name: MCP servers
+      description: Third-party tool servers, each with its own reach.
+      blast_radius: B3
+      reversible: false
+      justification: Extensibility. Blast radius is whatever the server holds.
+      requires_approval: unknown
+
+  halt_mechanism:
+    exists: true
+    how: >
+      Interrupt at the terminal; the sandbox bounds an in-flight command regardless.
+      Not a governed kill switch with a defined time-to-halt.
+    last_tested: unknown
+
+  memory:
+    persistent: true
+    scope: user
+    provenance_recorded: false
+    review_cadence: none
+    # Session history and configuration persist; no provenance on what was learned.
+
+  tier_history:
+    - date: "2026-08-18"
+      autonomy_tier: A2
+      blast_radius: B3
+      reason: First assessment. Tier reflects the `untrusted` policy.
+      approved_by: "n/a"
+
+data:
+  personal_data: unknown
+  special_category_data: unknown
+  data_sources: ["local filesystem", "command output", "MCP servers", "model provider"]
+  retention: unknown
+
+supply_chain:
+  role: deployer
+  base_model: "configurable — Kimi K3, GPT, Claude and others"
+  base_model_supplier: "multiple, operator's choice"
+  third_party_components: [MCP servers, model providers]
+  critical_or_important_function: unknown
+  # Would be the adopting firm's determination. If used to change production code at an
+  # EU financial entity, plausibly yes.
+
+assessments:
+  - framework: remit-autonomy
+    date: "2026-08-18"
+    assessor: "Remit agent-autonomy-review, from source"
+    outcome: >
+      A2 documented, A3 by default, A4 reachable in one config change, B3 throughout.
+      The sandbox design is
+      genuinely strong and is the real control; the approval layer is not. Findings
+      concern which of the two is doing the work, and whether an adopter knows.
+    confidence: high
+    requires_legal_review: false
+    findings:
+      - reference: default-approval-is-model-decided
+        status: not-met
+        evidence: >
+          AskForApproval::OnRequest is #[default]. Its own doc comment reads: "The model
+          decides when to ask the user for approval."
+        gap: >
+          The default approval policy delegates the approval decision to the component
+          being approved. This is the sharpest instance of the finding in
+          framework/autonomy-tiers.md that we have seen in production code — and it is
+          worse than the usual form: the agent is not describing itself past a control,
+          it IS the control. An operator who believes "it asks me before doing things"
+          holds a belief the code does not support.
+        owner: "adopting organisation"
+      - reference: sandbox-is-the-real-control
+        status: met
+        evidence: >
+          SandboxPolicy is enforced at the OS layer (seatbelt/landlock), not in the
+          prompt. NetworkAccess::Restricted is #[default]. is_dangerous_command catches
+          rm -rf / including sudo- and env-prefixed evasions.
+        gap: ""
+        owner: "n/a — this is the part that works"
+      - reference: tier-is-configuration-not-property
+        status: partial
+        evidence: >
+          The same binary spans AskForApproval::UnlessTrusted + SandboxPolicy::ReadOnly
+          (A2/B0) to AskForApproval::Never + SandboxPolicy::DangerFullAccess (A4/B3).
+        gap: >
+          Remit's tier model says the tier belongs to the deployment, not the model. Here
+          the span is four tiers wide and is set by two config values. Any adopter's
+          governance record must record the CONFIGURATION, not the tool — and any
+          statement of the form "we use Open Interpreter, it's A2" is meaningless without
+          the policy attached.
+        owner: "adopting organisation"
+      - reference: untrusted-input-at-b3
+        status: partial
+        evidence: >
+          The agent reads file contents, command output, fetched web content and MCP
+          results, and holds B3 shell execution.
+        gap: >
+          Classic P2 surface. The sandbox bounds the damage, which is the correct
+          mitigation and materially better than most agents — but under
+          DangerFullAccess or with an over-scoped MCP server the bound is gone, and
+          those are the configurations most likely to be chosen for convenience.
+        owner: "adopting organisation"
+      - reference: mcp-blast-radius-unbounded
+        status: not-met
+        evidence: "MCP servers are configurable; each carries its own reach."
+        gap: >
+          Blast radius follows from the tools held. An adopter enumerating tools must
+          enumerate every MCP server too, and most will not — the tool inventory stops
+          at the agent and misses what the agent can reach through.
+        owner: "adopting organisation"
+
+notes: >
+  This is a better-designed agent than most, and saying so is part of an honest
+  assessment. Sandboxing is OS-enforced rather than prompted; network is restricted by
+  default; danger-full-access is named honestly rather than euphemistically; the
+  dangerous-command detector handles env-prefix and sudo evasions that a naive
+  implementation misses.
+
+  The finding that matters is architectural rather than a bug: TWO control layers exist
+  and only one is real. The sandbox is enforced outside the model and works. The approval
+  policy, in its default setting, is decided by the model — and it is the approval layer
+  that operators describe when they explain why the tool is safe.
+
+  A deployer's governance record for this system must record the configuration, not the
+  tool. Remit's tier model already says that; this is the clearest live example of it
+  we have found.
