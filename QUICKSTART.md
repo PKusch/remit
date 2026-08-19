@@ -65,6 +65,9 @@ untested halt, memory without provenance, expired exceptions.
 
 ## See the whole estate at once
 
+**[Look at it first](https://patkusch.github.io/remit/dashboard/)** — the live version, no
+install required. Then build your own:
+
 ```bash
 python dashboard/build.py && open dashboard/index.html
 ```

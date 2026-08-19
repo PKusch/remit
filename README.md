@@ -18,7 +18,8 @@ git clone https://github.com/patkusch/remit.git && cd remit && ./install.sh
 **→ [The model decides when to ask](writing/the-model-decides-when-to-ask.md)** — what this
 found when pointed at a widely-used coding agent, and why existing frameworks miss it.
 **→ [`QUICKSTART.md`](QUICKSTART.md)** — five minutes, and you never type a skill name.
-**→ [`dashboard/`](dashboard/)** — your estate on the grid, control gaps computed live.
+**→ [Live control room](https://patkusch.github.io/remit/dashboard/)** — the estate on the
+grid, control gaps computed in the page. No install needed to look.
 **→ [`examples/opspilot/`](examples/opspilot/)** — what it produces, run against a real
 agentic system that writes off money.
 
