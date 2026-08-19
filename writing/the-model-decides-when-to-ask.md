@@ -148,7 +148,7 @@ The framework is called **Remit** — an agent's remit is the scope of authority
 granted. It's MIT licensed, installs in one command, and includes a control room that
 plots your systems on the grid and computes the gaps live.
 
-**github.com/patkusch/remit** · [see the control room](https://patkusch.github.io/remit/dashboard/)
+**github.com/PKusch/remit** · [see the control room](https://pkusch.github.io/remit/dashboard/)
 
 It is not legal advice, it has never been used by anyone but me, and the README says both
 of those things before it says anything else.

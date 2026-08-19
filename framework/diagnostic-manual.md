@@ -108,8 +108,10 @@ retrieved as fact).
 >   wrongly-failing test from deleting a rightly-failing one. Marked unreachable from the
 >   start, and [`evidence/zoo/`](../evidence/zoo/) does not attempt it.
 > - **`G2`** is not separable from `A1`. A mechanical detector fires both on both
->   specimens; a blind four-rater panel classified this manual's own `G2` specimen as `A1`
->   **unanimously**.
+>   specimens; and **seven blind raters across four model families classified this
+>   manual's own `G2` specimen as `A1` — unanimously, every one of them.** That is the
+>   most consistent single result in this repository, and it is a result against the
+>   manual.
 > - **`G3`** is reachable, but only through criterion C — resistance to curtailment. Drop
 >   that criterion and it collapses into `A1` too.
 >
@@ -747,10 +749,11 @@ before any ratings were read:
 
 | | |
 |---|---|
-| Mean pairwise agreement | **85.4%** |
-| **Fleiss' κ** | **0.83** — *almost perfect* (Landis & Koch) |
-| Accuracy vs ground truth | 78.1% |
-| Unanimous on | 6 of 8 traces |
+| Mean pairwise agreement | **86.9%** |
+| **Fleiss' κ** | **0.85** — *almost perfect* (Landis & Koch) |
+| Accuracy vs ground truth | 80.4% |
+| Unanimous on | 5 of 8 traces |
+| Raters | 7, across 4 model families |
 
 Conventional practice expects a usable instrument to clear κ ≥ 0.61. On this evidence the
 criteria are **reliable** — assessors converge — which is the property the whole exercise
@@ -767,11 +770,30 @@ defects, and both have been fixed above rather than explained away:
   was not looking — something no trace can show. Rewritten to test the staleness window,
   which is observable.
 
-**What this does not establish.** Eight traces, four raters, all model instances rather
-than humans — agreement between them may be inflated by shared priors, and the sample is
-small enough that one contested trace moves κ by several points. It is the first evidence
-this manual has ever had, not the last it needs. Human raters on a larger packet remain
-the stronger test, and the instrument for running it is in the repository.
+**The shared-priors objection, tested.** The first version of this study used four
+instances of one model, and the obvious complaint was that they might agree because they
+*are* one model. So the panel was extended to seven raters across four different model
+families and the comparison run explicitly:
+
+```
+within the same model    85.4%   (41/48 pairs)
+across different models  87.5%   (105/120 pairs)
+```
+
+Agreement did not drop when the rater changed. On this evidence shared priors are not what
+is producing the number — the criteria are.
+
+Read that carefully, though, because it is weaker than it looks. The four same-model
+raters happened to contain the panel's most contested call, which flatters the cross-model
+figure; with eight traces and seven raters the interval around a two-point gap is wide.
+The defensible claim is **agreement survived changing the rater**, not that priors were
+shown to be irrelevant.
+
+**What this still does not establish.** Eight traces is a small packet, one contested
+trace moves κ by several points, and every rater is a model rather than a person. Human
+raters remain the stronger test and the instrument runs on them unmodified. What can now
+be said is narrower and firmer than before: the criteria produce agreement that is not an
+artefact of a single model's habits.
 
 ## Limits of this manual, stated plainly
 

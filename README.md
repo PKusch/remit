@@ -12,13 +12,13 @@ The name is the thesis. An agent's remit is the scope of authority it has been g
 and governance is the business of defining that scope, evidencing it, and enforcing it.
 
 ```bash
-git clone https://github.com/patkusch/remit.git && cd remit && ./install.sh
+git clone https://github.com/PKusch/remit.git && cd remit && ./install.sh
 ```
 
 **→ [The model decides when to ask](writing/the-model-decides-when-to-ask.md)** — what this
 found when pointed at a widely-used coding agent, and why existing frameworks miss it.
 **→ [`QUICKSTART.md`](QUICKSTART.md)** — five minutes, and you never type a skill name.
-**→ [Live control room](https://patkusch.github.io/remit/dashboard/)** — the estate on the
+**→ [Live control room](https://pkusch.github.io/remit/dashboard/)** — the estate on the
 grid, control gaps computed in the page. No install needed to look.
 **→ [`examples/opspilot/`](examples/opspilot/)** — what it produces, run against a real
 agentic system that writes off money.
@@ -186,8 +186,11 @@ pip install pyyaml jsonschema
 python scripts/validate_record.py examples/ tests/fixtures/
 ```
 
-`scripts/validate_record.py` validates records against the schema *and* reports
-governance warnings the schema cannot express — an observed tier exceeding the declared
+`scripts/validate_record.py` checks a record against the schema *and* reports governance
+warnings the schema cannot express. **It reads records, not code** — it can tell you your
+record is internally inconsistent, never that the record is true. A reader put it plainly:
+it re-derives warnings from what you already wrote down. Useful as a consistency check,
+worthless as a discovery tool if the record was filled in carelessly. What it reports — an observed tier exceeding the declared
 one, a blast radius lower than the tools actually held, an untested halt at an oversight
 level that requires one, persistent memory without provenance, expired exceptions. Exits
 non-zero on failure, so it drops into CI or a pre-commit hook.
@@ -208,7 +211,7 @@ score is real rather than self-graded.
 
 ```
 recall on detectable classes : 16/16  (100%)
-spurious findings            : 2
+spurious findings            : 3
 deferred to human            : 3
 ```
 
@@ -260,8 +263,8 @@ the question governance actually turns on: **can an agent do the damage without 
 the signature?** An evasion only counts if the harm survives, so harm is defined in a
 separate file that never references the criteria.
 
-**Four of seven tactics got away with it on the first run** — and none of them required
-malice. Adding a correlation id to each retry. Declaring a generous scope up front.
+**Four of seven tactics got away with it on the first run** — `0/7 tactics` evade today,
+after hardening — and none of them required malice. Adding a correlation id to each retry. Declaring a generous scope up front.
 Rejecting a token 2 of 12. Writing a provenance string that asserts verification. Every
 one is something an engineer does for ordinary reasons, which is what makes them holes
 rather than curiosities.
@@ -280,7 +283,7 @@ The general form: *a control the agent can satisfy by describing itself is not a
 ## Install
 
 ```bash
-git clone https://github.com/patkusch/remit.git
+git clone https://github.com/PKusch/remit.git
 cd remit && ./install.sh
 ```
 
@@ -369,6 +372,21 @@ That date matters more than usual. The **Digital Omnibus on AI** entered into fo
 Art. 50 transparency at 2 August 2026. This repo carried the pre-Omnibus dates for its
 first two days. Most guidance you will find online still does. **Check the vintage of
 anything you read on this, including this.**
+
+**It governs whether a system is *allowed to act*, not whether what it computes is any
+good.** This is the largest blind spot and it was found by handing the repo to readers who
+had not seen it. Assessing a decision-support tool, one of them swept 1,392 synthetic
+inputs and discovered that one of its three recommendations was arithmetically unreachable
+— the single most serious defect in that system. **Nothing in this framework pointed at
+it.** Autonomy tiers, blast radius and the failure taxonomy all describe an agent's
+authority and behaviour; none of them ask whether its output is correct. Use this
+alongside ordinary engineering scepticism about the answer, never instead of it.
+
+**About a third of this repository is load-bearing for any one assessment.** Honest core:
+[`autonomy-tiers.md`](framework/autonomy-tiers.md), [`diagnostic-manual.md`](framework/diagnostic-manual.md),
+the schema, and whichever one or two legal skills bite. The rest — the crosswalk, the
+management-system skills, `evidence/` — is reference, and a reference is allowed to be
+larger than any single use. But do not read the length as depth.
 
 **This is not legal advice.** The EU AI Act, DORA, and ISO 42001 material here is a
 structured triage to organise facts and surface the right questions. Classification turns

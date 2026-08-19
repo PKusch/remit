@@ -73,13 +73,8 @@ jobs:
       - name: Adversary — no closed hole reopened
         run: python evidence/adversary/run.py --no-colour --strict
 
-      # The README documents specific numbers. If they drift, the README is wrong, and
-      # a repo that corrects other people's stale claims should not carry its own.
+      # Every number the README quotes from a harness must match what that harness prints.
+      # The previous version of this step grepped two magic strings and passed while the
+      # line beneath one of them was wrong. An outside reader found it in ninety seconds.
       - name: README figures still true
-        run: |
-          set -eu
-          zoo_recall=$(python evidence/zoo/run.py --no-colour | grep -o '[0-9]*/[0-9]* *([0-9]*%)' | head -1)
-          echo "zoo reports: $zoo_recall"
-          grep -q "16/16" README.md || { echo "README zoo figure is stale"; exit 1; }
-          grep -q "4%" README.md || { echo "README cascade figure is stale"; exit 1; }
-          echo "README figures consistent with current output"
+        run: python scripts/check_readme_figures.py

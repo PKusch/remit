@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/patkusch/remit/framework/system-record.schema.json",
+  "$id": "https://github.com/PKusch/remit/framework/system-record.schema.json",
   "title": "Remit AI System Record",
   "description": "The single shared artefact every Remit skill reads from and writes to. One record per AI system or agent. Governance falls apart when each framework assessment keeps its own private notion of what the system is; this schema is the fix.",
   "type": "object",

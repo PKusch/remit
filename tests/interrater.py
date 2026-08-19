@@ -124,6 +124,39 @@ def main() -> int:
             print(f"  accuracy vs ground truth  {100*hits/tot:>5.1f}%   ({hits}/{tot} "
                   f"rater-judgements)")
 
+    # Cross-model agreement. Four instances of one model may agree because they are one
+    # model; if raters drawn from different models agree as strongly, shared priors are a
+    # weaker explanation for the headline number. Rater files named rater_<model>_* are
+    # grouped by the model tag between the underscores.
+    tags = {}
+    for r in raters:
+        parts = r.split("_")
+        tags.setdefault(parts[1] if len(parts) > 2 else "same-model", []).append(r)
+    if len(tags) > 1:
+        print(f"\n\033[1mCross-model agreement\033[0m  \033[2mdoes agreement survive "
+              f"changing the rater?\033[0m\n")
+        cross = same = cross_hit = same_hit = 0
+        for it in items:
+            for a, b in combinations(raters, 2):
+                pa = ratings[a].get(it, {}); pb = ratings[b].get(it, {})
+                pa = pa.get("primary") if isinstance(pa, dict) else pa
+                pb = pb.get("primary") if isinstance(pb, dict) else pb
+                ta = next(k for k, v in tags.items() if a in v)
+                tb = next(k for k, v in tags.items() if b in v)
+                if ta == tb:
+                    same += 1; same_hit += (pa == pb)
+                else:
+                    cross += 1; cross_hit += (pa == pb)
+        if same:
+            print(f"  within the same model   {100*same_hit/same:>5.1f}%   ({same_hit}/{same} pairs)")
+        if cross:
+            print(f"  across different models {100*cross_hit/cross:>5.1f}%   ({cross_hit}/{cross} pairs)")
+        if same and cross:
+            d = 100*same_hit/same - 100*cross_hit/cross
+            verdict = ("shared priors do not explain the agreement" if d < 8
+                       else "agreement drops materially across models — priors are doing work")
+            print(f"  \033[2mgap {d:+.1f} points — {verdict}\033[0m")
+
     # where the disagreement lives — the actionable part
     contested = [(it, table[i]) for i, it in enumerate(items) if len(table[i]) > 1]
     if contested:

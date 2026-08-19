@@ -2,10 +2,32 @@
 
 Five minutes, and you never type a skill name.
 
+> ### Handed this repo cold, with nothing installed?
+>
+> Everything below assumes the skills are installed and you are in a conversation. If
+> someone has just pointed you at this directory and asked you to assess a system from its
+> source, that path does not apply — and a reader who tried it said so bluntly: *"the
+> QUICKSTART's entire premise did not apply."*
+>
+> **For a cold code review, read two files and ignore the rest:**
+>
+> 1. [`framework/autonomy-tiers.md`](framework/autonomy-tiers.md) — score the system's
+>    autonomy and blast radius from the **tools it holds**, not from what it usually does.
+>    Then ask the question that does most of the work: *what would this system have to do
+>    to satisfy its controls while still causing the harm?*
+> 2. [`framework/diagnostic-manual.md`](framework/diagnostic-manual.md) — start at
+>    **"the five that actually fire"** and stop there unless a case doesn't fit. The other
+>    fourteen are reference.
+>
+> Skip the intake skill, the record, the validator and the dashboard. They exist to
+> maintain an inventory over time, and there is no inventory in a one-shot code review.
+> Filling a governance schema from source alone means inventing the answers, which is
+> worse than leaving it empty.
+
 ## 1. Install
 
 ```bash
-git clone https://github.com/patkusch/remit.git
+git clone https://github.com/PKusch/remit.git
 cd remit && ./install.sh
 ```
 
@@ -59,13 +81,18 @@ pip install pyyaml jsonschema
 python scripts/validate_record.py records/your-system.yaml
 ```
 
-Validates against the schema **and** flags things the schema can't express — an observed
-autonomy tier higher than the declared one, a blast radius lower than the tools held, an
-untested halt, memory without provenance, expired exceptions.
+Checks the record against the schema **and** flags what the schema can't express — an
+observed tier above the declared one, a blast radius below the tools held, an untested
+halt, memory without provenance, expired exceptions.
+
+It reads **your record, not your code.** Everything it finds is a contradiction in what
+you wrote down. That is genuinely useful — records drift and contradictions are easy to
+miss — but it will never tell you the record is *true*, and a carelessly filled record
+validates clean.
 
 ## See the whole estate at once
 
-**[Look at it first](https://patkusch.github.io/remit/dashboard/)** — the live version, no
+**[Look at it first](https://pkusch.github.io/remit/dashboard/)** — the live version, no
 install required. Then build your own:
 
 ```bash
