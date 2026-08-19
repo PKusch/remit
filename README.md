@@ -15,6 +15,8 @@ and governance is the business of defining that scope, evidencing it, and enforc
 git clone https://github.com/patkusch/remit.git && cd remit && ./install.sh
 ```
 
+**→ [The model decides when to ask](writing/the-model-decides-when-to-ask.md)** — what this
+found when pointed at a widely-used coding agent, and why existing frameworks miss it.
 **→ [`QUICKSTART.md`](QUICKSTART.md)** — five minutes, and you never type a skill name.
 **→ [`dashboard/`](dashboard/)** — your estate on the grid, control gaps computed live.
 **→ [`examples/opspilot/`](examples/opspilot/)** — what it produces, run against a real
