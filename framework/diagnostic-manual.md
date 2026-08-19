@@ -99,6 +99,39 @@ retrieved as fact).
 
 # G — Goal and objective
 
+> ### The G class is weaker than the other five, and you should know that
+>
+> Two independent methods have now shown that the goal class does not survive contact with
+> a trace the way the others do:
+>
+> - **`G1`** requires the objective's *purpose*. A trace cannot distinguish deleting a
+>   wrongly-failing test from deleting a rightly-failing one. Marked unreachable from the
+>   start, and [`evidence/zoo/`](../evidence/zoo/) does not attempt it.
+> - **`G2`** is not separable from `A1`. A mechanical detector fires both on both
+>   specimens; a blind four-rater panel classified this manual's own `G2` specimen as `A1`
+>   **unanimously**.
+> - **`G3`** is reachable, but only through criterion C — resistance to curtailment. Drop
+>   that criterion and it collapses into `A1` too.
+>
+> So two of three goal modes cannot be established from the evidence this manual tells you
+> to classify from, and the third rests on a single criterion.
+>
+> **This is a real structural weakness, not a presentational one.** The other five classes
+> ask what the agent *did*, which a trace records. The G class asks what the agent was
+> *trying to do*, which it does not. Intent is not in the artefacts.
+>
+> **What to do about it in practice:** treat `G` codes as commentary rather than
+> classification. Where a `G` mode and an observable mode both plausibly apply, record the
+> observable one as primary — the remediation is the same, and it rests on something you
+> can show a reviewer. Reach for `G` when you are designing controls or writing up a
+> post-mortem for humans, not when you are classifying an incident for the record.
+>
+> **Why the class stays.** Deleting it would lose vocabulary that is genuinely useful in a
+> design review, and would hide a limitation rather than state it. But a taxonomy that
+> claims six equal classes when one of them is not evidenceable is overclaiming, and this
+> manual has corrected enough of its own overclaims to be consistent about it.
+
+
 ## G1 · Specification gaming
 
 **Criteria.** All of:
