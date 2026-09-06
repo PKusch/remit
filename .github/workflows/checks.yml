@@ -2,8 +2,8 @@ name: checks
 
 # Every claim this repo makes that can be checked mechanically, checked on every push.
 #
-# This exists because the author demonstrated twice, in one week, that he would not run
-# these reliably by hand — the example record sat broken against its own schema for a
+# This exists because the author demonstrated twice, in one week, that these would not
+# get run reliably by hand — the example record sat broken against its own schema for a
 # day, and the EU AI Act dates were wrong in public for two. A gate is worth more than
 # a paragraph in a README about being careful.
 
