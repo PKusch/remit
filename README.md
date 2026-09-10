@@ -1,12 +1,13 @@
 # Remit
 
-**An agentic skills framework for AI governance.**
+**A rulebook for what an AI agent may do without asking a person, and a way to write up what went wrong that two engineers will fill in the same way.**
 
-Established AI governance frameworks were written for systems that *produce outputs*.
-An agent *takes actions*. Remit is a set of installable agent skills that do real
-governance work — classification, assessment, diagnosis, evidence — plus a framework
-layer for the part existing standards leave thin: **what an agent is allowed to do
-without asking anyone.**
+Today's AI rules were written for systems that answer questions. An agent takes
+actions. Remit is a set of checks an agent can run on itself and on the systems
+around it: what tools it holds, how much damage one action could do, whether a
+person could realistically say no. It adds a manual for writing up failures so
+the same failure gets the same name every time, and it maps the results onto
+the EU AI Act, NIST AI RMF, ISO 42001 and DORA so they count as evidence.
 
 The name is the thesis. An agent's remit is the scope of authority it has been granted,
 and governance is the business of defining that scope, evidencing it, and enforcing it.
