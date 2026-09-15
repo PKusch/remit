@@ -39,6 +39,8 @@ jobs:
       # Legal content decays. Make the decay a build failure, not a silent liability.
       - name: Legal content not stale
         run: python scripts/check_staleness.py
+      - name: Crosswalk citations resolve
+        run: python scripts/check_crosswalk.py
 
       # Do the system records conform to the schema, and do they pass the governance
       # checks the schema cannot express (tier mismatch, untested halt, expired

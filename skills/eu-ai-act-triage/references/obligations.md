@@ -16,6 +16,12 @@ the article and the date. A generic list of articles is not an output anyone can
 
 ---
 
+## Applies regardless of risk tier
+
+| # | Obligation | Article | What it means in practice |
+|---|---|---|---|
+| 1 | AI literacy | Art. 4 | Providers and deployers must take measures to ensure staff and anyone else operating or using an AI system on their behalf have sufficient AI literacy — understanding enough about the system's capabilities, limitations and risks to use it responsibly. Applies to every system, not just high-risk. In force since 2 February 2025 and was not deferred by the Digital Omnibus. |
+
 ## High-risk — provider obligations
 
 The heavy set. Chapter III, Section 2 states the requirements for the system; Section 3
