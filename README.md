@@ -329,13 +329,16 @@ remit/
 │   ├── agent-autonomy-review/
 │   ├── agent-failure-diagnosis/
 │   ├── eu-ai-act-triage/          + Annex III, prohibitions, obligations
-│   ├── dora-ict-assessment/       the regime that usually binds in financial services
+│   ├── dora-ict-assessment/       + chapter/article map, the regime that usually binds in financial services
 │   ├── nist-ai-rmf-assessment/    + functions and categories
 │   ├── iso-42001-soa/             + Annex A control objectives
 │   ├── ai-incident-triage/
 │   └── evidence-pack/
 ├── scripts/
-│   └── validate_record.py         schema + governance checks, CI-ready
+│   ├── validate_record.py         schema + governance checks, CI-ready
+│   ├── check_links.py             every relative markdown link resolves
+│   ├── check_staleness.py         legal-content files past their re-check date
+│   └── check_crosswalk.py         every crosswalk citation resolves in this repo's own references
 ├── adversary/                     can you do the harm without leaving the signature?
 │   ├── harms.py                   what went wrong, defined without the criteria
 │   ├── evasions.py                seven tactics, matched honest/evasive pairs

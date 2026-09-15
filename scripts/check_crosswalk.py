@@ -15,9 +15,8 @@ What this checks, per column of the "By governance theme" table:
                 table. A clause number (cl. 6.1.2) is outside Annex A scope
                 and is not checked — annex-a.md deliberately covers only the
                 controls, not the management-system clauses.
-  DORA        — reported, not checked. There is no DORA reference file in
-                this repo, so every DORA citation in the crosswalk currently
-                rests on nothing checkable here. That is stated, not hidden.
+  DORA        — the base article number appears in articles.md's chapter
+                map or one of its per-article tables.
 """
 from __future__ import annotations
 import re
@@ -34,6 +33,7 @@ EU_AI_ACT_REFS = [
 ]
 NIST_REF = ROOT / "skills/nist-ai-rmf-assessment/references/functions.md"
 ISO_REF = ROOT / "skills/iso-42001-soa/references/annex-a.md"
+DORA_REF = ROOT / "skills/dora-ict-assessment/references/articles.md"
 
 
 def base_article(cite: str) -> str:
@@ -69,9 +69,9 @@ def main() -> int:
         )
     }
     iso_text = ISO_REF.read_text(encoding="utf-8")
+    dora_text = DORA_REF.read_text(encoding="utf-8")
 
     problems = 0
-    dora_citations: set[str] = set()
 
     for theme, eu, nist, iso, dora in rows:
         for cite in re.findall(r"Art\.\s*\d+", eu):
@@ -88,16 +88,13 @@ def main() -> int:
             if not re.search(rf"\|\s*{re.escape(cite)}\s*\|", iso_text):
                 print(f"  ✗ ISO: '{cite}' (theme: {theme}) not found in annex-a.md's control table")
                 problems += 1
-        for cite in re.findall(r"Art\.\s*\d+(?:[–-]\d+)?", dora):
-            dora_citations.add(cite)
+        for cite in re.findall(r"Art\.\s*\d+(?:[–-]\d+)?(?:\(\d+\))?", dora):
+            art = base_article(cite)
+            if not re.search(rf"\b{art}\b", dora_text):
+                print(f"  ✗ DORA: '{cite}' (theme: {theme}) not found in dora-ict-assessment/references/articles.md")
+                problems += 1
 
-    print(f"\n{'✗' if problems else '✓'} {problems} unverifiable citation(s) against EU AI Act, NIST and ISO reference material")
-    if dora_citations:
-        print(
-            f"  ⓘ {len(dora_citations)} DORA article(s) cited ({', '.join(sorted(dora_citations))}) — "
-            "not checked, because this repo carries no DORA reference file to check them against. "
-            "That gap is real; it is not this script pretending otherwise."
-        )
+    print(f"\n{'✗' if problems else '✓'} {problems} unverifiable citation(s) against EU AI Act, NIST, ISO and DORA reference material")
     return 1 if problems else 0
 
 

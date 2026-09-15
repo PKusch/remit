@@ -21,6 +21,7 @@ WATCHED = [
     "skills/eu-ai-act-triage/references/obligations.md",
     "skills/eu-ai-act-triage/references/prohibitions.md",
     "skills/dora-ict-assessment/SKILL.md",
+    "skills/dora-ict-assessment/references/articles.md",
     "skills/iso-42001-soa/references/annex-a.md",
     "skills/nist-ai-rmf-assessment/references/functions.md",
     "framework/crosswalk.md",
