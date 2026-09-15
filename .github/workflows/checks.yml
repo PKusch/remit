@@ -16,12 +16,17 @@ on:
 jobs:
   checks:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.12", "3.13"]
+    name: python ${{ matrix.python }}
     steps:
       - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.13"
+          python-version: ${{ matrix.python }}
 
       - name: Install dependencies
         run: pip install --quiet pyyaml jsonschema
