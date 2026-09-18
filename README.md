@@ -417,6 +417,8 @@ The most useful contributions are failure modes the diagnostic manual misses, an
 where its criteria produced the wrong classification on real evidence. Open an issue with
 the observation and, where you can share it, the artefacts.
 
+If you are changing files, [CONTRIBUTING.md](CONTRIBUTING.md) lists the checks to run first.
+
 ## Licence
 
 MIT — see [LICENSE](LICENSE).
