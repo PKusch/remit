@@ -1,0 +1,30 @@
+name: A failure the manual missed or got wrong
+description: An agent failure the diagnostic manual has no mode for, or a case where its criteria gave the wrong classification.
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Which is it?
+      options:
+        - No mode fits, the manual is missing one
+        - A mode was applied and it was the wrong one
+        - Two assessors would write this up differently
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: The incident in plain words. Leave out anything you cannot share.
+    validations:
+      required: true
+  - type: textarea
+    id: classified
+    attributes:
+      label: How the manual classified it
+      description: The mode and the criteria it matched, or "nothing matched".
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Artefacts
+      description: Logs, transcripts or records, where you can share them.
