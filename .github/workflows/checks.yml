@@ -75,6 +75,12 @@ jobs:
           python dashboard/build.py --out /tmp/dash.html
           grep -q "const R = \[{" /tmp/dash.html || { echo "no records embedded"; exit 1; }
 
+      # The committed dashboard/index.html is what people open. Is it what the template
+      # and the records actually build, or did one change without the other?
+      - name: Committed dashboard is current
+        run: |
+          diff -q /tmp/dash.html dashboard/index.html || { echo "dashboard/index.html is stale, rebuild it with python dashboard/build.py and commit it"; exit 1; }
+
       # Has any change reopened a hole that adversary/ previously closed? This is the
       # only robustness claim CI can honestly police.
       - name: Adversary — no closed hole reopened
