@@ -199,7 +199,7 @@ def main() -> int:
 
     if args.json:
         args.json.write_text(json.dumps({
-            "episodes": ep, "cascades": cas,
+            "episodes": ep, "cascades": r["cascades"], "cascades_emergent": cas_e,
             "solo": dict(r["solo"]),
             "cooc": {f"{a}+{b}": n for (a, b), n in r["cooc"].items()},
             "by_condition": {c: {a: dict(v) for a, v in d.items()}

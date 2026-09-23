@@ -68,6 +68,11 @@ jobs:
       - name: Disorder — false-negative sweep
         run: python evidence/disorder/falsenegatives.py -n 40
 
+      # --json is not on the path exercised above and had been broken since it was
+      # written (an undefined name, caught only by actually calling it).
+      - name: Disorder — machine-readable output does not crash
+        run: python evidence/disorder/run.py -n 10 --json /tmp/disorder.json
+
       # Does the dashboard still build from the records? A stale template silently
       # produces a page that renders nothing.
       - name: Dashboard builds
