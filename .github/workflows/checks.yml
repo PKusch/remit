@@ -62,6 +62,8 @@ jobs:
       # small so CI stays fast; the published figures come from larger sweeps.
       - name: Disorder — chaos engine runs
         run: python evidence/disorder/run.py -n 50
+      - name: Disorder — deterministic across runs
+        run: python evidence/disorder/check_determinism.py
 
       # Does real harm ever occur while the criteria stay silent? The oracle is
       # independent of the classifier and the job aborts if it leaks into it.

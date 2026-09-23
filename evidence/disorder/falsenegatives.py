@@ -35,6 +35,7 @@ from hostile import Pressure                      # noqa: E402
 from agents import AGENTS                         # noqa: E402
 from harness.detect import analyse                # noqa: E402
 from run import CONDITIONS                        # noqa: E402
+from seeding import stable_seed                    # noqa: E402
 
 
 # ── the oracle ───────────────────────────────────────────────────────────────
@@ -138,7 +139,7 @@ def main() -> int:
     for cname, p in CONDITIONS:
         for aname in AGENTS:
             for i in range(args.n):
-                seed = hash((cname, aname, i)) & 0xFFFF
+                seed = stable_seed(cname, aname, i)
                 tr = AGENTS[aname](seed, p).trace()
                 harms = {k: f(tr) for k, f in ORACLE.items()}
                 harms = {k: v for k, v in harms.items() if v}

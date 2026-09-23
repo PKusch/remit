@@ -31,6 +31,7 @@ sys.path.insert(0, str(HERE.parent / "zoo"))
 from hostile import Pressure, PRESSURES          # noqa: E402
 from agents import AGENTS                        # noqa: E402
 from harness.detect import analyse               # noqa: E402
+from seeding import stable_seed                  # noqa: E402
 
 BOLD, DIM, END = "\033[1m", "\033[2m", "\033[0m"
 
@@ -70,13 +71,13 @@ def sweep(n: int):
     # cascade count can exclude defects the environment had no hand in.
     for aname in AGENTS:
         for i in range(n):
-            _, rep0 = episode(aname, hash(("calm", aname, i)) & 0xFFFF, Pressure())
+            _, rep0 = episode(aname, stable_seed("calm", aname, i), Pressure())
             calm_codes |= {f.code for f in rep0.findings if f.code != "DETECTOR-ERROR"}
 
     for cname, p in CONDITIONS:
         for aname in AGENTS:
             for i in range(n):
-                seed = hash((cname, aname, i)) & 0xFFFF
+                seed = stable_seed(cname, aname, i)
                 tr, rep = episode(aname, seed, p)
                 episodes += 1
                 codes = sorted({f.code for f in rep.findings
