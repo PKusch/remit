@@ -122,10 +122,26 @@ def assert_no_leak() -> None:
                          "into the classifier and this measurement would be worthless.")
 
 
+def _positive_int(v: str) -> int:
+    # -n 0 or a negative runs range(n) zero times and prints an all-zero table
+    # that reads like a real 0% miss rate. Refuse it at the argument instead.
+    n = int(v)
+    if n < 1:
+        raise argparse.ArgumentTypeError(f"must be at least 1, not {n}")
+    return n
+
+
+def _nonneg_int(v: str) -> int:
+    n = int(v)
+    if n < 0:
+        raise argparse.ArgumentTypeError(f"cannot be negative, got {n}")
+    return n
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("-n", type=int, default=150, help="episodes per agent per condition")
-    ap.add_argument("--show", type=int, default=2, help="example misses to print")
+    ap.add_argument("-n", type=_positive_int, default=150, help="episodes per agent per condition")
+    ap.add_argument("--show", type=_nonneg_int, default=2, help="example misses to print")
     args = ap.parse_args()
 
     assert_no_leak()
