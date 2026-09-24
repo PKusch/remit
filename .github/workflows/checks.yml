@@ -85,6 +85,17 @@ jobs:
       - name: Disorder — machine-readable output does not crash
         run: python evidence/disorder/run.py -n 10 --json /tmp/disorder.json
 
+      # A mistyped argument must fail with a usage message, not a traceback: -n 0
+      # divided by zero mid-report, and a wrong --agent/--condition either raised a
+      # bare KeyError on the --replay path or was silently ignored on the sweep path.
+      - name: Disorder — a bad argument is refused, not crashed on
+        run: |
+          for a in "-n 0" "-n -3" "--replay 1 --agent nope" "--replay 1 --condition nope"; do
+            if python evidence/disorder/run.py $a 2>/tmp/e; then echo "bad args accepted: $a"; exit 1; fi
+            if grep -qi traceback /tmp/e; then echo "traceback on: $a"; cat /tmp/e; exit 1; fi
+          done
+          echo "bad arguments refused cleanly"
+
       # Does the dashboard still build from the records? A stale template silently
       # produces a page that renders nothing.
       - name: Dashboard builds

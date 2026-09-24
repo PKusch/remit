@@ -104,12 +104,24 @@ def bar(v: float, w: int = 18) -> str:
     return "█" * filled + "·" * (w - filled)
 
 
+def _positive_int(v: str) -> int:
+    # -n 0 or a negative divides by zero in the cascade and rate lines; reject it
+    # at the boundary with a plain message instead of a traceback mid-report.
+    n = int(v)
+    if n < 1:
+        raise argparse.ArgumentTypeError(f"must be at least 1, not {n}")
+    return n
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("-n", type=int, default=200, help="episodes per agent per condition")
+    ap.add_argument("-n", type=_positive_int, default=200, help="episodes per agent per condition")
     ap.add_argument("--replay", type=int, help="replay one seed with a full trace")
-    ap.add_argument("--agent", default="remediator")
-    ap.add_argument("--condition", default="storm")
+    # choices reject a mistyped name with a usage message; without them a wrong
+    # --agent/--condition either raised a bare KeyError on the replay path or was
+    # ignored entirely on the sweep path, where they only steer --replay.
+    ap.add_argument("--agent", default="remediator", choices=list(AGENTS))
+    ap.add_argument("--condition", default="storm", choices=[c for c, _ in CONDITIONS])
     ap.add_argument("--json", type=Path)
     args = ap.parse_args()
 
