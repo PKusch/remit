@@ -82,6 +82,18 @@ jobs:
           python dashboard/build.py --out /tmp/dash.html
           grep -q "const R = \[{" /tmp/dash.html || { echo "no records embedded"; exit 1; }
 
+      # A record the dashboard leaves out must say so. Two files with one id used to
+      # lose the second without a word.
+      - name: Dashboard says when it skips a record
+        run: |
+          mkdir /tmp/dup
+          printf 'id: same\nname: A\n' > /tmp/dup/a.yaml
+          printf 'id: same\nname: B\n' > /tmp/dup/b.yaml
+          printf 'name: no id\n' > /tmp/dup/c.yaml
+          python dashboard/build.py --records /tmp/dup --out /tmp/dup.html | tee /tmp/dup.log
+          grep -q "b.yaml: duplicate id 'same', already loaded from a.yaml" /tmp/dup.log
+          grep -q "c.yaml: no id" /tmp/dup.log
+
       # The committed dashboard/index.html is what people open. Is it what the template
       # and the records actually build, or did one change without the other?
       - name: Committed dashboard is current

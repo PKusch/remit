@@ -45,7 +45,7 @@ def main() -> int:
     ap.add_argument("--out", type=Path, default=ROOT / "dashboard" / "index.html")
     args = ap.parse_args()
 
-    recs, seen = [], set()
+    recs, seen = [], {}
     for d in args.records:
         for f in sorted(d.rglob("*.yaml")) if d.is_dir() else [d]:
             try:
@@ -53,8 +53,16 @@ def main() -> int:
             except Exception as exc:                       # noqa: BLE001
                 print(f"  skipped {f.name}: {exc}")
                 continue
-            if isinstance(data, dict) and data.get("id") and data["id"] not in seen:
-                seen.add(data["id"])
+            # A record left out of a governance dashboard without a word looks exactly
+            # like a system that is not there, so every skip says why.
+            if not isinstance(data, dict):
+                print(f"  skipped {f.name}: not a record (expected a mapping)")
+            elif not data.get("id"):
+                print(f"  skipped {f.name}: no id")
+            elif data["id"] in seen:
+                print(f"  skipped {f.name}: duplicate id '{data['id']}', already loaded from {seen[data['id']]}")
+            else:
+                seen[data["id"]] = f.name
                 recs.append(norm(data))
 
     if not recs:
