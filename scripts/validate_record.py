@@ -200,6 +200,7 @@ def main() -> int:
         return 1
 
     failed = warned = 0
+    ids: dict[str, str] = {}
     for path in files:
         rel = path.relative_to(REPO_ROOT) if REPO_ROOT in path.parents else path
         try:
@@ -220,6 +221,16 @@ def main() -> int:
                 print(f"    {loc}: {e.message}")
         else:
             print(f"✓ {rel}")
+
+        # Two records with one id are one system as far as the dashboard is concerned:
+        # it keeps the first and drops the rest. Each file passing on its own hides that.
+        rid = rec.get("id") if isinstance(rec, dict) else None
+        if isinstance(rid, str) and rid:
+            if rid in ids:
+                failed += 1
+                print(f"✗ {rel} — duplicate id '{rid}', already used by {ids[rid]}")
+            else:
+                ids[rid] = str(rel)
 
         if warnings:
             warned += 1

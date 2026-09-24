@@ -53,6 +53,16 @@ jobs:
       - name: Records validate
         run: python scripts/validate_record.py examples/ tests/fixtures/
 
+      # Each record passing alone is not enough: two with one id are one system to the
+      # dashboard. The second must be reported, and must fail the run.
+      - name: Records — a duplicate id is caught
+        run: |
+          mkdir /tmp/dupvalid
+          cp examples/loan-triage-agent.record.yaml /tmp/dupvalid/a.record.yaml
+          cp examples/loan-triage-agent.record.yaml /tmp/dupvalid/b.record.yaml
+          if python scripts/validate_record.py /tmp/dupvalid > /tmp/dupvalid.log; then echo "duplicate id passed"; exit 1; fi
+          grep -q "duplicate id" /tmp/dupvalid.log
+
       # Do the diagnostic manual's criteria still recover every mode they were written
       # for? Exits non-zero if any machine-detectable specimen goes unclassified.
       - name: Zoo — criteria recover their specimens
