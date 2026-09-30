@@ -44,6 +44,16 @@ jobs:
       # Legal content decays. Make the decay a build failure, not a silent liability.
       - name: Legal content not stale
         run: python scripts/check_staleness.py
+
+      # A mistyped --today or a negative --max-age-days must fail with a usage
+      # message, not a ValueError traceback or an all-stale table that reads real.
+      - name: Staleness — a bad argument is refused
+        run: |
+          for a in "--today not-a-date" "--max-age-days -5"; do
+            if python scripts/check_staleness.py $a 2>/tmp/e; then echo "bad args accepted: $a"; exit 1; fi
+            if grep -qi traceback /tmp/e; then echo "traceback on: $a"; cat /tmp/e; exit 1; fi
+          done
+          echo "bad arguments refused cleanly"
       - name: Crosswalk citations resolve
         run: python scripts/check_crosswalk.py
 

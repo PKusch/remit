@@ -29,12 +29,23 @@ WATCHED = [
 STAMP = re.compile(r"verified[:\s]+(\d{4}-\d{2}-\d{2})", re.I)
 
 
+def _nonneg_int(v: str) -> int:
+    # A negative max-age marks every file stale (age > a negative is always true),
+    # which reads like a real result. Refuse it at the argument.
+    n = int(v)
+    if n < 0:
+        raise argparse.ArgumentTypeError(f"cannot be negative, got {n}")
+    return n
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--max-age-days", type=int, default=90)
-    ap.add_argument("--today", default=None, help="override for testing")
+    ap.add_argument("--max-age-days", type=_nonneg_int, default=90)
+    # fromisoformat as the type: a mistyped override is a usage error, not a
+    # ValueError traceback from inside main.
+    ap.add_argument("--today", type=dt.date.fromisoformat, default=None, help="override for testing, YYYY-MM-DD")
     args = ap.parse_args()
-    today = dt.date.fromisoformat(args.today) if args.today else dt.date.today()
+    today = args.today or dt.date.today()
 
     stale = missing = 0
     for rel in WATCHED:
