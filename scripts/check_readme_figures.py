@@ -29,33 +29,37 @@ def main() -> int:
     zoo = run(["evidence/zoo/run.py", "--no-colour"])
     adv = run(["evidence/adversary/run.py", "--no-colour"])
 
-    checks: list[tuple[str, str, str]] = []
-
-    # zoo: recall and spurious count, read from the harness rather than assumed
-    m = re.search(r"recall on detectable classes\s*:\s*(\d+/\d+)", zoo)
-    if m:
-        checks.append(("zoo recall", m.group(1), m.group(1)))
-    m = re.search(r"spurious findings\s*:\s*(\d+)", zoo)
-    if m:
-        checks.append(("zoo spurious findings", f"spurious findings            : {m.group(1)}",
-                       m.group(1)))
-    m = re.search(r"deferred to human\s*:\s*(\d+)", zoo)
-    if m:
-        checks.append(("zoo deferred", f"deferred to human            : {m.group(1)}",
-                       m.group(1)))
-    m = re.search(r"(\d+)/(\d+) tactics did the damage", adv)
-    if m:
-        checks.append(("adversary evaded", f"{m.group(1)}/{m.group(2)} tactics", m.group(1)))
+    # (label, harness output, regex, what to look for in the README from the match).
+    # Each figure MUST be found in the harness output: a regex that no longer matches
+    # means the harness changed its wording and this figure is no longer being gated.
+    # Skipping it silently is the exact overclaim-behind-a-trusted-gate this script
+    # exists to prevent, so a missing match is a failure, not a quietly dropped check.
+    specs = [
+        ("zoo recall", zoo, r"recall on detectable classes\s*:\s*(\d+/\d+)",
+         lambda m: m.group(1)),
+        ("zoo spurious findings", zoo, r"spurious findings\s*:\s*(\d+)",
+         lambda m: f"spurious findings            : {m.group(1)}"),
+        ("zoo deferred", zoo, r"deferred to human\s*:\s*(\d+)",
+         lambda m: f"deferred to human            : {m.group(1)}"),
+        ("adversary evaded", adv, r"(\d+)/(\d+) tactics did the damage",
+         lambda m: f"{m.group(1)}/{m.group(2)} tactics"),
+    ]
 
     bad = 0
-    for label, needle, value in checks:
+    for label, src, pattern, needle_of in specs:
+        m = re.search(pattern, src)
+        if m is None:
+            print(f"  ✗ {label:<26} the harness no longer prints this figure (output changed)")
+            bad += 1
+            continue
+        needle = needle_of(m)
         ok = needle in readme
-        print(f"  {'✓' if ok else '✗'} {label:<26} code says {value!r}")
+        print(f"  {'✓' if ok else '✗'} {label:<26} code says {needle!r}")
         if not ok:
             print(f"      README does not contain: {needle!r}")
             bad += 1
 
-    print(f"\n{'✗' if bad else '✓'} {len(checks)} figure(s) checked · {bad} stale")
+    print(f"\n{'✗' if bad else '✓'} {len(specs)} figure(s) checked · {bad} stale or missing")
     if bad:
         print("Update the README to what the code prints. Do not update the code to the README.")
     return 1 if bad else 0
