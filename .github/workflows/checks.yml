@@ -73,6 +73,17 @@ jobs:
           if python scripts/validate_record.py /tmp/dupvalid > /tmp/dupvalid.log; then echo "duplicate id passed"; exit 1; fi
           grep -q "duplicate id" /tmp/dupvalid.log
 
+      # A record with a wrong-typed field must be reported by the schema, not crash the
+      # governance checks that read it. They once raised AttributeError on `agentic: 5`
+      # and the schema error that explained it was never printed.
+      - name: Wrong-typed record is reported, not a traceback
+        run: |
+          mkdir /tmp/badtype
+          printf 'id: bad\nname: B\nagentic: 5\nexceptions: x\n' > /tmp/badtype/r.record.yaml
+          if python scripts/validate_record.py /tmp/badtype >/tmp/badtype.log 2>/tmp/badtype.err; then echo "bad record passed"; exit 1; fi
+          if grep -qi traceback /tmp/badtype.err; then echo "traceback"; cat /tmp/badtype.err; exit 1; fi
+          grep -q "is not of type 'object'" /tmp/badtype.log
+
       # Do the diagnostic manual's criteria still recover every mode they were written
       # for? Exits non-zero if any machine-detectable specimen goes unclassified.
       - name: Zoo — criteria recover their specimens
