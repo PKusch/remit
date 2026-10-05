@@ -45,6 +45,11 @@ def main() -> int:
     ap.add_argument("--out", type=Path, default=ROOT / "dashboard" / "index.html")
     args = ap.parse_args()
 
+    # Said before any work, and for the file we are about to write, so a mistyped
+    # --out is one plain line and not an IsADirectoryError after the records load.
+    if args.out.is_dir():
+        sys.exit(f"--out {args.out} is a directory; give a file name")
+
     recs, seen = [], {}
     for d in args.records:
         for f in sorted(d.rglob("*.yaml")) if d.is_dir() else [d]:
@@ -69,9 +74,12 @@ def main() -> int:
         sys.exit("No records found. Point --records at a directory of *.record.yaml files.")
 
     tpl = (ROOT / "dashboard" / "template.html").read_text(encoding="utf-8")
-    args.out.write_text(
-        tpl.replace("__RECORDS__", json.dumps(recs, separators=(",", ":"))),
-        encoding="utf-8")
+    try:
+        args.out.write_text(
+            tpl.replace("__RECORDS__", json.dumps(recs, separators=(",", ":"))),
+            encoding="utf-8")
+    except OSError as e:
+        sys.exit(f"cannot write {args.out}: {e.strerror or e}")
 
     print(f"✓ {len(recs)} record(s) → {args.out}")
     for r in recs:

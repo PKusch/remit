@@ -129,6 +129,15 @@ jobs:
           grep -q "b.yaml: duplicate id 'same', already loaded from a.yaml" /tmp/dup.log
           grep -q "c.yaml: no id" /tmp/dup.log
 
+      # A mistyped --out must be one plain line, not an IsADirectoryError after the
+      # records have loaded.
+      - name: Dashboard refuses a bad output path
+        run: |
+          for out in /tmp /tmp/no-such-dir-$$/d.html; do
+            if python dashboard/build.py --out "$out" 2>/tmp/e; then echo "bad --out accepted: $out"; exit 1; fi
+            if grep -qi traceback /tmp/e; then echo "traceback on --out $out"; cat /tmp/e; exit 1; fi
+          done
+
       # The committed dashboard/index.html is what people open. Is it what the template
       # and the records actually build, or did one change without the other?
       - name: Committed dashboard is current
