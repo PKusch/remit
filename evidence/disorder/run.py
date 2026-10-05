@@ -125,6 +125,14 @@ def main() -> int:
     ap.add_argument("--json", type=Path)
     args = ap.parse_args()
 
+    # --json is written last, after the whole sweep, so a bad path used to surface as
+    # a traceback only once all the work was done. Say so before starting.
+    if args.json is not None:
+        if args.json.is_dir():
+            sys.exit(f"--json {args.json} is a directory; give a file name")
+        if not args.json.parent.is_dir():
+            sys.exit(f"--json: the folder {args.json.parent} does not exist")
+
     if args.replay is not None:
         p = dict(CONDITIONS)[args.condition]
         tr, rep = episode(args.agent, args.replay, p)
