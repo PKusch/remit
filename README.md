@@ -1,5 +1,7 @@
 # Remit
 
+[![checks](https://github.com/PKusch/remit/actions/workflows/checks.yml/badge.svg)](https://github.com/PKusch/remit/actions/workflows/checks.yml)
+
 **A rulebook for what an AI agent may do without asking a person, and a way to write up what went wrong that two engineers will fill in the same way.**
 
 Today's AI rules were written for systems that answer questions. An agent takes
