@@ -1,8 +1,17 @@
-# Remit
+<div align="center">
 
-[![checks](https://github.com/PKusch/remit/actions/workflows/checks.yml/badge.svg)](https://github.com/PKusch/remit/actions/workflows/checks.yml)
+# 🛂 Remit
 
 **A rulebook for what an AI agent may do without asking a person, and a way to write up what went wrong that two engineers will fill in the same way.**
+
+[![checks](https://github.com/PKusch/remit/actions/workflows/checks.yml/badge.svg)](https://github.com/PKusch/remit/actions/workflows/checks.yml)
+[![live control room](https://img.shields.io/badge/control%20room-live-34d399)](https://pkusch.github.io/remit/dashboard/)
+![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)
+![Python 3](https://img.shields.io/badge/Python-3-3776AB?logo=python&logoColor=white)
+
+### [**→ Open the live control room**](https://pkusch.github.io/remit/dashboard/)
+
+</div>
 
 Today's AI rules were written for systems that answer questions. An agent takes
 actions. Remit is a set of checks an agent can run on itself and on the systems
