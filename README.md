@@ -11,6 +11,8 @@
 
 ### [**→ Open the live control room**](https://pkusch.github.io/remit/dashboard/)
 
+[Why it exists](#why-this-exists) · [The grid](#the-governance-grid) · [How the pieces fit](#how-the-pieces-fit) · [Failure taxonomy](#the-failure-taxonomy-at-a-glance) · [Install](#install) · [Limits](#limits-stated-plainly)
+
 | **9** skills | **18** failure modes in 6 classes | **4** frameworks mapped | **20** cells in the governance grid | **2,400** episodes measured |
 |:---:|:---:|:---:|:---:|:---:|
 
