@@ -40,6 +40,21 @@ agentic system that writes off money.
 
 Everything below is why it works and how it was tested. You don't need it to start.
 
+## See it
+
+The control room is built from system records, and it works out each system's control gaps in the page with the same check CI runs. Pick a square on the grid to see what that position obliges, or open a system to see its findings.
+
+<table>
+  <tr>
+    <td width="50%" valign="top"><img src="docs/screenshots/control-room.jpg" alt="The control room: four systems on a grid of autonomy against blast radius, with counts of systems, gaps and systems running above their tier" /></td>
+    <td width="50%" valign="top"><img src="docs/screenshots/control-room-detail.jpg" alt="One system opened: its control gaps, its findings with ratings, the tools it holds and who is accountable" /></td>
+  </tr>
+  <tr>
+    <td valign="top"><b>The estate on the grid.</b><br /><sub>Autonomy across, reach down. Four systems, all at A3 and B3, and all running above the tier they are governed at.</sub></td>
+    <td valign="top"><b>One system, opened.</b><br /><sub>OpsPilot, a real agentic system: what the check computed, what was found, and the tools it holds with their reach.</sub></td>
+  </tr>
+</table>
+
 ---
 
 ## Why this exists
