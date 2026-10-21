@@ -44,7 +44,7 @@ Everything below is why it works and how it was tested. You don't need it to sta
 
 ## See it
 
-The control room is built from system records, and it works out each system's control gaps in the page with the same check CI runs. Pick a square on the grid to see what that position obliges, or open a system to see its findings.
+The control room is built from system records, and it works out each system's control gaps in the page with the same check CI runs. Pick a square on the grid to see what that position obliges, or open a system to see its findings. It works on a phone as well as a laptop, and needs no install.
 
 <table>
   <tr>
