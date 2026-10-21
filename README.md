@@ -11,6 +11,9 @@
 
 ### [**→ Open the live control room**](https://pkusch.github.io/remit/dashboard/)
 
+| **9** skills | **18** failure modes in 6 classes | **4** frameworks mapped | **20** cells in the governance grid | **2,400** episodes measured |
+|:---:|:---:|:---:|:---:|:---:|
+
 </div>
 
 Today's AI rules were written for systems that answer questions. An agent takes
