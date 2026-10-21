@@ -346,7 +346,8 @@ downstream and carries statutory deadlines. And on the incident path, **the repo
 clock before the analysis** — Art. 73 and DORA deadlines run from awareness, not from
 the point your investigation concludes.
 
-### Repository map
+<details>
+<summary><b>Repository map</b>: what is in each folder</summary>
 
 ```
 remit/
@@ -383,6 +384,8 @@ remit/
 ```
 
 ---
+
+</details>
 
 ## The two ideas worth stealing even if you don't use the skills
 
