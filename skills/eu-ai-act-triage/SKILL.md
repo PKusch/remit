@@ -141,7 +141,8 @@ is silent about DORA reads as a clearance it never gave.
 
 ## Dates
 
-> **The Digital Omnibus on AI entered into force on 27 July 2026 and deferred the
+> **The Digital Omnibus on AI (Regulation (EU) 2026/1744, published in the Official Journal
+> on 24 July 2026) entered into force on 27 July 2026 and deferred the
 > high-risk deadlines.** Much published guidance — and many internal compliance
 > calendars — still carries the original 2 August 2026 date for Annex III. Check which
 > vintage you are reading before relying on it.
@@ -172,6 +173,12 @@ threshold for processing special-category data in bias detection under Art. 10(5
 
 *Verified 17 August 2026 against post-Omnibus sources. Re-check before relying on it —
 this area has moved twice in a year.*
+
+*Spot-checked 27 October 2026: the entry-into-force date, the Annex III (2 December 2027) and
+Annex I (2 August 2028) dates, and the 2 December 2026 grace for Art. 50(2) all agree across
+three published summaries (two law-firm alerts and a Cloud Security Alliance note). Those were
+secondary sources; the Official Journal text itself was not read. The `verified:` stamps are not
+moved by this.*
 
 ## Obligations
 
