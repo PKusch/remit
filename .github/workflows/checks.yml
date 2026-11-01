@@ -45,6 +45,9 @@ jobs:
       - name: Legal content not stale
         run: python scripts/check_staleness.py
 
+      - name: Staleness check unit tests
+        run: python -m unittest tests/test_staleness.py
+
       # A mistyped --today or a negative --max-age-days must fail with a usage
       # message, not a ValueError traceback or an all-stale table that reads real.
       - name: Staleness — a bad argument is refused
