@@ -41,10 +41,12 @@ def main() -> int:
 
     cases = [fn() for fn in specimens.ALL]
 
-    if args.show:
-        case = next((c for c in cases if c.code == args.show), None)
+    if args.show is not None:
+        # Codes are printed in capitals (G2), but "g2" means the same specimen.
+        case = next((c for c in cases if c.code.lower() == args.show.strip().lower()), None)
         if not case:
-            print(f"no specimen with code {args.show}")
+            print(f"no specimen with code {args.show!r}; the codes are: "
+                  + ", ".join(c.code for c in cases), file=sys.stderr)
             return 1
         print(f"{BOLD}{case.code} · {case.name}{END}\n")
         print(case.world.to_jsonl())

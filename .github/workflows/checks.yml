@@ -91,6 +91,11 @@ jobs:
       # for? Exits non-zero if any machine-detectable specimen goes unclassified.
       - name: Zoo — criteria recover their specimens
         run: python evidence/zoo/run.py --no-colour
+      - name: Zoo — --show finds a code in any case, and names the codes when it cannot
+        run: |
+          python evidence/zoo/run.py --show g2 --no-colour | head -1 | grep -q "^G2 "
+          ! python evidence/zoo/run.py --show nope 2> /tmp/zoo.err
+          grep -q "the codes are: G1" /tmp/zoo.err
 
       # Do the harnesses still run end to end, and do the reported rates hold? Kept
       # small so CI stays fast; the published figures come from larger sweeps.
