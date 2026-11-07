@@ -173,3 +173,22 @@ jobs:
       # line beneath one of them was wrong. An outside reader found it in ninety seconds.
       - name: README figures still true
         run: python scripts/check_readme_figures.py
+
+      # A console that is not UTF-8 (LC_ALL=C here, a code page on Windows) must
+      # not turn a passing check into a crash: the scripts print check marks.
+      - name: Scripts run on a console that is not UTF-8
+        env:
+          LC_ALL: C
+          PYTHONUTF8: "0"
+          PYTHONCOERCECLOCALE: "0"
+          PYTHONIOENCODING: ascii
+        run: |
+          python scripts/check_links.py > /dev/null
+          python scripts/check_staleness.py > /dev/null
+          python scripts/check_crosswalk.py > /dev/null
+          python scripts/validate_record.py examples/ > /dev/null
+          python scripts/check_readme_figures.py > /dev/null
+          python evidence/zoo/run.py --no-colour > /dev/null
+          python evidence/disorder/falsenegatives.py -n 5 > /dev/null
+          python evidence/disorder/run.py -n 5 > /dev/null
+          python dashboard/build.py --out /tmp/ascii-dashboard.html > /dev/null

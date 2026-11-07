@@ -11,6 +11,11 @@ fails, and the fix is to re-verify and update the date — not to bump it.
 """
 from __future__ import annotations
 import argparse, datetime as dt, re, sys
+# The output uses check marks and dashes; a console that cannot show them
+# must not turn a passing check into a crash.
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(errors="replace")
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent

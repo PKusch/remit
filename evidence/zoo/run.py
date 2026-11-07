@@ -19,6 +19,11 @@ from __future__ import annotations
 
 import argparse
 import sys
+# The output uses check marks and dashes; a console that cannot show them
+# must not turn a passing check into a crash.
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(errors="replace")
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
