@@ -70,6 +70,12 @@ Most monitoring will tell you the agent is up, not that it is wrong.
 **ICT incident management and reporting (Arts. 17–23).** Classification against the RTS
 criteria in section 4 below, then reporting on the clocks.
 
+*Pending, not law (checked 9 November 2026):* the Commission's Digital Omnibus proposal,
+COM(2025) 837 of 19 November 2025, would add one EU-wide portal run by ENISA for sending
+incident reports under several laws, DORA included. It leaves what must be reported, and
+when, unchanged. No adopted text was found; the Council and Parliament were still
+negotiating. Do not tell an entity its reporting route has changed.
+
 **Digital operational resilience testing (Arts. 24–27).** A testing programme
 proportionate to risk, with threat-led penetration testing (TLPT) for entities so
 designated. For agents this is where the halt mechanism and the injection-resistance
@@ -185,9 +191,10 @@ own competent authority's guidance, and route real determinations — especially
 critical-or-important-function call and any major-incident classification — to the people
 who own them.
 
-*Legal content verified 17 August 2026. Re-check before relying on it.*
+*Legal content verified 17 August 2026 and re-checked 9 November 2026 (Digital Omnibus
+proposal still pending). Re-check before relying on it.*
 
 ---
 
 <!-- staleness gate: scripts/check_staleness.py -->
-**verified: 2026-08-17** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.
+**verified: 2026-11-09** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.
