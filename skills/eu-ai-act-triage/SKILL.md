@@ -176,11 +176,13 @@ threshold for processing special-category data in bias detection under Art. 10(5
 *Verified 17 August 2026 against post-Omnibus sources. Re-check before relying on it —
 this area has moved twice in a year.*
 
-*Spot-checked 27 October 2026: the entry-into-force date, the Annex III (2 December 2027) and
-Annex I (2 August 2028) dates, and the 2 December 2026 grace for Art. 50(2) all agree across
-three published summaries (two law-firm alerts and a Cloud Security Alliance note). Those were
-secondary sources; the Official Journal text itself was not read. The `verified:` stamps are not
-moved by this.*
+*Re-verified 9 November 2026 against the Official Journal text of Regulation (EU) 2026/1744
+on EUR-Lex: published 24 July 2026, in force on the third day after (27 July); Art. 113 sets
+2 December 2026 for the two new prohibitions, 2 December 2027 for Annex III and 2 August 2028
+for Annex I; Art. 111(4) gives generative systems already on the market until 2 December 2026
+for Art. 50(2); Art. 111(2) gives public-authority systems until 2 August 2030; national
+sandboxes must run by 2 August 2027. Annex III and Art. 6(3) are not amended. Art. 4 is, and
+this file was corrected for it the same day.*
 
 ## Obligations
 
@@ -238,4 +240,4 @@ them by assumption.
 ---
 
 <!-- staleness gate: scripts/check_staleness.py -->
-**verified: 2026-08-17** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.
+**verified: 2026-11-09** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.

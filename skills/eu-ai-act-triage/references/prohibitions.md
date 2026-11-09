@@ -92,4 +92,4 @@ text.
 ---
 
 <!-- staleness gate: scripts/check_staleness.py -->
-**verified: 2026-08-17** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.
+**verified: 2026-11-09** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.

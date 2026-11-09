@@ -85,6 +85,11 @@ Digital Omnibus**, which makes this the nearest live AI Act deadline for most
 organisations. Generative systems already on the market before 2 August 2026 have until
 **2 December 2026** for the Art. 50(2) machine-readable marking requirement.
 
+For how to comply, the Commission's voluntary Code of Practice on transparency of
+AI-generated content was published in final form on 10 June 2026. Its guidelines on Art. 50
+were published as a draft on 8 May 2026 and were still shown as a draft on the Commission's
+page on 9 November 2026; check for the final version before quoting them.
+
 | Who | Obligation |
 |---|---|
 | Providers of systems interacting with people | Inform the person they are interacting with AI, unless obvious in context |
@@ -148,4 +153,4 @@ discussion.
 ---
 
 <!-- staleness gate: scripts/check_staleness.py -->
-**verified: 2026-08-17** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.
+**verified: 2026-11-09** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.
