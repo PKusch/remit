@@ -7,9 +7,9 @@ for the operative text**, and the related Regulatory Technical Standards (RTS)
 and Implementing Technical Standards (ITS), which carry the operational detail
 these article numbers only gesture at.
 
-DORA applies from 17 January 2025. Unlike the EU AI Act, its dates were not
-touched by the Digital Omnibus — it is a separate regulation on a separate
-track.
+DORA applies from 17 January 2025 (Art. 64). The Digital Omnibus on AI did not
+touch it. A separate Commission proposal, COM(2025) 837, would change how major
+incidents are sent in (see the skill); it had not been adopted on 9 November 2026.
 
 ## Chapter map
 
@@ -22,6 +22,8 @@ track.
 | V | 28–44 | Managing ICT third-party risk (contracts, and oversight of critical providers) |
 | VI | 45 | Information-sharing arrangements |
 | VII | 46–56 | Competent authorities |
+| VIII | 57 | Delegated acts |
+| IX | 58–64 | Transitional and final provisions |
 
 ## Chapter II — ICT risk management (Art. 5–16)
 
@@ -29,6 +31,7 @@ track.
 |---|---|
 | 5 | Governance and organisation — the management body owns and is accountable for the ICT risk management framework, not just the CISO function |
 | 6 | The ICT risk management framework itself — documented, reviewed at least yearly, audited |
+| 7 | ICT systems, protocols and tools — kept up to date, reliable, with enough capacity and resilience |
 | 8 | Identification — mapping ICT assets, dependencies, and the business functions they support |
 | 9 | Protection and prevention |
 | 10 | Detection — mechanisms to spot anomalous activity promptly |
@@ -44,11 +47,11 @@ track.
 |---|---|
 | 17 | The ICT-related incident management process itself |
 | 18 | Classification of incidents and cyber threats against common criteria |
-| 19 | Reporting major ICT-related incidents to the competent authority |
+| 19 | Reporting major ICT-related incidents to the competent authority, and (19(2)) voluntary notification of significant cyber threats |
 | 20 | Harmonisation of reporting content and templates (via RTS/ITS) |
-| 21 | Centralisation of reporting through a single EU hub (in development) |
+| 21 | Centralisation of reporting: the ESAs report on whether a single EU hub for incident reports is feasible — no such hub is in operation |
 | 22 | Supervisory feedback on an entity's incident handling |
-| 23 | Voluntary reporting of significant cyber threats |
+| 23 | Payment-related operational or security incidents at credit institutions, payment institutions, account information service providers and e-money institutions — these are reported under DORA |
 
 ## Chapter IV — resilience testing (Art. 24–27)
 
@@ -76,7 +79,8 @@ chapter map above and not broken out further here.
 
 ---
 
-**verified: 2026-09-15** — against the regulation's chapter and article
-structure, which has been stable since adoption; RTS/ITS detail under most
+**verified: 2026-11-09** — against the regulation's chapter and article
+structure in the Official Journal text on EUR-Lex (Art. 23 was mislabelled until
+then; the voluntary threat notice is Art. 19(2)); RTS/ITS detail under most
 articles continues to be finalised and should be checked separately.
 Re-check before relying on it; re-verify before updating this date.
