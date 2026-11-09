@@ -20,7 +20,7 @@ the article and the date. A generic list of articles is not an output anyone can
 
 | # | Obligation | Article | What it means in practice |
 |---|---|---|---|
-| 1 | AI literacy | Art. 4 | Providers and deployers must take measures to ensure staff and anyone else operating or using an AI system on their behalf have sufficient AI literacy — understanding enough about the system's capabilities, limitations and risks to use it responsibly. Applies to every system, not just high-risk. In force since 2 February 2025 and was not deferred by the Digital Omnibus. |
+| 1 | AI literacy | Art. 4 | Providers and deployers must take measures to support the AI literacy of staff and anyone else operating or using an AI system on their behalf — understanding enough about the system's capabilities, limitations and risks to use it responsibly. Applies to every system, not just high-risk. In force since 2 February 2025 and not deferred, but the Digital Omnibus replaced the article from 27 July 2026: the original duty to *ensure a sufficient level* became a duty to *support* literacy, which "does not require providers or deployers to guarantee any specific level". Advice written before July 2026 overstates it. |
 
 ## High-risk — provider obligations
 

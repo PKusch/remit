@@ -161,9 +161,11 @@ Cite these when stating obligations, since half of the practical question is *by
 | **2 Aug 2028** | **Annex I high-risk — deferred from 2 Aug 2027** |
 | 2 Aug 2030 | High-risk systems already in use by public authorities |
 
-**What the Omnibus did *not* touch**, and where most of the live risk therefore sits:
-the Art. 5 prohibitions and Art. 4 AI literacy (in force since Feb 2025), the GPAI
-obligations (since Aug 2025), and Art. 50 transparency (2 Aug 2026). A common error
+**What the Omnibus did *not* delay**, and where most of the live risk therefore sits:
+the Art. 5 prohibitions (in force since Feb 2025, with two more added from 2 Dec 2026),
+Art. 4 AI literacy (in force since Feb 2025; the Omnibus rewrote it from 27 July 2026 to a
+duty to *support* AI literacy that requires no particular level), the GPAI obligations
+(since Aug 2025), and Art. 50 transparency (2 Aug 2026). A common error
 right now is to tell a client "nothing applies until December 2027" — the transparency
 duties are live and the prohibitions have been for over a year.
 
