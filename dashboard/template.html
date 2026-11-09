@@ -192,7 +192,8 @@ function warnings(r){
   const m=g.memory||{};
   if(m.persistent===true&&!m.provenance_recorded) out.push("persistent memory without provenance");
   tools.filter(t=>!t.justification).forEach(t=>out.push(`tool "${t.name}" has no justification`));
-  (r.exceptions||[]).filter(e=>e.expires&&e.expires<"2026-08-18")
+  // today, in the viewer's browser: a fixed date here never flagged anything expiring after it
+  (r.exceptions||[]).filter(e=>e.expires&&String(e.expires)<new Date().toISOString().slice(0,10))
     .forEach(e=>out.push(`exception expired ${e.expires}`));
   return out;
 }
