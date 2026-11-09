@@ -32,6 +32,11 @@ counting convention, not in the substance.
 *Objective titles verified 17 August 2026 against public sources. Control text is
 copyrighted and must be read in the standard.*
 
+*Re-checked 9 November 2026: the 2023 edition is still the one in force, with no amendment
+found. Europe adopted it as EN ISO/IEC 42001:2026 (published 18 March 2026), whose title
+still names ISO/IEC 42001:2023, so Annex A is unchanged. ISO's own catalogue page could not be
+read by the tool used, so the edition was confirmed through the European listing instead.*
+
 ---
 
 ## A.2 — Policies related to AI
@@ -135,4 +140,4 @@ and the one that reveals fastest whether the management system is real.
 ---
 
 <!-- staleness gate: scripts/check_staleness.py -->
-**verified: 2026-08-17** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.
+**verified: 2026-11-09** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.
