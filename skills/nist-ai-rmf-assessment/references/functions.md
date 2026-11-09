@@ -5,6 +5,13 @@ Reference for assessment. AI RMF 1.0 (January 2023): four functions, 19 categori
 questions that tend to surface real gaps — consult the NIST AI RMF Playbook for the full
 subcategory text before finalising an assessment.
 
+*Still the current version on 9 November 2026.* NIST's AI RMF page says version 1.0 is
+being revised under the White House AI Action Plan, but no draft of a new version has been
+published. On 7 April 2026 NIST released a concept note for a separate profile on AI in
+critical infrastructure; that is a profile, like the Generative AI Profile below, not a new
+version of the framework. Some blogs describe a published "AI RMF 2.0" draft; NIST's own
+page does not, so do not cite one.
+
 ---
 
 ## GOVERN — culture, structures, accountability
@@ -111,4 +118,4 @@ it is what makes the second assessment, a year later, show real movement.
 ---
 
 <!-- staleness gate: scripts/check_staleness.py -->
-**verified: 2026-08-17** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.
+**verified: 2026-11-09** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.
