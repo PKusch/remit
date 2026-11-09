@@ -402,7 +402,10 @@ everything else. Where self-report and trace conflict, the trace wins.
 
 ## Limits, stated plainly
 
-**Legal content last verified: 17 August 2026.**
+**Legal content last verified: 9 November 2026**, against the Official Journal texts. That
+re-check corrected two things: the Digital Omnibus also *softened* Art. 4 AI literacy (a duty
+to support it, with no required level), and DORA's Art. 23 is about payment incidents, not
+voluntary threat reports.
 
 That date matters more than usual. The **Digital Omnibus on AI** entered into force on
 27 July 2026 and deferred the EU AI Act's high-risk deadlines — Annex III from 2 August
