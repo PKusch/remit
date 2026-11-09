@@ -7,7 +7,7 @@
 [![checks](https://github.com/PKusch/remit/actions/workflows/checks.yml/badge.svg)](https://github.com/PKusch/remit/actions/workflows/checks.yml)
 [![live control room](https://img.shields.io/badge/control%20room-live-34d399)](https://pkusch.github.io/remit/dashboard/)
 ![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)
-![Python 3](https://img.shields.io/badge/Python-3-3776AB?logo=python&logoColor=white)
+![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)
 
 ### [**→ Open the live control room**](https://pkusch.github.io/remit/dashboard/)
 
