@@ -85,7 +85,10 @@ For an organisation facing several frameworks at once, this order minimises rewo
 
 ## Sources
 
-Verify against current texts; all of these are moving. **Last verified 17 August 2026.**
+Verify against current texts; all of these are moving. **Last verified 9 November 2026**
+(the AI Act rows against the Official Journal text of the Digital Omnibus). The rows still
+map the same topics; the one change in substance is Art. 4, which since 27 July 2026 asks
+providers and deployers to *support* AI literacy rather than *ensure* a sufficient level.
 
 - Regulation (EU) 2024/1689 (AI Act), **as amended by the Digital Omnibus on AI**
   (in force 27 July 2026, which deferred Annex III high-risk to 2 December 2027 and
@@ -98,4 +101,4 @@ Verify against current texts; all of these are moving. **Last verified 17 August
 ---
 
 <!-- staleness gate: scripts/check_staleness.py -->
-**verified: 2026-08-17** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.
+**verified: 2026-11-09** — against sources current at that date. This file restates external law or standards, which move. Re-check before relying on it; re-verify before updating this date.
